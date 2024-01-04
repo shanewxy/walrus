@@ -70,6 +70,9 @@ func (Resource) Fields() []ent.Field {
 			Annotations(
 				entx.Input(entx.WithCreate(), entx.WithUpdate()),
 				entx.SkipOutput()),
+		field.Bool("rollbackable").
+			Comment("Whether the resource is able to rollback.").
+			Annotations(entx.SkipInput()),
 	}
 }
 

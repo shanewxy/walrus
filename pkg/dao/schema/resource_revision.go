@@ -85,6 +85,9 @@ func (ResourceRevision) Fields() []ent.Field {
 		field.String("created_by").
 			Comment("User who created the revision.").
 			Annotations(entx.SkipInput()),
+		field.Bool("rollbackable").
+			Comment("Whether the revision is able to rollback.").
+			Annotations(entx.SkipInput()),
 	}
 }
 
