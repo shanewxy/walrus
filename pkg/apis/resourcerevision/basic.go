@@ -39,6 +39,10 @@ func (h Handler) CollectionGet(req CollectionGetRequest) (CollectionGetResponse,
 		query.Where(resourcerevision.ResourceID(req.Resource.ID))
 	}
 
+	if req.Rollbackable {
+		query.Where(resourcerevision.Rollbackable(true))
+	}
+
 	if stream := req.Stream; stream != nil {
 		// Handle stream request.
 		if fields, ok := req.Extracting(getFields, getFields...); ok {

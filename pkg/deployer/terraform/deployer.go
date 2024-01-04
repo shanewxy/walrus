@@ -113,6 +113,7 @@ func (d Deployer) Apply(
 	revision, err := d.createRevision(ctx, mc, createRevisionOptions{
 		ResourceID:    resource.ID,
 		ChangeComment: resource.ChangeComment,
+		Rollbackable:  resource.Rollbackable,
 		JobType:       JobTypeApply,
 	})
 	if err != nil {
@@ -374,6 +375,8 @@ type createRevisionOptions struct {
 	ResourceID object.ID
 	// ChangeComment indicates the optional message of the revision.
 	ChangeComment string
+	// Rollbackable indicates whether the revision is able to rollback.
+	Rollbackable bool
 	// JobType indicates the type of the job.
 	JobType string
 }
@@ -522,6 +525,7 @@ func (d Deployer) createRevision(
 		DeployerType:    DeployerType,
 		CreatedBy:       userSubject.Name,
 		ChangeComment:   opts.ChangeComment,
+		Rollbackable:    opts.Rollbackable,
 	}
 
 	status.ResourceRevisionStatusReady.Unknown(entity, "")
