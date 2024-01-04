@@ -58,6 +58,8 @@ const (
 	FieldChangeComment = "change_comment"
 	// FieldCreatedBy holds the string denoting the created_by field in the database.
 	FieldCreatedBy = "created_by"
+	// FieldRollbackable holds the string denoting the rollbackable field in the database.
+	FieldRollbackable = "rollbackable"
 	// EdgeProject holds the string denoting the project edge name in mutations.
 	EdgeProject = "project"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
@@ -110,6 +112,7 @@ var Columns = []string{
 	FieldRecord,
 	FieldChangeComment,
 	FieldCreatedBy,
+	FieldRollbackable,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -240,6 +243,11 @@ func ByChangeComment(opts ...sql.OrderTermOption) OrderOption {
 // ByCreatedBy orders the results by the created_by field.
 func ByCreatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCreatedBy, opts...).ToFunc()
+}
+
+// ByRollbackable orders the results by the rollbackable field.
+func ByRollbackable(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRollbackable, opts...).ToFunc()
 }
 
 // ByProjectField orders the results by project field.

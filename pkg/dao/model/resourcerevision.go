@@ -66,6 +66,8 @@ type ResourceRevision struct {
 	ChangeComment string `json:"change_comment,omitempty"`
 	// User who created the revision.
 	CreatedBy string `json:"created_by,omitempty"`
+	// Whether the revision is able to rollback.
+	Rollbackable bool `json:"rollbackable,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ResourceRevisionQuery when eager-loading is set.
 	Edges        ResourceRevisionEdges `json:"edges,omitempty"`
@@ -137,6 +139,8 @@ func (*ResourceRevision) scanValues(columns []string) ([]any, error) {
 			values[i] = new(object.ID)
 		case resourcerevision.FieldAttributes:
 			values[i] = new(property.Values)
+		case resourcerevision.FieldRollbackable:
+			values[i] = new(sql.NullBool)
 		case resourcerevision.FieldDuration:
 			values[i] = new(sql.NullInt64)
 		case resourcerevision.FieldTemplateName, resourcerevision.FieldTemplateVersion, resourcerevision.FieldInputPlan, resourcerevision.FieldOutput, resourcerevision.FieldDeployerType, resourcerevision.FieldRecord, resourcerevision.FieldChangeComment, resourcerevision.FieldCreatedBy:
@@ -277,6 +281,12 @@ func (rr *ResourceRevision) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				rr.CreatedBy = value.String
 			}
+		case resourcerevision.FieldRollbackable:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field rollbackable", values[i])
+			} else if value.Valid {
+				rr.Rollbackable = value.Bool
+			}
 		default:
 			rr.selectValues.Set(columns[i], values[i])
 		}
@@ -381,6 +391,9 @@ func (rr *ResourceRevision) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
 	builder.WriteString(rr.CreatedBy)
+	builder.WriteString(", ")
+	builder.WriteString("rollbackable=")
+	builder.WriteString(fmt.Sprintf("%v", rr.Rollbackable))
 	builder.WriteByte(')')
 	return builder.String()
 }

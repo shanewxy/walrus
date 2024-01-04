@@ -188,6 +188,12 @@ func (rc *ResourceCreate) SetNillableChangeComment(s *string) *ResourceCreate {
 	return rc
 }
 
+// SetRollbackable sets the "rollbackable" field.
+func (rc *ResourceCreate) SetRollbackable(b bool) *ResourceCreate {
+	rc.mutation.SetRollbackable(b)
+	return rc
+}
+
 // SetID sets the "id" field.
 func (rc *ResourceCreate) SetID(o object.ID) *ResourceCreate {
 	rc.mutation.SetID(o)
@@ -353,6 +359,9 @@ func (rc *ResourceCreate) check() error {
 			return &ValidationError{Name: "environment_id", err: fmt.Errorf(`model: validator failed for field "Resource.environment_id": %w`, err)}
 		}
 	}
+	if _, ok := rc.mutation.Rollbackable(); !ok {
+		return &ValidationError{Name: "rollbackable", err: errors.New(`model: missing required field "Resource.rollbackable"`)}
+	}
 	if _, ok := rc.mutation.ProjectID(); !ok {
 		return &ValidationError{Name: "project", err: errors.New(`model: missing required edge "Resource.project"`)}
 	}
@@ -435,6 +444,10 @@ func (rc *ResourceCreate) createSpec() (*Resource, *sqlgraph.CreateSpec) {
 	if value, ok := rc.mutation.ChangeComment(); ok {
 		_spec.SetField(resource.FieldChangeComment, field.TypeString, value)
 		_node.ChangeComment = value
+	}
+	if value, ok := rc.mutation.Rollbackable(); ok {
+		_spec.SetField(resource.FieldRollbackable, field.TypeBool, value)
+		_node.Rollbackable = value
 	}
 	if nodes := rc.mutation.ProjectIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -585,6 +598,7 @@ func (rc *ResourceCreate) Set(obj *Resource) *ResourceCreate {
 	rc.SetName(obj.Name)
 	rc.SetProjectID(obj.ProjectID)
 	rc.SetEnvironmentID(obj.EnvironmentID)
+	rc.SetRollbackable(obj.Rollbackable)
 
 	// Optional.
 	if obj.Description != "" {
@@ -697,6 +711,9 @@ func (rc *ResourceCreate) SaveE(ctx context.Context, cbs ...func(ctx context.Con
 		}
 		if _, set := rc.mutation.Field(resource.FieldChangeComment); set {
 			obj.ChangeComment = x.ChangeComment
+		}
+		if _, set := rc.mutation.Field(resource.FieldRollbackable); set {
+			obj.Rollbackable = x.Rollbackable
 		}
 		obj.Edges = x.Edges
 	}
@@ -841,6 +858,9 @@ func (rcb *ResourceCreateBulk) SaveE(ctx context.Context, cbs ...func(ctx contex
 			}
 			if _, set := rcb.builders[i].mutation.Field(resource.FieldChangeComment); set {
 				objs[i].ChangeComment = x[i].ChangeComment
+			}
+			if _, set := rcb.builders[i].mutation.Field(resource.FieldRollbackable); set {
+				objs[i].Rollbackable = x[i].Rollbackable
 			}
 			objs[i].Edges = x[i].Edges
 		}
@@ -1106,6 +1126,18 @@ func (u *ResourceUpsert) ClearChangeComment() *ResourceUpsert {
 	return u
 }
 
+// SetRollbackable sets the "rollbackable" field.
+func (u *ResourceUpsert) SetRollbackable(v bool) *ResourceUpsert {
+	u.Set(resource.FieldRollbackable, v)
+	return u
+}
+
+// UpdateRollbackable sets the "rollbackable" field to the value that was provided on create.
+func (u *ResourceUpsert) UpdateRollbackable() *ResourceUpsert {
+	u.SetExcluded(resource.FieldRollbackable)
+	return u
+}
+
 // UpdateNewValues updates the mutable fields using the new values that were set on create except the ID field.
 // Using this option is equivalent to using:
 //
@@ -1330,6 +1362,20 @@ func (u *ResourceUpsertOne) UpdateChangeComment() *ResourceUpsertOne {
 func (u *ResourceUpsertOne) ClearChangeComment() *ResourceUpsertOne {
 	return u.Update(func(s *ResourceUpsert) {
 		s.ClearChangeComment()
+	})
+}
+
+// SetRollbackable sets the "rollbackable" field.
+func (u *ResourceUpsertOne) SetRollbackable(v bool) *ResourceUpsertOne {
+	return u.Update(func(s *ResourceUpsert) {
+		s.SetRollbackable(v)
+	})
+}
+
+// UpdateRollbackable sets the "rollbackable" field to the value that was provided on create.
+func (u *ResourceUpsertOne) UpdateRollbackable() *ResourceUpsertOne {
+	return u.Update(func(s *ResourceUpsert) {
+		s.UpdateRollbackable()
 	})
 }
 
@@ -1722,6 +1768,20 @@ func (u *ResourceUpsertBulk) UpdateChangeComment() *ResourceUpsertBulk {
 func (u *ResourceUpsertBulk) ClearChangeComment() *ResourceUpsertBulk {
 	return u.Update(func(s *ResourceUpsert) {
 		s.ClearChangeComment()
+	})
+}
+
+// SetRollbackable sets the "rollbackable" field.
+func (u *ResourceUpsertBulk) SetRollbackable(v bool) *ResourceUpsertBulk {
+	return u.Update(func(s *ResourceUpsert) {
+		s.SetRollbackable(v)
+	})
+}
+
+// UpdateRollbackable sets the "rollbackable" field to the value that was provided on create.
+func (u *ResourceUpsertBulk) UpdateRollbackable() *ResourceUpsertBulk {
+	return u.Update(func(s *ResourceUpsert) {
+		s.UpdateRollbackable()
 	})
 }
 

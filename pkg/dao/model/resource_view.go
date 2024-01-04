@@ -548,6 +548,7 @@ func (rpi *ResourcePatchInput) ValidateWith(ctx context.Context, cs ClientSet, c
 			resource.FieldCreateTime,
 			resource.FieldUpdateTime,
 			resource.FieldStatus,
+			resource.FieldRollbackable,
 		)...,
 	)
 
@@ -1071,15 +1072,16 @@ func (rui *ResourceUpdateInputs) ValidateWith(ctx context.Context, cs ClientSet,
 
 // ResourceOutput holds the output of the Resource entity.
 type ResourceOutput struct {
-	ID          object.ID         `json:"id,omitempty"`
-	Name        string            `json:"name,omitempty"`
-	Description string            `json:"description,omitempty"`
-	Labels      map[string]string `json:"labels,omitempty"`
-	CreateTime  *time.Time        `json:"createTime,omitempty"`
-	UpdateTime  *time.Time        `json:"updateTime,omitempty"`
-	Status      status.Status     `json:"status,omitempty"`
-	Type        string            `json:"type,omitempty"`
-	Attributes  property.Values   `json:"attributes,omitempty"`
+	ID           object.ID         `json:"id,omitempty"`
+	Name         string            `json:"name,omitempty"`
+	Description  string            `json:"description,omitempty"`
+	Labels       map[string]string `json:"labels,omitempty"`
+	CreateTime   *time.Time        `json:"createTime,omitempty"`
+	UpdateTime   *time.Time        `json:"updateTime,omitempty"`
+	Status       status.Status     `json:"status,omitempty"`
+	Type         string            `json:"type,omitempty"`
+	Attributes   property.Values   `json:"attributes,omitempty"`
+	Rollbackable bool              `json:"rollbackable,omitempty"`
 
 	Project     *ProjectOutput         `json:"project,omitempty"`
 	Environment *EnvironmentOutput     `json:"environment,omitempty"`
@@ -1103,15 +1105,16 @@ func ExposeResource(_r *Resource) *ResourceOutput {
 	}
 
 	ro := &ResourceOutput{
-		ID:          _r.ID,
-		Name:        _r.Name,
-		Description: _r.Description,
-		Labels:      _r.Labels,
-		CreateTime:  _r.CreateTime,
-		UpdateTime:  _r.UpdateTime,
-		Status:      _r.Status,
-		Type:        _r.Type,
-		Attributes:  _r.Attributes,
+		ID:           _r.ID,
+		Name:         _r.Name,
+		Description:  _r.Description,
+		Labels:       _r.Labels,
+		CreateTime:   _r.CreateTime,
+		UpdateTime:   _r.UpdateTime,
+		Status:       _r.Status,
+		Type:         _r.Type,
+		Attributes:   _r.Attributes,
+		Rollbackable: _r.Rollbackable,
 	}
 
 	if _r.Edges.Project != nil {

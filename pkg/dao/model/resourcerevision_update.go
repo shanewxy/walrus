@@ -191,6 +191,12 @@ func (rru *ResourceRevisionUpdate) SetCreatedBy(s string) *ResourceRevisionUpdat
 	return rru
 }
 
+// SetRollbackable sets the "rollbackable" field.
+func (rru *ResourceRevisionUpdate) SetRollbackable(b bool) *ResourceRevisionUpdate {
+	rru.mutation.SetRollbackable(b)
+	return rru
+}
+
 // Mutation returns the ResourceRevisionMutation object of the builder.
 func (rru *ResourceRevisionUpdate) Mutation() *ResourceRevisionMutation {
 	return rru.mutation
@@ -301,6 +307,7 @@ func (rru *ResourceRevisionUpdate) Set(obj *ResourceRevision) *ResourceRevisionU
 		rru.ClearChangeComment()
 	}
 	rru.SetCreatedBy(obj.CreatedBy)
+	rru.SetRollbackable(obj.Rollbackable)
 
 	// With Default.
 
@@ -383,6 +390,9 @@ func (rru *ResourceRevisionUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if value, ok := rru.mutation.CreatedBy(); ok {
 		_spec.SetField(resourcerevision.FieldCreatedBy, field.TypeString, value)
+	}
+	if value, ok := rru.mutation.Rollbackable(); ok {
+		_spec.SetField(resourcerevision.FieldRollbackable, field.TypeBool, value)
 	}
 	_spec.Node.Schema = rru.schemaConfig.ResourceRevision
 	ctx = internal.NewSchemaConfigContext(ctx, rru.schemaConfig)
@@ -558,6 +568,12 @@ func (rruo *ResourceRevisionUpdateOne) SetCreatedBy(s string) *ResourceRevisionU
 	return rruo
 }
 
+// SetRollbackable sets the "rollbackable" field.
+func (rruo *ResourceRevisionUpdateOne) SetRollbackable(b bool) *ResourceRevisionUpdateOne {
+	rruo.mutation.SetRollbackable(b)
+	return rruo
+}
+
 // Mutation returns the ResourceRevisionMutation object of the builder.
 func (rruo *ResourceRevisionUpdateOne) Mutation() *ResourceRevisionMutation {
 	return rruo.mutation
@@ -715,6 +731,9 @@ func (rruo *ResourceRevisionUpdateOne) Set(obj *ResourceRevision) *ResourceRevis
 			if db.CreatedBy != obj.CreatedBy {
 				rruo.SetCreatedBy(obj.CreatedBy)
 			}
+			if db.Rollbackable != obj.Rollbackable {
+				rruo.SetRollbackable(obj.Rollbackable)
+			}
 
 			// With Default.
 
@@ -797,6 +816,9 @@ func (rruo *ResourceRevisionUpdateOne) SaveE(ctx context.Context, cbs ...func(ct
 		}
 		if _, set := rruo.mutation.Field(resourcerevision.FieldCreatedBy); set {
 			obj.CreatedBy = x.CreatedBy
+		}
+		if _, set := rruo.mutation.Field(resourcerevision.FieldRollbackable); set {
+			obj.Rollbackable = x.Rollbackable
 		}
 		obj.Edges = x.Edges
 	}
@@ -923,6 +945,9 @@ func (rruo *ResourceRevisionUpdateOne) sqlSave(ctx context.Context) (_node *Reso
 	}
 	if value, ok := rruo.mutation.CreatedBy(); ok {
 		_spec.SetField(resourcerevision.FieldCreatedBy, field.TypeString, value)
+	}
+	if value, ok := rruo.mutation.Rollbackable(); ok {
+		_spec.SetField(resourcerevision.FieldRollbackable, field.TypeBool, value)
 	}
 	_spec.Node.Schema = rruo.schemaConfig.ResourceRevision
 	ctx = internal.NewSchemaConfigContext(ctx, rruo.schemaConfig)

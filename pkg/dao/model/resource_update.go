@@ -167,6 +167,12 @@ func (ru *ResourceUpdate) ClearChangeComment() *ResourceUpdate {
 	return ru
 }
 
+// SetRollbackable sets the "rollbackable" field.
+func (ru *ResourceUpdate) SetRollbackable(b bool) *ResourceUpdate {
+	ru.mutation.SetRollbackable(b)
+	return ru
+}
+
 // SetTemplate sets the "template" edge to the TemplateVersion entity.
 func (ru *ResourceUpdate) SetTemplate(t *TemplateVersion) *ResourceUpdate {
 	return ru.SetTemplateID(t.ID)
@@ -408,6 +414,7 @@ func (ru *ResourceUpdate) Set(obj *Resource) *ResourceUpdate {
 	} else {
 		ru.ClearChangeComment()
 	}
+	ru.SetRollbackable(obj.Rollbackable)
 
 	// With Default.
 	if obj.UpdateTime != nil {
@@ -479,6 +486,9 @@ func (ru *ResourceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if ru.mutation.ChangeCommentCleared() {
 		_spec.ClearField(resource.FieldChangeComment, field.TypeString)
+	}
+	if value, ok := ru.mutation.Rollbackable(); ok {
+		_spec.SetField(resource.FieldRollbackable, field.TypeBool, value)
 	}
 	if ru.mutation.TemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -802,6 +812,12 @@ func (ruo *ResourceUpdateOne) ClearChangeComment() *ResourceUpdateOne {
 	return ruo
 }
 
+// SetRollbackable sets the "rollbackable" field.
+func (ruo *ResourceUpdateOne) SetRollbackable(b bool) *ResourceUpdateOne {
+	ruo.mutation.SetRollbackable(b)
+	return ruo
+}
+
 // SetTemplate sets the "template" edge to the TemplateVersion entity.
 func (ruo *ResourceUpdateOne) SetTemplate(t *TemplateVersion) *ResourceUpdateOne {
 	return ruo.SetTemplateID(t.ID)
@@ -1080,6 +1096,9 @@ func (ruo *ResourceUpdateOne) Set(obj *Resource) *ResourceUpdateOne {
 			} else {
 				ruo.ClearChangeComment()
 			}
+			if db.Rollbackable != obj.Rollbackable {
+				ruo.SetRollbackable(obj.Rollbackable)
+			}
 
 			// With Default.
 			if (obj.UpdateTime != nil) && (!reflect.DeepEqual(db.UpdateTime, obj.UpdateTime)) {
@@ -1150,6 +1169,9 @@ func (ruo *ResourceUpdateOne) SaveE(ctx context.Context, cbs ...func(ctx context
 		}
 		if _, set := ruo.mutation.Field(resource.FieldChangeComment); set {
 			obj.ChangeComment = x.ChangeComment
+		}
+		if _, set := ruo.mutation.Field(resource.FieldRollbackable); set {
+			obj.Rollbackable = x.Rollbackable
 		}
 		obj.Edges = x.Edges
 	}
@@ -1262,6 +1284,9 @@ func (ruo *ResourceUpdateOne) sqlSave(ctx context.Context) (_node *Resource, err
 	}
 	if ruo.mutation.ChangeCommentCleared() {
 		_spec.ClearField(resource.FieldChangeComment, field.TypeString)
+	}
+	if value, ok := ruo.mutation.Rollbackable(); ok {
+		_spec.SetField(resource.FieldRollbackable, field.TypeBool, value)
 	}
 	if ruo.mutation.TemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{

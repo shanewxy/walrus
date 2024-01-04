@@ -143,6 +143,11 @@ func CreatedBy(v string) predicate.ResourceRevision {
 	return predicate.ResourceRevision(sql.FieldEQ(FieldCreatedBy, v))
 }
 
+// Rollbackable applies equality check predicate on the "rollbackable" field. It's identical to RollbackableEQ.
+func Rollbackable(v bool) predicate.ResourceRevision {
+	return predicate.ResourceRevision(sql.FieldEQ(FieldRollbackable, v))
+}
+
 // CreateTimeEQ applies the EQ predicate on the "create_time" field.
 func CreateTimeEQ(v time.Time) predicate.ResourceRevision {
 	return predicate.ResourceRevision(sql.FieldEQ(FieldCreateTime, v))
@@ -1141,6 +1146,16 @@ func CreatedByEqualFold(v string) predicate.ResourceRevision {
 // CreatedByContainsFold applies the ContainsFold predicate on the "created_by" field.
 func CreatedByContainsFold(v string) predicate.ResourceRevision {
 	return predicate.ResourceRevision(sql.FieldContainsFold(FieldCreatedBy, v))
+}
+
+// RollbackableEQ applies the EQ predicate on the "rollbackable" field.
+func RollbackableEQ(v bool) predicate.ResourceRevision {
+	return predicate.ResourceRevision(sql.FieldEQ(FieldRollbackable, v))
+}
+
+// RollbackableNEQ applies the NEQ predicate on the "rollbackable" field.
+func RollbackableNEQ(v bool) predicate.ResourceRevision {
+	return predicate.ResourceRevision(sql.FieldNEQ(FieldRollbackable, v))
 }
 
 // HasProject applies the HasEdge predicate on the "project" edge.

@@ -117,6 +117,11 @@ func ChangeComment(v string) predicate.Resource {
 	return predicate.Resource(sql.FieldEQ(FieldChangeComment, v))
 }
 
+// Rollbackable applies equality check predicate on the "rollbackable" field. It's identical to RollbackableEQ.
+func Rollbackable(v bool) predicate.Resource {
+	return predicate.Resource(sql.FieldEQ(FieldRollbackable, v))
+}
+
 // NameEQ applies the EQ predicate on the "name" field.
 func NameEQ(v string) predicate.Resource {
 	return predicate.Resource(sql.FieldEQ(FieldName, v))
@@ -865,6 +870,16 @@ func ChangeCommentEqualFold(v string) predicate.Resource {
 // ChangeCommentContainsFold applies the ContainsFold predicate on the "change_comment" field.
 func ChangeCommentContainsFold(v string) predicate.Resource {
 	return predicate.Resource(sql.FieldContainsFold(FieldChangeComment, v))
+}
+
+// RollbackableEQ applies the EQ predicate on the "rollbackable" field.
+func RollbackableEQ(v bool) predicate.Resource {
+	return predicate.Resource(sql.FieldEQ(FieldRollbackable, v))
+}
+
+// RollbackableNEQ applies the NEQ predicate on the "rollbackable" field.
+func RollbackableNEQ(v bool) predicate.Resource {
+	return predicate.Resource(sql.FieldNEQ(FieldRollbackable, v))
 }
 
 // HasProject applies the HasEdge predicate on the "project" edge.
