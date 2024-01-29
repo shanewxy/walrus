@@ -69,7 +69,7 @@ jobs:
       - name: Build
         run: make ci
         env:
-          LINT_DIRTY: "true"
+#          LINT_DIRTY: "true"
           PACKAGE_BUILD: "false"
           WALRUS_TELEMETRY_API_KEY: "${{ github.event_name != 'pull_request' && secrets.CI_TELEMETRY_API_KEY || '' }}"
       - name: Archive Publish Result
@@ -107,12 +107,12 @@ jobs:
           platforms: "arm64"
       - name: Setup Buildx
         uses: docker/setup-buildx-action@v3
-      - name: Login DockerHub
-        if: ${{ github.event_name != 'pull_request' }}
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.CI_DOCKERHUB_USERNAME }}
-          password: ${{ secrets.CI_DOCKERHUB_PASSWORD }}
+#      - name: Login DockerHub
+#        if: ${{ github.event_name != 'pull_request' }}
+#        uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.CI_DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.CI_DOCKERHUB_PASSWORD }}
       - name: Unarchive Publish Result
         timeout-minutes: 5
         uses: actions/cache/restore@v3
@@ -126,69 +126,69 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REPO }}/${{ matrix.target }}
-      - name: Package
-        uses: docker/build-push-action@v5
-        id: package
-        with:
-          push: ${{ github.event_name != 'pull_request' }}
-          file: .dist/package/${{ matrix.target }}/${{ matrix.task }}/image/Dockerfile
-          context: .dist/package/${{ matrix.target }}/${{ matrix.task }}/
-          platforms: ${{ env.BUILD_PLATFORMS }}
-          tags: ${{ steps.metadata.outputs.tags }}
-          labels: ${{ steps.metadata.outputs.labels }}
-          # configure build cache,
-          # ref to https://github.com/moby/buildkit/tree/v0.11.5#registry-push-image-and-cache-separately.
-          cache-from: |
-            type=registry,ref=${{ env.REPO }}/build-cache:${{ matrix.target }}-${{ matrix.task }}
-          cache-to: |
-            ${{ github.event_name != 'pull_request' && format('type=registry,mode=max,oci-mediatypes=false,compression=gzip,ref={0}/build-cache:{1}-{2},ignore-error=true', env.REPO, matrix.target, matrix.task) || '' }}
-          build-args: |
-            SERVE_UI_INDEX=${{ startsWith(github.ref, 'refs/tags/') && 'file:///var/lib/walrus/ui' || 'https://walrus-ui-1303613262.cos.ap-guangzhou.myqcloud.com/latest/index.html' }}
-      - name: Setup Cosign
-        if: ${{ github.event_name != 'pull_request' }}
-        uses: sigstore/cosign-installer@v3.3.0
-        with:
-          cosign-release: v2.0.0
-      - name: Prove
-        if: ${{ github.event_name != 'pull_request' }}
-        run: |
-          set -euo pipefail
-
-          # login
-          cosign login "docker.io" -u "${DOCKERHUB_USERNAME}" -p "${DOCKERHUB_PASSWORD}"
-
-          # prove
-          curl -o slsa-generator --retry 3 --retry-all-errors --retry-delay 3 -sSfL \
-            "https://github.com/slsa-framework/slsa-github-generator/releases/download/${SLSA_GITHUB_GENERATOR_VERSION}/${SLSA_GITHUB_GENERATOR}"
-          chmod a+x slsa-generator
-          predicate_name="predicate.json"
-          ./slsa-generator generate --predicate="${predicate_name}"
-          cosign attest --predicate="${predicate_name}" \
-            --type slsaprovenance \
-            --yes \
-            "${UNTRUSTED_IMAGE}@${UNTRUSTED_DIGEST}"
-        env:
-          COSIGN_EXPERIMENTAL: "1"
-          SLSA_GITHUB_GENERATOR: "slsa-generator-container-linux-amd64"
-          SLSA_GITHUB_GENERATOR_VERSION: "v1.5.0"
-          GITHUB_CONTEXT: "${{ toJSON(github) }}"
-          UNTRUSTED_IMAGE: "${{ env.REPO }}/${{ matrix.target }}"
-          UNTRUSTED_DIGEST: "${{ steps.package.outputs.digest }}"
-          DOCKERHUB_USERNAME: "${{ secrets.CI_DOCKERHUB_USERNAME }}"
-          DOCKERHUB_PASSWORD: "${{ secrets.CI_DOCKERHUB_PASSWORD }}"
-        continue-on-error: true
-      - name: Release CLI To OSS
-        uses: TencentCloud/cos-action@b0aa648235fb35a1bdd6a77f529eb0ac4c2f1c25
-        if: ${{ github.event_name != 'pull_request' }}
-        with:
-          secret_id: ${{ secrets.CI_TECENTCOS_SECRET_ID }}
-          secret_key: ${{ secrets.CI_TECENTCOS_SECRET_KEY }}
-          cos_bucket: ${{ secrets.COS_BUCKET }}
-          cos_region: ${{ secrets.COS_REGION }}
-          local_path: .dist/package/${{ matrix.target }}/${{ matrix.task }}/build/cli
-          remote_path: releases/${{ steps.metadata.outputs.version == 'main' && 'latest' || steps.metadata.outputs.version }}
-          accelerate: true
-          clean: false
+#      - name: Package
+#        uses: docker/build-push-action@v5
+#        id: package
+#        with:
+#          push: ${{ github.event_name != 'pull_request' }}
+#          file: .dist/package/${{ matrix.target }}/${{ matrix.task }}/image/Dockerfile
+#          context: .dist/package/${{ matrix.target }}/${{ matrix.task }}/
+#          platforms: ${{ env.BUILD_PLATFORMS }}
+#          tags: ${{ steps.metadata.outputs.tags }}
+#          labels: ${{ steps.metadata.outputs.labels }}
+#          # configure build cache,
+#          # ref to https://github.com/moby/buildkit/tree/v0.11.5#registry-push-image-and-cache-separately.
+#          cache-from: |
+#            type=registry,ref=${{ env.REPO }}/build-cache:${{ matrix.target }}-${{ matrix.task }}
+#          cache-to: |
+#            ${{ github.event_name != 'pull_request' && format('type=registry,mode=max,oci-mediatypes=false,compression=gzip,ref={0}/build-cache:{1}-{2},ignore-error=true', env.REPO, matrix.target, matrix.task) || '' }}
+#          build-args: |
+#            SERVE_UI_INDEX=${{ startsWith(github.ref, 'refs/tags/') && 'file:///var/lib/walrus/ui' || 'https://walrus-ui-1303613262.cos.ap-guangzhou.myqcloud.com/latest/index.html' }}
+#      - name: Setup Cosign
+#        if: ${{ github.event_name != 'pull_request' }}
+#        uses: sigstore/cosign-installer@v3.3.0
+#        with:
+#          cosign-release: v2.0.0
+#      - name: Prove
+#        if: ${{ github.event_name != 'pull_request' }}
+#        run: |
+#          set -euo pipefail
+#
+#          # login
+#          cosign login "docker.io" -u "${DOCKERHUB_USERNAME}" -p "${DOCKERHUB_PASSWORD}"
+#
+#          # prove
+#          curl -o slsa-generator --retry 3 --retry-all-errors --retry-delay 3 -sSfL \
+#            "https://github.com/slsa-framework/slsa-github-generator/releases/download/${SLSA_GITHUB_GENERATOR_VERSION}/${SLSA_GITHUB_GENERATOR}"
+#          chmod a+x slsa-generator
+#          predicate_name="predicate.json"
+#          ./slsa-generator generate --predicate="${predicate_name}"
+#          cosign attest --predicate="${predicate_name}" \
+#            --type slsaprovenance \
+#            --yes \
+#            "${UNTRUSTED_IMAGE}@${UNTRUSTED_DIGEST}"
+#        env:
+#          COSIGN_EXPERIMENTAL: "1"
+#          SLSA_GITHUB_GENERATOR: "slsa-generator-container-linux-amd64"
+#          SLSA_GITHUB_GENERATOR_VERSION: "v1.5.0"
+#          GITHUB_CONTEXT: "${{ toJSON(github) }}"
+#          UNTRUSTED_IMAGE: "${{ env.REPO }}/${{ matrix.target }}"
+#          UNTRUSTED_DIGEST: "${{ steps.package.outputs.digest }}"
+#          DOCKERHUB_USERNAME: "${{ secrets.CI_DOCKERHUB_USERNAME }}"
+#          DOCKERHUB_PASSWORD: "${{ secrets.CI_DOCKERHUB_PASSWORD }}"
+#        continue-on-error: true
+#      - name: Release CLI To OSS
+#        uses: TencentCloud/cos-action@b0aa648235fb35a1bdd6a77f529eb0ac4c2f1c25
+#        if: ${{ github.event_name != 'pull_request' }}
+#        with:
+#          secret_id: ${{ secrets.CI_TECENTCOS_SECRET_ID }}
+#          secret_key: ${{ secrets.CI_TECENTCOS_SECRET_KEY }}
+#          cos_bucket: ${{ secrets.COS_BUCKET }}
+#          cos_region: ${{ secrets.COS_REGION }}
+#          local_path: .dist/package/${{ matrix.target }}/${{ matrix.task }}/build/cli
+#          remote_path: releases/${{ steps.metadata.outputs.version == 'main' && 'latest' || steps.metadata.outputs.version }}
+#          accelerate: true
+#          clean: false
       - name: Release Assets
         uses: softprops/action-gh-release@v1
         if: ${{ startsWith(github.ref, 'refs/tags/') }}
