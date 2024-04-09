@@ -53,14 +53,14 @@ This directory contains the code generators for the CRD (Custom Resource Definit
       new value updates.
     - `+nullable`, `+nullable=false`: Specify whether the field is nullable or not.
     - `+optional`: Specify whether the field is optional, by default all fields are required.
-    - `+listType="atomic"`: Specify the list type of the field, select from `map`, `set` or `atomic`.
+    - `+listType=atomic`: Specify the list type of the field, select from `map`, `set` or `atomic`.
         - `atomic`: Default, all the fields are treated as one unit, any changes have to replace the entire list.
         - `map`: It needs to have a key field (`+listMapKey=`), which will be used to build an associative list.
         - `set`: Fields need to be "scalar", and there can be only one occurrence of each.
-    - `+listMapKey="name"`: Specify the (sub) field of the list type to be the map key, it is required when the list
+    - `+listMapKey=name`: Specify the (sub) field of the list type to be the map key, it is required when the list
       type
       is `map`.
-    - `+mapType="granular"`: Specify the map type of the field, select from `granular` or `atomic`.
+    - `+mapType=granular`: Specify the map type of the field, select from `granular` or `atomic`.
         - `atomic`: All fields are treated as one unit, any changes have to replace the entire map.
         - `granular`: Default, items in the map are independent of each other, and can be manipulated by different
           actors.

@@ -371,7 +371,7 @@ func schemeType(logger klog.Logger, visited map[*types.Type]struct{}, t *types.T
 			props = schemeType(logger, visited, t.Underlying, lvl+1)
 		}
 	case types.Map:
-		if t.Key != types.String {
+		if !isString(t.Key) {
 			// Fallback to byte slices if map key is not string.
 			props = ptr.To(bytesProps)
 			logger.Error(nil, "invalid map key type, must be string, fallback to byte slice",
@@ -1085,14 +1085,23 @@ func collectMarkers(comments []string, into map[string][]string) {
 			into["validation"] = append(into["validation"], "optional=true")
 		case strings.HasPrefix(line, listTypeMarker):
 			if v := line[len(listTypeMarker):]; v != "" {
+				if !isGoQuoteString(v) {
+					v = strconv.Quote(v)
+				}
 				into["validation"] = append(into["validation"], "listType="+v)
 			}
 		case strings.HasPrefix(line, listMapKeyMarker):
 			if v := line[len(listMapKeyMarker):]; v != "" {
+				if !isGoQuoteString(v) {
+					v = strconv.Quote(v)
+				}
 				into["validation"] = append(into["validation"], "listMapKey="+v)
 			}
 		case strings.HasPrefix(line, mapTypeMarker):
 			if v := line[len(mapTypeMarker):]; v != "" {
+				if !isGoQuoteString(v) {
+					v = strconv.Quote(v)
+				}
 				into["validation"] = append(into["validation"], "mapType="+v)
 			}
 		case strings.HasPrefix(line, validationMarker):
@@ -1112,7 +1121,7 @@ func collectMarkers(comments []string, into map[string][]string) {
 				}
 				switch mk {
 				case "pattern":
-					if strings.HasPrefix(mv, "`") && strings.HasSuffix(mv, "`") {
+					if isGoBlockString(mv) {
 						mv = mv[1 : len(mv)-1]
 					}
 					mv = strconv.Quote(mv)
@@ -1125,6 +1134,14 @@ func collectMarkers(comments []string, into map[string][]string) {
 			}
 		}
 	}
+}
+
+func isGoBlockString(s string) bool {
+	return strings.HasPrefix(s, "`") && strings.HasSuffix(s, "`")
+}
+
+func isGoQuoteString(s string) bool {
+	return strings.HasPrefix(s, "\"") && strings.HasSuffix(s, "\"")
 }
 
 // parseStructTags returns the struct tags of the given type.

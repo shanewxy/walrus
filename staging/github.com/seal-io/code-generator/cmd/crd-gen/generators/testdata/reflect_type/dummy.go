@@ -5,6 +5,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/apimachinery/pkg/api/resource"
+	core "k8s.io/api/core/v1"
 )
 
 // Dummy is the schema for the projects API.
@@ -120,7 +121,8 @@ type DummySpec struct {
 	DummyX              DummyX      `json:"dummyX,omitempty"`
 	DummyY              DummyY      `json:"dummyY,omitempty"`
 
-	Quantity resource.Quantity `json:"quantity"`
+	Quantity  resource.Quantity `json:"quantity"`
+	Container core.Container    `json:"container"`
 }
 
 type DummyX struct {

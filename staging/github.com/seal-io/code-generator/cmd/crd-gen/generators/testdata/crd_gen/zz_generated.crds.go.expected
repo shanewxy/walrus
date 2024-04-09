@@ -104,6 +104,7 @@ func crd_crd_gen_generators_testdata_crd_gen_Dummy() *v1.CustomResourceDefinitio
 										"dummyX",
 										"dummyY",
 										"quantity",
+										"container",
 									},
 									Properties: map[string]v1.JSONSchemaProps{
 										"arrayObject": {
@@ -171,6 +172,1331 @@ func crd_crd_gen_generators_testdata_crd_gen_Dummy() *v1.CustomResourceDefinitio
 										"boolPointer": {
 											Type:     "boolean",
 											Nullable: true,
+										},
+										"container": {
+											Type: "object",
+											Required: []string{
+												"name",
+											},
+											Properties: map[string]v1.JSONSchemaProps{
+												"args": {
+													Description: "Arguments to the entrypoint.\nThe container image's CMD is used if this is not provided.\nVariable references $(VAR_NAME) are expanded using the container's environment. If a variable\ncannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced\nto a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. \"$$(VAR_NAME)\" will\nproduce the string literal \"$(VAR_NAME)\". Escaped references will never be expanded, regardless\nof whether the variable exists or not. Cannot be updated.\nMore info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell",
+													Type:        "array",
+													Items: &v1.JSONSchemaPropsOrArray{
+														Schema: &v1.JSONSchemaProps{
+															Type: "string",
+														},
+													},
+													Nullable: true,
+												},
+												"command": {
+													Description: "Entrypoint array. Not executed within a shell.\nThe container image's ENTRYPOINT is used if this is not provided.\nVariable references $(VAR_NAME) are expanded using the container's environment. If a variable\ncannot be resolved, the reference in the input string will be unchanged. Double $$ are reduced\nto a single $, which allows for escaping the $(VAR_NAME) syntax: i.e. \"$$(VAR_NAME)\" will\nproduce the string literal \"$(VAR_NAME)\". Escaped references will never be expanded, regardless\nof whether the variable exists or not. Cannot be updated.\nMore info: https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#running-a-command-in-a-shell",
+													Type:        "array",
+													Items: &v1.JSONSchemaPropsOrArray{
+														Schema: &v1.JSONSchemaProps{
+															Type: "string",
+														},
+													},
+													Nullable: true,
+												},
+												"env": {
+													Description: "List of environment variables to set in the container.\nCannot be updated.",
+													Type:        "array",
+													Items: &v1.JSONSchemaPropsOrArray{
+														Schema: &v1.JSONSchemaProps{
+															Type: "object",
+															Required: []string{
+																"name",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"name": {
+																	Description: "Name of the environment variable. Must be a C_IDENTIFIER.",
+																	Type:        "string",
+																},
+																"value": {
+																	Description: "Variable references $(VAR_NAME) are expanded\nusing the previously defined environment variables in the container and\nany service environment variables. If a variable cannot be resolved,\nthe reference in the input string will be unchanged. Double $$ are reduced\nto a single $, which allows for escaping the $(VAR_NAME) syntax: i.e.\n\"$$(VAR_NAME)\" will produce the string literal \"$(VAR_NAME)\".\nEscaped references will never be expanded, regardless of whether the variable\nexists or not.\nDefaults to \"\".",
+																	Type:        "string",
+																},
+																"valueFrom": {
+																	Description: "Source for the environment variable's value. Cannot be used if value is not empty.",
+																	Type:        "object",
+																	Properties: map[string]v1.JSONSchemaProps{
+																		"configMapKeyRef": {
+																			Description: "Selects a key of a ConfigMap.",
+																			Type:        "object",
+																			Required: []string{
+																				"key",
+																			},
+																			Properties: map[string]v1.JSONSchemaProps{
+																				"key": {
+																					Description: "The key to select.",
+																					Type:        "string",
+																				},
+																				"name": {
+																					Description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+																					Type:        "string",
+																				},
+																				"optional": {
+																					Description: "Specify whether the ConfigMap or its key must be defined",
+																					Type:        "boolean",
+																					Nullable:    true,
+																				},
+																			},
+																			Nullable: true,
+																		},
+																		"fieldRef": {
+																			Description: "Selects a field of the pod: supports metadata.name, metadata.namespace, `metadata.labels['<KEY>']`, `metadata.annotations['<KEY>']`,\nspec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP, status.podIPs.",
+																			Type:        "object",
+																			Required: []string{
+																				"fieldPath",
+																			},
+																			Properties: map[string]v1.JSONSchemaProps{
+																				"apiVersion": {
+																					Description: "Version of the schema the FieldPath is written in terms of, defaults to \"v1\".",
+																					Type:        "string",
+																				},
+																				"fieldPath": {
+																					Description: "Path of the field to select in the specified API version.",
+																					Type:        "string",
+																				},
+																			},
+																			Nullable: true,
+																		},
+																		"resourceFieldRef": {
+																			Description: "Selects a resource of the container: only resources limits and requests\n(limits.cpu, limits.memory, limits.ephemeral-storage, requests.cpu, requests.memory and requests.ephemeral-storage) are currently supported.",
+																			Type:        "object",
+																			Required: []string{
+																				"resource",
+																			},
+																			Properties: map[string]v1.JSONSchemaProps{
+																				"containerName": {
+																					Description: "Container name: required for volumes, optional for env vars",
+																					Type:        "string",
+																				},
+																				"divisor": {
+																					Description: "Specifies the output format of the exposed resources, defaults to \"1\"",
+																					Pattern:     `^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$`,
+																					AnyOf: []v1.JSONSchemaProps{
+																						{
+																							Type: "integer",
+																						},
+																						{
+																							Type: "string",
+																						},
+																					},
+																					XIntOrString: true,
+																				},
+																				"resource": {
+																					Description: "Required: resource to select",
+																					Type:        "string",
+																				},
+																			},
+																			Nullable: true,
+																		},
+																		"secretKeyRef": {
+																			Description: "Selects a key of a secret in the pod's namespace",
+																			Type:        "object",
+																			Required: []string{
+																				"key",
+																			},
+																			Properties: map[string]v1.JSONSchemaProps{
+																				"key": {
+																					Description: "The key of the secret to select from.  Must be a valid secret key.",
+																					Type:        "string",
+																				},
+																				"name": {
+																					Description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+																					Type:        "string",
+																				},
+																				"optional": {
+																					Description: "Specify whether the Secret or its key must be defined",
+																					Type:        "boolean",
+																					Nullable:    true,
+																				},
+																			},
+																			Nullable: true,
+																		},
+																	},
+																	Nullable: true,
+																},
+															},
+														},
+													},
+													Nullable: true,
+												},
+												"envFrom": {
+													Description: "List of sources to populate environment variables in the container.\nThe keys defined within a source must be a C_IDENTIFIER. All invalid keys\nwill be reported as an event when the container is starting. When a key exists in multiple\nsources, the value associated with the last source will take precedence.\nValues defined by an Env with a duplicate key will take precedence.\nCannot be updated.",
+													Type:        "array",
+													Items: &v1.JSONSchemaPropsOrArray{
+														Schema: &v1.JSONSchemaProps{
+															Type: "object",
+															Properties: map[string]v1.JSONSchemaProps{
+																"configMapRef": {
+																	Description: "The ConfigMap to select from",
+																	Type:        "object",
+																	Properties: map[string]v1.JSONSchemaProps{
+																		"name": {
+																			Description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+																			Type:        "string",
+																		},
+																		"optional": {
+																			Description: "Specify whether the ConfigMap must be defined",
+																			Type:        "boolean",
+																			Nullable:    true,
+																		},
+																	},
+																	Nullable: true,
+																},
+																"prefix": {
+																	Description: "An optional identifier to prepend to each key in the ConfigMap. Must be a C_IDENTIFIER.",
+																	Type:        "string",
+																},
+																"secretRef": {
+																	Description: "The Secret to select from",
+																	Type:        "object",
+																	Properties: map[string]v1.JSONSchemaProps{
+																		"name": {
+																			Description: "Name of the referent.\nMore info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names\nTODO: Add other useful fields. apiVersion, kind, uid?",
+																			Type:        "string",
+																		},
+																		"optional": {
+																			Description: "Specify whether the Secret must be defined",
+																			Type:        "boolean",
+																			Nullable:    true,
+																		},
+																	},
+																	Nullable: true,
+																},
+															},
+														},
+													},
+													Nullable: true,
+												},
+												"image": {
+													Description: "Container image name.\nMore info: https://kubernetes.io/docs/concepts/containers/images\nThis field is optional to allow higher level config management to default or override\ncontainer images in workload controllers like Deployments and StatefulSets.",
+													Type:        "string",
+												},
+												"imagePullPolicy": {
+													Description: "Image pull policy.\nOne of Always, Never, IfNotPresent.\nDefaults to Always if :latest tag is specified, or IfNotPresent otherwise.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/containers/images#updating-images",
+													Type:        "string",
+												},
+												"lifecycle": {
+													Description: "Actions that the management system should take in response to container lifecycle events.\nCannot be updated.",
+													Type:        "object",
+													Properties: map[string]v1.JSONSchemaProps{
+														"postStart": {
+															Description: "PostStart is called immediately after a container is created. If the handler fails,\nthe container is terminated and restarted according to its restart policy.\nOther management of the container blocks until the hook completes.\nMore info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks",
+															Type:        "object",
+															Properties: map[string]v1.JSONSchemaProps{
+																"exec": {
+																	Description: "Exec specifies the action to take.",
+																	Type:        "object",
+																	Properties: map[string]v1.JSONSchemaProps{
+																		"command": {
+																			Description: "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.",
+																			Type:        "array",
+																			Items: &v1.JSONSchemaPropsOrArray{
+																				Schema: &v1.JSONSchemaProps{
+																					Type: "string",
+																				},
+																			},
+																			Nullable: true,
+																		},
+																	},
+																	Nullable: true,
+																},
+																"httpGet": {
+																	Description: "HTTPGet specifies the http request to perform.",
+																	Type:        "object",
+																	Required: []string{
+																		"port",
+																	},
+																	Properties: map[string]v1.JSONSchemaProps{
+																		"host": {
+																			Description: "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.",
+																			Type:        "string",
+																		},
+																		"httpHeaders": {
+																			Description: "Custom headers to set in the request. HTTP allows repeated headers.",
+																			Type:        "array",
+																			Items: &v1.JSONSchemaPropsOrArray{
+																				Schema: &v1.JSONSchemaProps{
+																					Type: "object",
+																					Required: []string{
+																						"name",
+																						"value",
+																					},
+																					Properties: map[string]v1.JSONSchemaProps{
+																						"name": {
+																							Description: "The header field name.\nThis will be canonicalized upon output, so case-variant names will be understood as the same header.",
+																							Type:        "string",
+																						},
+																						"value": {
+																							Description: "The header field value",
+																							Type:        "string",
+																						},
+																					},
+																				},
+																			},
+																			Nullable: true,
+																		},
+																		"path": {
+																			Description: "Path to access on the HTTP server.",
+																			Type:        "string",
+																		},
+																		"port": {
+																			Description: "Name or number of the port to access on the container.\nNumber must be in the range 1 to 65535.\nName must be an IANA_SVC_NAME.",
+																			AnyOf: []v1.JSONSchemaProps{
+																				{
+																					Type: "integer",
+																				},
+																				{
+																					Type: "string",
+																				},
+																			},
+																			XIntOrString: true,
+																		},
+																		"scheme": {
+																			Description: "Scheme to use for connecting to the host.\nDefaults to HTTP.",
+																			Type:        "string",
+																		},
+																	},
+																	Nullable: true,
+																},
+																"sleep": {
+																	Description: "Sleep represents the duration that the container should sleep before being terminated.",
+																	Type:        "object",
+																	Required: []string{
+																		"seconds",
+																	},
+																	Properties: map[string]v1.JSONSchemaProps{
+																		"seconds": {
+																			Description: "Seconds is the number of seconds to sleep.",
+																			Type:        "integer",
+																			Format:      "int64",
+																		},
+																	},
+																	Nullable: true,
+																},
+																"tcpSocket": {
+																	Description: "Deprecated. TCPSocket is NOT supported as a LifecycleHandler and kept\nfor the backward compatibility. There are no validation of this field and\nlifecycle hooks will fail in runtime when tcp handler is specified.",
+																	Type:        "object",
+																	Required: []string{
+																		"port",
+																	},
+																	Properties: map[string]v1.JSONSchemaProps{
+																		"host": {
+																			Description: "Optional: Host name to connect to, defaults to the pod IP.",
+																			Type:        "string",
+																		},
+																		"port": {
+																			Description: "Number or name of the port to access on the container.\nNumber must be in the range 1 to 65535.\nName must be an IANA_SVC_NAME.",
+																			AnyOf: []v1.JSONSchemaProps{
+																				{
+																					Type: "integer",
+																				},
+																				{
+																					Type: "string",
+																				},
+																			},
+																			XIntOrString: true,
+																		},
+																	},
+																	Nullable: true,
+																},
+															},
+															Nullable: true,
+														},
+														"preStop": {
+															Description: "PreStop is called immediately before a container is terminated due to an\nAPI request or management event such as liveness/startup probe failure,\npreemption, resource contention, etc. The handler is not called if the\ncontainer crashes or exits. The Pod's termination grace period countdown begins before the\nPreStop hook is executed. Regardless of the outcome of the handler, the\ncontainer will eventually terminate within the Pod's termination grace\nperiod (unless delayed by finalizers). Other management of the container blocks until the hook completes\nor until the termination grace period is reached.\nMore info: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#container-hooks",
+															Type:        "object",
+															Properties: map[string]v1.JSONSchemaProps{
+																"exec": {
+																	Description: "Exec specifies the action to take.",
+																	Type:        "object",
+																	Properties: map[string]v1.JSONSchemaProps{
+																		"command": {
+																			Description: "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.",
+																			Type:        "array",
+																			Items: &v1.JSONSchemaPropsOrArray{
+																				Schema: &v1.JSONSchemaProps{
+																					Type: "string",
+																				},
+																			},
+																			Nullable: true,
+																		},
+																	},
+																	Nullable: true,
+																},
+																"httpGet": {
+																	Description: "HTTPGet specifies the http request to perform.",
+																	Type:        "object",
+																	Required: []string{
+																		"port",
+																	},
+																	Properties: map[string]v1.JSONSchemaProps{
+																		"host": {
+																			Description: "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.",
+																			Type:        "string",
+																		},
+																		"httpHeaders": {
+																			Description: "Custom headers to set in the request. HTTP allows repeated headers.",
+																			Type:        "array",
+																			Items: &v1.JSONSchemaPropsOrArray{
+																				Schema: &v1.JSONSchemaProps{
+																					Type: "object",
+																					Required: []string{
+																						"name",
+																						"value",
+																					},
+																					Properties: map[string]v1.JSONSchemaProps{
+																						"name": {
+																							Description: "The header field name.\nThis will be canonicalized upon output, so case-variant names will be understood as the same header.",
+																							Type:        "string",
+																						},
+																						"value": {
+																							Description: "The header field value",
+																							Type:        "string",
+																						},
+																					},
+																				},
+																			},
+																			Nullable: true,
+																		},
+																		"path": {
+																			Description: "Path to access on the HTTP server.",
+																			Type:        "string",
+																		},
+																		"port": {
+																			Description: "Name or number of the port to access on the container.\nNumber must be in the range 1 to 65535.\nName must be an IANA_SVC_NAME.",
+																			AnyOf: []v1.JSONSchemaProps{
+																				{
+																					Type: "integer",
+																				},
+																				{
+																					Type: "string",
+																				},
+																			},
+																			XIntOrString: true,
+																		},
+																		"scheme": {
+																			Description: "Scheme to use for connecting to the host.\nDefaults to HTTP.",
+																			Type:        "string",
+																		},
+																	},
+																	Nullable: true,
+																},
+																"sleep": {
+																	Description: "Sleep represents the duration that the container should sleep before being terminated.",
+																	Type:        "object",
+																	Required: []string{
+																		"seconds",
+																	},
+																	Properties: map[string]v1.JSONSchemaProps{
+																		"seconds": {
+																			Description: "Seconds is the number of seconds to sleep.",
+																			Type:        "integer",
+																			Format:      "int64",
+																		},
+																	},
+																	Nullable: true,
+																},
+																"tcpSocket": {
+																	Description: "Deprecated. TCPSocket is NOT supported as a LifecycleHandler and kept\nfor the backward compatibility. There are no validation of this field and\nlifecycle hooks will fail in runtime when tcp handler is specified.",
+																	Type:        "object",
+																	Required: []string{
+																		"port",
+																	},
+																	Properties: map[string]v1.JSONSchemaProps{
+																		"host": {
+																			Description: "Optional: Host name to connect to, defaults to the pod IP.",
+																			Type:        "string",
+																		},
+																		"port": {
+																			Description: "Number or name of the port to access on the container.\nNumber must be in the range 1 to 65535.\nName must be an IANA_SVC_NAME.",
+																			AnyOf: []v1.JSONSchemaProps{
+																				{
+																					Type: "integer",
+																				},
+																				{
+																					Type: "string",
+																				},
+																			},
+																			XIntOrString: true,
+																		},
+																	},
+																	Nullable: true,
+																},
+															},
+															Nullable: true,
+														},
+													},
+													Nullable: true,
+												},
+												"livenessProbe": {
+													Description: "Periodic probe of container liveness.\nContainer will be restarted if the probe fails.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
+													Type:        "object",
+													Properties: map[string]v1.JSONSchemaProps{
+														"exec": {
+															Description: "Exec specifies the action to take.",
+															Type:        "object",
+															Properties: map[string]v1.JSONSchemaProps{
+																"command": {
+																	Description: "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.",
+																	Type:        "array",
+																	Items: &v1.JSONSchemaPropsOrArray{
+																		Schema: &v1.JSONSchemaProps{
+																			Type: "string",
+																		},
+																	},
+																	Nullable: true,
+																},
+															},
+															Nullable: true,
+														},
+														"failureThreshold": {
+															Description: "Minimum consecutive failures for the probe to be considered failed after having succeeded.\nDefaults to 3. Minimum value is 1.",
+															Type:        "integer",
+															Format:      "int32",
+														},
+														"grpc": {
+															Description: "GRPC specifies an action involving a GRPC port.",
+															Type:        "object",
+															Required: []string{
+																"port",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"port": {
+																	Description: "Port number of the gRPC service. Number must be in the range 1 to 65535.",
+																	Type:        "integer",
+																	Format:      "int32",
+																},
+																"service": {
+																	Description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\nIf this is not specified, the default behavior is defined by gRPC.",
+																	Type:        "string",
+																	Default: &v1.JSON{
+																		Raw: []byte(`""`),
+																	},
+																	Nullable: true,
+																},
+															},
+															Nullable: true,
+														},
+														"httpGet": {
+															Description: "HTTPGet specifies the http request to perform.",
+															Type:        "object",
+															Required: []string{
+																"port",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"host": {
+																	Description: "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.",
+																	Type:        "string",
+																},
+																"httpHeaders": {
+																	Description: "Custom headers to set in the request. HTTP allows repeated headers.",
+																	Type:        "array",
+																	Items: &v1.JSONSchemaPropsOrArray{
+																		Schema: &v1.JSONSchemaProps{
+																			Type: "object",
+																			Required: []string{
+																				"name",
+																				"value",
+																			},
+																			Properties: map[string]v1.JSONSchemaProps{
+																				"name": {
+																					Description: "The header field name.\nThis will be canonicalized upon output, so case-variant names will be understood as the same header.",
+																					Type:        "string",
+																				},
+																				"value": {
+																					Description: "The header field value",
+																					Type:        "string",
+																				},
+																			},
+																		},
+																	},
+																	Nullable: true,
+																},
+																"path": {
+																	Description: "Path to access on the HTTP server.",
+																	Type:        "string",
+																},
+																"port": {
+																	Description: "Name or number of the port to access on the container.\nNumber must be in the range 1 to 65535.\nName must be an IANA_SVC_NAME.",
+																	AnyOf: []v1.JSONSchemaProps{
+																		{
+																			Type: "integer",
+																		},
+																		{
+																			Type: "string",
+																		},
+																	},
+																	XIntOrString: true,
+																},
+																"scheme": {
+																	Description: "Scheme to use for connecting to the host.\nDefaults to HTTP.",
+																	Type:        "string",
+																},
+															},
+															Nullable: true,
+														},
+														"initialDelaySeconds": {
+															Description: "Number of seconds after the container has started before liveness probes are initiated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
+															Type:        "integer",
+															Format:      "int32",
+														},
+														"periodSeconds": {
+															Description: "How often (in seconds) to perform the probe.\nDefault to 10 seconds. Minimum value is 1.",
+															Type:        "integer",
+															Format:      "int32",
+														},
+														"successThreshold": {
+															Description: "Minimum consecutive successes for the probe to be considered successful after having failed.\nDefaults to 1. Must be 1 for liveness and startup. Minimum value is 1.",
+															Type:        "integer",
+															Format:      "int32",
+														},
+														"tcpSocket": {
+															Description: "TCPSocket specifies an action involving a TCP port.",
+															Type:        "object",
+															Required: []string{
+																"port",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"host": {
+																	Description: "Optional: Host name to connect to, defaults to the pod IP.",
+																	Type:        "string",
+																},
+																"port": {
+																	Description: "Number or name of the port to access on the container.\nNumber must be in the range 1 to 65535.\nName must be an IANA_SVC_NAME.",
+																	AnyOf: []v1.JSONSchemaProps{
+																		{
+																			Type: "integer",
+																		},
+																		{
+																			Type: "string",
+																		},
+																	},
+																	XIntOrString: true,
+																},
+															},
+															Nullable: true,
+														},
+														"terminationGracePeriodSeconds": {
+															Description: "Optional duration in seconds the pod needs to terminate gracefully upon probe failure.\nThe grace period is the duration in seconds after the processes running in the pod are sent\na termination signal and the time when the processes are forcibly halted with a kill signal.\nSet this value longer than the expected cleanup time for your process.\nIf this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this\nvalue overrides the value provided by the pod spec.\nValue must be non-negative integer. The value zero indicates stop immediately via\nthe kill signal (no opportunity to shut down).\nThis is a beta field and requires enabling ProbeTerminationGracePeriod feature gate.\nMinimum value is 1. spec.terminationGracePeriodSeconds is used if unset.",
+															Type:        "integer",
+															Format:      "int64",
+															Nullable:    true,
+														},
+														"timeoutSeconds": {
+															Description: "Number of seconds after which the probe times out.\nDefaults to 1 second. Minimum value is 1.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
+															Type:        "integer",
+															Format:      "int32",
+														},
+													},
+													Nullable: true,
+												},
+												"name": {
+													Description: "Name of the container specified as a DNS_LABEL.\nEach container in a pod must have a unique name (DNS_LABEL).\nCannot be updated.",
+													Type:        "string",
+												},
+												"ports": {
+													Description: "List of ports to expose from the container. Not specifying a port here\nDOES NOT prevent that port from being exposed. Any port which is\nlistening on the default \"0.0.0.0\" address inside a container will be\naccessible from the network.\nModifying this array with strategic merge patch may corrupt the data.\nFor more information See https://github.com/kubernetes/kubernetes/issues/108255.\nCannot be updated.",
+													Type:        "array",
+													Items: &v1.JSONSchemaPropsOrArray{
+														Schema: &v1.JSONSchemaProps{
+															Type: "object",
+															Required: []string{
+																"containerPort",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"containerPort": {
+																	Description: "Number of port to expose on the pod's IP address.\nThis must be a valid port number, 0 < x < 65536.",
+																	Type:        "integer",
+																	Format:      "int32",
+																},
+																"hostIP": {
+																	Description: "What host IP to bind the external port to.",
+																	Type:        "string",
+																},
+																"hostPort": {
+																	Description: "Number of port to expose on the host.\nIf specified, this must be a valid port number, 0 < x < 65536.\nIf HostNetwork is specified, this must match ContainerPort.\nMost containers do not need this.",
+																	Type:        "integer",
+																	Format:      "int32",
+																},
+																"name": {
+																	Description: "If specified, this must be an IANA_SVC_NAME and unique within the pod. Each\nnamed port in a pod must have a unique name. Name for the port that can be\nreferred to by services.",
+																	Type:        "string",
+																},
+																"protocol": {
+																	Description: "Protocol for port. Must be UDP, TCP, or SCTP.\nDefaults to \"TCP\".",
+																	Type:        "string",
+																	Default: &v1.JSON{
+																		Raw: []byte(`"TCP"`),
+																	},
+																},
+															},
+														},
+													},
+													Nullable: true,
+													XListMapKeys: []string{
+														"containerPort",
+														"protocol",
+													},
+													XListType: ptr.To[string]("map"),
+												},
+												"readinessProbe": {
+													Description: "Periodic probe of container service readiness.\nContainer will be removed from service endpoints if the probe fails.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
+													Type:        "object",
+													Properties: map[string]v1.JSONSchemaProps{
+														"exec": {
+															Description: "Exec specifies the action to take.",
+															Type:        "object",
+															Properties: map[string]v1.JSONSchemaProps{
+																"command": {
+																	Description: "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.",
+																	Type:        "array",
+																	Items: &v1.JSONSchemaPropsOrArray{
+																		Schema: &v1.JSONSchemaProps{
+																			Type: "string",
+																		},
+																	},
+																	Nullable: true,
+																},
+															},
+															Nullable: true,
+														},
+														"failureThreshold": {
+															Description: "Minimum consecutive failures for the probe to be considered failed after having succeeded.\nDefaults to 3. Minimum value is 1.",
+															Type:        "integer",
+															Format:      "int32",
+														},
+														"grpc": {
+															Description: "GRPC specifies an action involving a GRPC port.",
+															Type:        "object",
+															Required: []string{
+																"port",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"port": {
+																	Description: "Port number of the gRPC service. Number must be in the range 1 to 65535.",
+																	Type:        "integer",
+																	Format:      "int32",
+																},
+																"service": {
+																	Description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\nIf this is not specified, the default behavior is defined by gRPC.",
+																	Type:        "string",
+																	Default: &v1.JSON{
+																		Raw: []byte(`""`),
+																	},
+																	Nullable: true,
+																},
+															},
+															Nullable: true,
+														},
+														"httpGet": {
+															Description: "HTTPGet specifies the http request to perform.",
+															Type:        "object",
+															Required: []string{
+																"port",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"host": {
+																	Description: "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.",
+																	Type:        "string",
+																},
+																"httpHeaders": {
+																	Description: "Custom headers to set in the request. HTTP allows repeated headers.",
+																	Type:        "array",
+																	Items: &v1.JSONSchemaPropsOrArray{
+																		Schema: &v1.JSONSchemaProps{
+																			Type: "object",
+																			Required: []string{
+																				"name",
+																				"value",
+																			},
+																			Properties: map[string]v1.JSONSchemaProps{
+																				"name": {
+																					Description: "The header field name.\nThis will be canonicalized upon output, so case-variant names will be understood as the same header.",
+																					Type:        "string",
+																				},
+																				"value": {
+																					Description: "The header field value",
+																					Type:        "string",
+																				},
+																			},
+																		},
+																	},
+																	Nullable: true,
+																},
+																"path": {
+																	Description: "Path to access on the HTTP server.",
+																	Type:        "string",
+																},
+																"port": {
+																	Description: "Name or number of the port to access on the container.\nNumber must be in the range 1 to 65535.\nName must be an IANA_SVC_NAME.",
+																	AnyOf: []v1.JSONSchemaProps{
+																		{
+																			Type: "integer",
+																		},
+																		{
+																			Type: "string",
+																		},
+																	},
+																	XIntOrString: true,
+																},
+																"scheme": {
+																	Description: "Scheme to use for connecting to the host.\nDefaults to HTTP.",
+																	Type:        "string",
+																},
+															},
+															Nullable: true,
+														},
+														"initialDelaySeconds": {
+															Description: "Number of seconds after the container has started before liveness probes are initiated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
+															Type:        "integer",
+															Format:      "int32",
+														},
+														"periodSeconds": {
+															Description: "How often (in seconds) to perform the probe.\nDefault to 10 seconds. Minimum value is 1.",
+															Type:        "integer",
+															Format:      "int32",
+														},
+														"successThreshold": {
+															Description: "Minimum consecutive successes for the probe to be considered successful after having failed.\nDefaults to 1. Must be 1 for liveness and startup. Minimum value is 1.",
+															Type:        "integer",
+															Format:      "int32",
+														},
+														"tcpSocket": {
+															Description: "TCPSocket specifies an action involving a TCP port.",
+															Type:        "object",
+															Required: []string{
+																"port",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"host": {
+																	Description: "Optional: Host name to connect to, defaults to the pod IP.",
+																	Type:        "string",
+																},
+																"port": {
+																	Description: "Number or name of the port to access on the container.\nNumber must be in the range 1 to 65535.\nName must be an IANA_SVC_NAME.",
+																	AnyOf: []v1.JSONSchemaProps{
+																		{
+																			Type: "integer",
+																		},
+																		{
+																			Type: "string",
+																		},
+																	},
+																	XIntOrString: true,
+																},
+															},
+															Nullable: true,
+														},
+														"terminationGracePeriodSeconds": {
+															Description: "Optional duration in seconds the pod needs to terminate gracefully upon probe failure.\nThe grace period is the duration in seconds after the processes running in the pod are sent\na termination signal and the time when the processes are forcibly halted with a kill signal.\nSet this value longer than the expected cleanup time for your process.\nIf this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this\nvalue overrides the value provided by the pod spec.\nValue must be non-negative integer. The value zero indicates stop immediately via\nthe kill signal (no opportunity to shut down).\nThis is a beta field and requires enabling ProbeTerminationGracePeriod feature gate.\nMinimum value is 1. spec.terminationGracePeriodSeconds is used if unset.",
+															Type:        "integer",
+															Format:      "int64",
+															Nullable:    true,
+														},
+														"timeoutSeconds": {
+															Description: "Number of seconds after which the probe times out.\nDefaults to 1 second. Minimum value is 1.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
+															Type:        "integer",
+															Format:      "int32",
+														},
+													},
+													Nullable: true,
+												},
+												"resizePolicy": {
+													Description: "Resources resize policy for the container.",
+													Type:        "array",
+													Items: &v1.JSONSchemaPropsOrArray{
+														Schema: &v1.JSONSchemaProps{
+															Type: "object",
+															Required: []string{
+																"resourceName",
+																"restartPolicy",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"resourceName": {
+																	Description: "Name of the resource to which this resource resize policy applies.\nSupported values: cpu, memory.",
+																	Type:        "string",
+																},
+																"restartPolicy": {
+																	Description: "Restart policy to apply when specified resource is resized.\nIf not specified, it defaults to NotRequired.",
+																	Type:        "string",
+																},
+															},
+														},
+													},
+													Nullable:  true,
+													XListType: ptr.To[string]("atomic"),
+												},
+												"resources": {
+													Description: "Compute Resources required by this container.\nCannot be updated.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+													Type:        "object",
+													Properties: map[string]v1.JSONSchemaProps{
+														"claims": {
+															Description: "Claims lists the names of resources, defined in spec.resourceClaims,\nthat are used by this container.\nThis is an alpha field and requires enabling the\nDynamicResourceAllocation feature gate.\nThis field is immutable. It can only be set for containers.",
+															Type:        "array",
+															Items: &v1.JSONSchemaPropsOrArray{
+																Schema: &v1.JSONSchemaProps{
+																	Type: "object",
+																	Required: []string{
+																		"name",
+																	},
+																	Properties: map[string]v1.JSONSchemaProps{
+																		"name": {
+																			Description: "Name must match the name of one entry in pod.spec.resourceClaims of\nthe Pod where this field is used. It makes that resource available\ninside a container.",
+																			Type:        "string",
+																		},
+																	},
+																},
+															},
+															Nullable: true,
+															XListMapKeys: []string{
+																"name",
+															},
+															XListType: ptr.To[string]("map"),
+														},
+														"limits": {
+															Description: "Limits describes the maximum amount of compute resources allowed.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+															Type:        "object",
+															AdditionalProperties: &v1.JSONSchemaPropsOrBool{
+																Allows: true,
+																Schema: &v1.JSONSchemaProps{
+																	Pattern: `^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$`,
+																	AnyOf: []v1.JSONSchemaProps{
+																		{
+																			Type: "integer",
+																		},
+																		{
+																			Type: "string",
+																		},
+																	},
+																	XIntOrString: true,
+																},
+															},
+															Nullable: true,
+														},
+														"requests": {
+															Description: "Requests describes the minimum amount of compute resources required.\nIf Requests is omitted for a container, it defaults to Limits if that is explicitly specified,\notherwise to an implementation-defined value. Requests cannot exceed Limits.\nMore info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+															Type:        "object",
+															AdditionalProperties: &v1.JSONSchemaPropsOrBool{
+																Allows: true,
+																Schema: &v1.JSONSchemaProps{
+																	Pattern: `^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$`,
+																	AnyOf: []v1.JSONSchemaProps{
+																		{
+																			Type: "integer",
+																		},
+																		{
+																			Type: "string",
+																		},
+																	},
+																	XIntOrString: true,
+																},
+															},
+															Nullable: true,
+														},
+													},
+												},
+												"restartPolicy": {
+													Description: "RestartPolicy defines the restart behavior of individual containers in a pod.\nThis field may only be set for init containers, and the only allowed value is \"Always\".\nFor non-init containers or when this field is not specified,\nthe restart behavior is defined by the Pod's restart policy and the container type.\nSetting the RestartPolicy as \"Always\" for the init container will have the following effect:\nthis init container will be continually restarted on\nexit until all regular containers have terminated. Once all regular\ncontainers have completed, all init containers with restartPolicy \"Always\"\nwill be shut down. This lifecycle differs from normal init containers and\nis often referred to as a \"sidecar\" container. Although this init\ncontainer still starts in the init container sequence, it does not wait\nfor the container to complete before proceeding to the next init\ncontainer. Instead, the next init container starts immediately after this\ninit container is started, or after any startupProbe has successfully\ncompleted.",
+													Type:        "string",
+													Nullable:    true,
+												},
+												"securityContext": {
+													Description: "SecurityContext defines the security options the container should be run with.\nIf set, the fields of SecurityContext override the equivalent fields of PodSecurityContext.\nMore info: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/",
+													Type:        "object",
+													Properties: map[string]v1.JSONSchemaProps{
+														"allowPrivilegeEscalation": {
+															Description: "AllowPrivilegeEscalation controls whether a process can gain more\nprivileges than its parent process. This bool directly controls if\nthe no_new_privs flag will be set on the container process.\nAllowPrivilegeEscalation is true always when the container is:\n1) run as Privileged\n2) has CAP_SYS_ADMIN\nNote that this field cannot be set when spec.os.name is windows.",
+															Type:        "boolean",
+															Nullable:    true,
+														},
+														"capabilities": {
+															Description: "The capabilities to add/drop when running containers.\nDefaults to the default set of capabilities granted by the container runtime.\nNote that this field cannot be set when spec.os.name is windows.",
+															Type:        "object",
+															Properties: map[string]v1.JSONSchemaProps{
+																"add": {
+																	Description: "Added capabilities",
+																	Type:        "array",
+																	Items: &v1.JSONSchemaPropsOrArray{
+																		Schema: &v1.JSONSchemaProps{
+																			Type: "string",
+																		},
+																	},
+																	Nullable: true,
+																},
+																"drop": {
+																	Description: "Removed capabilities",
+																	Type:        "array",
+																	Items: &v1.JSONSchemaPropsOrArray{
+																		Schema: &v1.JSONSchemaProps{
+																			Type: "string",
+																		},
+																	},
+																	Nullable: true,
+																},
+															},
+															Nullable: true,
+														},
+														"privileged": {
+															Description: "Run container in privileged mode.\nProcesses in privileged containers are essentially equivalent to root on the host.\nDefaults to false.\nNote that this field cannot be set when spec.os.name is windows.",
+															Type:        "boolean",
+															Nullable:    true,
+														},
+														"procMount": {
+															Description: "procMount denotes the type of proc mount to use for the containers.\nThe default is DefaultProcMount which uses the container runtime defaults for\nreadonly paths and masked paths.\nThis requires the ProcMountType feature flag to be enabled.\nNote that this field cannot be set when spec.os.name is windows.",
+															Type:        "string",
+															Nullable:    true,
+														},
+														"readOnlyRootFilesystem": {
+															Description: "Whether this container has a read-only root filesystem.\nDefault is false.\nNote that this field cannot be set when spec.os.name is windows.",
+															Type:        "boolean",
+															Nullable:    true,
+														},
+														"runAsGroup": {
+															Description: "The GID to run the entrypoint of the container process.\nUses runtime default if unset.\nMay also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\nNote that this field cannot be set when spec.os.name is windows.",
+															Type:        "integer",
+															Format:      "int64",
+															Nullable:    true,
+														},
+														"runAsNonRoot": {
+															Description: "Indicates that the container must run as a non-root user.\nIf true, the Kubelet will validate the image at runtime to ensure that it\ndoes not run as UID 0 (root) and fail to start the container if it does.\nIf unset or false, no such validation will be performed.\nMay also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.",
+															Type:        "boolean",
+															Nullable:    true,
+														},
+														"runAsUser": {
+															Description: "The UID to run the entrypoint of the container process.\nDefaults to user specified in image metadata if unspecified.\nMay also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\nNote that this field cannot be set when spec.os.name is windows.",
+															Type:        "integer",
+															Format:      "int64",
+															Nullable:    true,
+														},
+														"seLinuxOptions": {
+															Description: "The SELinux context to be applied to the container.\nIf unspecified, the container runtime will allocate a random SELinux context for each\ncontainer.  May also be set in PodSecurityContext.  If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.\nNote that this field cannot be set when spec.os.name is windows.",
+															Type:        "object",
+															Properties: map[string]v1.JSONSchemaProps{
+																"level": {
+																	Description: "Level is SELinux level label that applies to the container.",
+																	Type:        "string",
+																},
+																"role": {
+																	Description: "Role is a SELinux role label that applies to the container.",
+																	Type:        "string",
+																},
+																"type": {
+																	Description: "Type is a SELinux type label that applies to the container.",
+																	Type:        "string",
+																},
+																"user": {
+																	Description: "User is a SELinux user label that applies to the container.",
+																	Type:        "string",
+																},
+															},
+															Nullable: true,
+														},
+														"seccompProfile": {
+															Description: "The seccomp options to use by this container. If seccomp options are\nprovided at both the pod & container level, the container options\noverride the pod options.\nNote that this field cannot be set when spec.os.name is windows.",
+															Type:        "object",
+															Required: []string{
+																"type",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"localhostProfile": {
+																	Description: "localhostProfile indicates a profile defined in a file on the node should be used.\nThe profile must be preconfigured on the node to work.\nMust be a descending path, relative to the kubelet's configured seccomp profile location.\nMust be set if type is \"Localhost\". Must NOT be set for any other type.",
+																	Type:        "string",
+																	Nullable:    true,
+																},
+																"type": {
+																	Description: "type indicates which kind of seccomp profile will be applied.\nValid options are:\nLocalhost - a profile defined in a file on the node should be used.\nRuntimeDefault - the container runtime default profile should be used.\nUnconfined - no profile should be applied.",
+																	Type:        "string",
+																},
+															},
+															Nullable: true,
+														},
+														"windowsOptions": {
+															Description: "The Windows specific settings applied to all containers.\nIf unspecified, the options from the PodSecurityContext will be used.\nIf set in both SecurityContext and PodSecurityContext, the value specified in SecurityContext takes precedence.\nNote that this field cannot be set when spec.os.name is linux.",
+															Type:        "object",
+															Properties: map[string]v1.JSONSchemaProps{
+																"gmsaCredentialSpec": {
+																	Description: "GMSACredentialSpec is where the GMSA admission webhook\n(https://github.com/kubernetes-sigs/windows-gmsa) inlines the contents of the\nGMSA credential spec named by the GMSACredentialSpecName field.",
+																	Type:        "string",
+																	Nullable:    true,
+																},
+																"gmsaCredentialSpecName": {
+																	Description: "GMSACredentialSpecName is the name of the GMSA credential spec to use.",
+																	Type:        "string",
+																	Nullable:    true,
+																},
+																"hostProcess": {
+																	Description: "HostProcess determines if a container should be run as a 'Host Process' container.\nAll of a Pod's containers must have the same effective HostProcess value\n(it is not allowed to have a mix of HostProcess containers and non-HostProcess containers).\nIn addition, if HostProcess is true then HostNetwork must also be set to true.",
+																	Type:        "boolean",
+																	Nullable:    true,
+																},
+																"runAsUserName": {
+																	Description: "The UserName in Windows to run the entrypoint of the container process.\nDefaults to the user specified in image metadata if unspecified.\nMay also be set in PodSecurityContext. If set in both SecurityContext and\nPodSecurityContext, the value specified in SecurityContext takes precedence.",
+																	Type:        "string",
+																	Nullable:    true,
+																},
+															},
+															Nullable: true,
+														},
+													},
+													Nullable: true,
+												},
+												"startupProbe": {
+													Description: "StartupProbe indicates that the Pod has successfully initialized.\nIf specified, no other probes are executed until this completes successfully.\nIf this probe fails, the Pod will be restarted, just as if the livenessProbe failed.\nThis can be used to provide different probe parameters at the beginning of a Pod's lifecycle,\nwhen it might take a long time to load data or warm a cache, than during steady-state operation.\nThis cannot be updated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
+													Type:        "object",
+													Properties: map[string]v1.JSONSchemaProps{
+														"exec": {
+															Description: "Exec specifies the action to take.",
+															Type:        "object",
+															Properties: map[string]v1.JSONSchemaProps{
+																"command": {
+																	Description: "Command is the command line to execute inside the container, the working directory for the\ncommand  is root ('/') in the container's filesystem. The command is simply exec'd, it is\nnot run inside a shell, so traditional shell instructions ('|', etc) won't work. To use\na shell, you need to explicitly call out to that shell.\nExit status of 0 is treated as live/healthy and non-zero is unhealthy.",
+																	Type:        "array",
+																	Items: &v1.JSONSchemaPropsOrArray{
+																		Schema: &v1.JSONSchemaProps{
+																			Type: "string",
+																		},
+																	},
+																	Nullable: true,
+																},
+															},
+															Nullable: true,
+														},
+														"failureThreshold": {
+															Description: "Minimum consecutive failures for the probe to be considered failed after having succeeded.\nDefaults to 3. Minimum value is 1.",
+															Type:        "integer",
+															Format:      "int32",
+														},
+														"grpc": {
+															Description: "GRPC specifies an action involving a GRPC port.",
+															Type:        "object",
+															Required: []string{
+																"port",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"port": {
+																	Description: "Port number of the gRPC service. Number must be in the range 1 to 65535.",
+																	Type:        "integer",
+																	Format:      "int32",
+																},
+																"service": {
+																	Description: "Service is the name of the service to place in the gRPC HealthCheckRequest\n(see https://github.com/grpc/grpc/blob/master/doc/health-checking.md).\nIf this is not specified, the default behavior is defined by gRPC.",
+																	Type:        "string",
+																	Default: &v1.JSON{
+																		Raw: []byte(`""`),
+																	},
+																	Nullable: true,
+																},
+															},
+															Nullable: true,
+														},
+														"httpGet": {
+															Description: "HTTPGet specifies the http request to perform.",
+															Type:        "object",
+															Required: []string{
+																"port",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"host": {
+																	Description: "Host name to connect to, defaults to the pod IP. You probably want to set\n\"Host\" in httpHeaders instead.",
+																	Type:        "string",
+																},
+																"httpHeaders": {
+																	Description: "Custom headers to set in the request. HTTP allows repeated headers.",
+																	Type:        "array",
+																	Items: &v1.JSONSchemaPropsOrArray{
+																		Schema: &v1.JSONSchemaProps{
+																			Type: "object",
+																			Required: []string{
+																				"name",
+																				"value",
+																			},
+																			Properties: map[string]v1.JSONSchemaProps{
+																				"name": {
+																					Description: "The header field name.\nThis will be canonicalized upon output, so case-variant names will be understood as the same header.",
+																					Type:        "string",
+																				},
+																				"value": {
+																					Description: "The header field value",
+																					Type:        "string",
+																				},
+																			},
+																		},
+																	},
+																	Nullable: true,
+																},
+																"path": {
+																	Description: "Path to access on the HTTP server.",
+																	Type:        "string",
+																},
+																"port": {
+																	Description: "Name or number of the port to access on the container.\nNumber must be in the range 1 to 65535.\nName must be an IANA_SVC_NAME.",
+																	AnyOf: []v1.JSONSchemaProps{
+																		{
+																			Type: "integer",
+																		},
+																		{
+																			Type: "string",
+																		},
+																	},
+																	XIntOrString: true,
+																},
+																"scheme": {
+																	Description: "Scheme to use for connecting to the host.\nDefaults to HTTP.",
+																	Type:        "string",
+																},
+															},
+															Nullable: true,
+														},
+														"initialDelaySeconds": {
+															Description: "Number of seconds after the container has started before liveness probes are initiated.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
+															Type:        "integer",
+															Format:      "int32",
+														},
+														"periodSeconds": {
+															Description: "How often (in seconds) to perform the probe.\nDefault to 10 seconds. Minimum value is 1.",
+															Type:        "integer",
+															Format:      "int32",
+														},
+														"successThreshold": {
+															Description: "Minimum consecutive successes for the probe to be considered successful after having failed.\nDefaults to 1. Must be 1 for liveness and startup. Minimum value is 1.",
+															Type:        "integer",
+															Format:      "int32",
+														},
+														"tcpSocket": {
+															Description: "TCPSocket specifies an action involving a TCP port.",
+															Type:        "object",
+															Required: []string{
+																"port",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"host": {
+																	Description: "Optional: Host name to connect to, defaults to the pod IP.",
+																	Type:        "string",
+																},
+																"port": {
+																	Description: "Number or name of the port to access on the container.\nNumber must be in the range 1 to 65535.\nName must be an IANA_SVC_NAME.",
+																	AnyOf: []v1.JSONSchemaProps{
+																		{
+																			Type: "integer",
+																		},
+																		{
+																			Type: "string",
+																		},
+																	},
+																	XIntOrString: true,
+																},
+															},
+															Nullable: true,
+														},
+														"terminationGracePeriodSeconds": {
+															Description: "Optional duration in seconds the pod needs to terminate gracefully upon probe failure.\nThe grace period is the duration in seconds after the processes running in the pod are sent\na termination signal and the time when the processes are forcibly halted with a kill signal.\nSet this value longer than the expected cleanup time for your process.\nIf this value is nil, the pod's terminationGracePeriodSeconds will be used. Otherwise, this\nvalue overrides the value provided by the pod spec.\nValue must be non-negative integer. The value zero indicates stop immediately via\nthe kill signal (no opportunity to shut down).\nThis is a beta field and requires enabling ProbeTerminationGracePeriod feature gate.\nMinimum value is 1. spec.terminationGracePeriodSeconds is used if unset.",
+															Type:        "integer",
+															Format:      "int64",
+															Nullable:    true,
+														},
+														"timeoutSeconds": {
+															Description: "Number of seconds after which the probe times out.\nDefaults to 1 second. Minimum value is 1.\nMore info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle#container-probes",
+															Type:        "integer",
+															Format:      "int32",
+														},
+													},
+													Nullable: true,
+												},
+												"stdin": {
+													Description: "Whether this container should allocate a buffer for stdin in the container runtime. If this\nis not set, reads from stdin in the container will always result in EOF.\nDefault is false.",
+													Type:        "boolean",
+												},
+												"stdinOnce": {
+													Description: "Whether the container runtime should close the stdin channel after it has been opened by\na single attach. When stdin is true the stdin stream will remain open across multiple attach\nsessions. If stdinOnce is set to true, stdin is opened on container start, is empty until the\nfirst client attaches to stdin, and then remains open and accepts data until the client disconnects,\nat which time stdin is closed and remains closed until the container is restarted. If this\nflag is false, a container processes that reads from stdin will never receive an EOF.\nDefault is false",
+													Type:        "boolean",
+												},
+												"terminationMessagePath": {
+													Description: "Optional: Path at which the file to which the container's termination message\nwill be written is mounted into the container's filesystem.\nMessage written is intended to be brief final status, such as an assertion failure message.\nWill be truncated by the node if greater than 4096 bytes. The total message length across\nall containers will be limited to 12kb.\nDefaults to /dev/termination-log.\nCannot be updated.",
+													Type:        "string",
+												},
+												"terminationMessagePolicy": {
+													Description: "Indicate how the termination message should be populated. File will use the contents of\nterminationMessagePath to populate the container status message on both success and failure.\nFallbackToLogsOnError will use the last chunk of container log output if the termination\nmessage file is empty and the container exited with an error.\nThe log output is limited to 2048 bytes or 80 lines, whichever is smaller.\nDefaults to File.\nCannot be updated.",
+													Type:        "string",
+												},
+												"tty": {
+													Description: "Whether this container should allocate a TTY for itself, also requires 'stdin' to be true.\nDefault is false.",
+													Type:        "boolean",
+												},
+												"volumeDevices": {
+													Description: "volumeDevices is the list of block devices to be used by the container.",
+													Type:        "array",
+													Items: &v1.JSONSchemaPropsOrArray{
+														Schema: &v1.JSONSchemaProps{
+															Type: "object",
+															Required: []string{
+																"name",
+																"devicePath",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"devicePath": {
+																	Description: "devicePath is the path inside of the container that the device will be mapped to.",
+																	Type:        "string",
+																},
+																"name": {
+																	Description: "name must match the name of a persistentVolumeClaim in the pod",
+																	Type:        "string",
+																},
+															},
+														},
+													},
+													Nullable: true,
+												},
+												"volumeMounts": {
+													Description: "Pod volumes to mount into the container's filesystem.\nCannot be updated.",
+													Type:        "array",
+													Items: &v1.JSONSchemaPropsOrArray{
+														Schema: &v1.JSONSchemaProps{
+															Type: "object",
+															Required: []string{
+																"name",
+																"mountPath",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"mountPath": {
+																	Description: "Path within the container at which the volume should be mounted.  Must\nnot contain ':'.",
+																	Type:        "string",
+																},
+																"mountPropagation": {
+																	Description: "mountPropagation determines how mounts are propagated from the host\nto container and the other way around.\nWhen not set, MountPropagationNone is used.\nThis field is beta in 1.10.",
+																	Type:        "string",
+																	Nullable:    true,
+																},
+																"name": {
+																	Description: "This must match the Name of a Volume.",
+																	Type:        "string",
+																},
+																"readOnly": {
+																	Description: "Mounted read-only if true, read-write otherwise (false or unspecified).\nDefaults to false.",
+																	Type:        "boolean",
+																},
+																"subPath": {
+																	Description: "Path within the volume from which the container's volume should be mounted.\nDefaults to \"\" (volume's root).",
+																	Type:        "string",
+																},
+																"subPathExpr": {
+																	Description: "Expanded path within the volume from which the container's volume should be mounted.\nBehaves similarly to SubPath but environment variable references $(VAR_NAME) are expanded using the container's environment.\nDefaults to \"\" (volume's root).\nSubPathExpr and SubPath are mutually exclusive.",
+																	Type:        "string",
+																},
+															},
+														},
+													},
+													Nullable: true,
+												},
+												"workingDir": {
+													Description: "Container's working directory.\nIf not specified, the container runtime's default will be used, which\nmight be configured in the container image.\nCannot be updated.",
+													Type:        "string",
+												},
+											},
 										},
 										"dummyX": {
 											Type: "object",
