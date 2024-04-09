@@ -15,6 +15,7 @@ replace (
 // This is a workaround to support generating proto from base external packages.
 // If we bump the version of the base external packages, we need to update the staging.
 replace (
+	github.com/argoproj/argo-workflows/v3 => ./staging/github.com/argoproj/argo-workflows/v3
 	github.com/gogo/protobuf => ./staging/github.com/gogo/protobuf
 	k8s.io/api => ./staging/k8s.io/api
 	k8s.io/apiextensions-apiserver => ./staging/k8s.io/apiextensions-apiserver
