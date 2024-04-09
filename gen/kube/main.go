@@ -65,6 +65,7 @@ func generate() error {
 			"k8s.io/api/storage/v1",
 			"k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1",
 			"k8s.io/kube-aggregator/pkg/apis/apiregistration/v1",
+			"github.com/argoproj/argo-workflows/v3/pkg/apis/workflow/v1alpha1",
 		},
 		PluralExceptions: map[string]string{
 			"Endpoints": "Endpoints",

@@ -8,6 +8,7 @@ package informers
 import (
 	"fmt"
 
+	v1alpha1 "github.com/argoproj/argo-workflows/v3/pkg/apis/workflow/v1alpha1"
 	walrusv1 "github.com/seal-io/walrus/pkg/apis/walrus/v1"
 	walruscorev1 "github.com/seal-io/walrus/pkg/apis/walruscore/v1"
 	v1 "k8s.io/api/admissionregistration/v1"
@@ -80,6 +81,24 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Apps().V1().ReplicaSets().Informer()}, nil
 	case appsv1.SchemeGroupVersion.WithResource("statefulsets"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Apps().V1().StatefulSets().Informer()}, nil
+
+		// Group=argoproj.io, Version=v1alpha1
+	case v1alpha1.SchemeGroupVersion.WithResource("clusterworkflowtemplates"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoproj().V1alpha1().ClusterWorkflowTemplates().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("cronworkflows"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoproj().V1alpha1().CronWorkflows().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("workflows"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoproj().V1alpha1().Workflows().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("workflowartifactgctasks"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoproj().V1alpha1().WorkflowArtifactGCTasks().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("workfloweventbindings"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoproj().V1alpha1().WorkflowEventBindings().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("workflowtaskresults"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoproj().V1alpha1().WorkflowTaskResults().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("workflowtasksets"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoproj().V1alpha1().WorkflowTaskSets().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("workflowtemplates"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoproj().V1alpha1().WorkflowTemplates().Informer()}, nil
 
 		// Group=autoscaling, Version=v1
 	case autoscalingv1.SchemeGroupVersion.WithResource("horizontalpodautoscalers"):

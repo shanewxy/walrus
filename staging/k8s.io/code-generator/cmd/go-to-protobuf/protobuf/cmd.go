@@ -388,7 +388,7 @@ func deps(c *generator.Context, pkgs []*protobufPackage) map[string][]string {
 	for _, p := range pkgs {
 		pkg, ok := c.Universe[p.PackagePath]
 		if !ok {
-			log.Fatalf("Unrecognized package: %s", p.PackagePath)
+			continue
 		}
 
 		for _, d := range pkg.Imports {

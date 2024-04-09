@@ -29,6 +29,7 @@ import (
 	storagev1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/storage/v1"
 	walrusv1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/walrus/v1"
 	walruscorev1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/walruscore/v1"
+	argoprojv1alpha1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/workflow/v1alpha1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
@@ -56,6 +57,7 @@ type Interface interface {
 	StorageV1() storagev1.StorageV1Interface
 	ApiextensionsV1() apiextensionsv1.ApiextensionsV1Interface
 	ApiregistrationV1() apiregistrationv1.ApiregistrationV1Interface
+	ArgoprojV1alpha1() argoprojv1alpha1.ArgoprojV1alpha1Interface
 }
 
 // Clientset contains the clients for groups.
@@ -81,6 +83,7 @@ type Clientset struct {
 	storageV1               *storagev1.StorageV1Client
 	apiextensionsV1         *apiextensionsv1.ApiextensionsV1Client
 	apiregistrationV1       *apiregistrationv1.ApiregistrationV1Client
+	argoprojV1alpha1        *argoprojv1alpha1.ArgoprojV1alpha1Client
 }
 
 // WalruscoreV1 retrieves the WalruscoreV1Client
@@ -181,6 +184,11 @@ func (c *Clientset) ApiextensionsV1() apiextensionsv1.ApiextensionsV1Interface {
 // ApiregistrationV1 retrieves the ApiregistrationV1Client
 func (c *Clientset) ApiregistrationV1() apiregistrationv1.ApiregistrationV1Interface {
 	return c.apiregistrationV1
+}
+
+// ArgoprojV1alpha1 retrieves the ArgoprojV1alpha1Client
+func (c *Clientset) ArgoprojV1alpha1() argoprojv1alpha1.ArgoprojV1alpha1Interface {
+	return c.argoprojV1alpha1
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -307,6 +315,10 @@ func NewForConfigAndClient(c *rest.Config, httpClient *http.Client) (*Clientset,
 	if err != nil {
 		return nil, err
 	}
+	cs.argoprojV1alpha1, err = argoprojv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	if err != nil {
+		return nil, err
+	}
 
 	cs.DiscoveryClient, err = discovery.NewDiscoveryClientForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
@@ -348,6 +360,7 @@ func New(c rest.Interface) *Clientset {
 	cs.storageV1 = storagev1.New(c)
 	cs.apiextensionsV1 = apiextensionsv1.New(c)
 	cs.apiregistrationV1 = apiregistrationv1.New(c)
+	cs.argoprojV1alpha1 = argoprojv1alpha1.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs
