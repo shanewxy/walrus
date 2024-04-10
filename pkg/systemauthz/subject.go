@@ -18,9 +18,16 @@ import (
 	"github.com/seal-io/walrus/pkg/systemmeta"
 )
 
+const (
+	_ServiceAccountNamePrefix     = "walrus-subject-"
+	_ServiceAccountUsernamePrefix = "system:serviceaccount:"
+	_ImpersonateUsernamePrefix    = "walrus:"
+	_UsernameSeparator            = ":"
+)
+
 // ConvertImpersonateUserFromSubjectName converts the subject {namespace,name} pair to an impersonate user.
 func ConvertImpersonateUserFromSubjectName(subjNamespace, subjName string) (impersonateUser string) {
-	return "walrus:" + subjNamespace + ":" + subjName
+	return _ImpersonateUsernamePrefix + subjNamespace + _UsernameSeparator + subjName
 }
 
 // ConvertSubjectNamesFromImpersonateUser converts the impersonate user to the subject {namespace,name} pair.
@@ -28,7 +35,7 @@ func ConvertImpersonateUserFromSubjectName(subjNamespace, subjName string) (impe
 // If the impersonate user is not a subject-delegated impersonate user,
 // it returns empty strings.
 func ConvertSubjectNamesFromImpersonateUser(impersonateUser string) (subjNamespace, subjName string, ok bool) {
-	subjNamespace, subjName, ok = strings.Cut(strings.TrimPrefix(impersonateUser, "walrus:"), ":")
+	subjNamespace, subjName, ok = strings.Cut(strings.TrimPrefix(impersonateUser, _ImpersonateUsernamePrefix), _UsernameSeparator)
 	if ok && subjNamespace != "" && subjName != "" {
 		return subjNamespace, subjName, true
 	}
@@ -37,7 +44,7 @@ func ConvertSubjectNamesFromImpersonateUser(impersonateUser string) (subjNamespa
 
 // ConvertServiceAccountNameFromSubjectName converts the subject name to a service account name.
 func ConvertServiceAccountNameFromSubjectName(subjName string) (saName string) {
-	return "walrus-subject-" + subjName
+	return _ServiceAccountNamePrefix + subjName
 }
 
 // ConvertSubjectNameFromServiceAccountName converts the service account name to a subject name.
@@ -45,7 +52,7 @@ func ConvertServiceAccountNameFromSubjectName(subjName string) (saName string) {
 // If the service account name is not a subject-delegated service account name,
 // it returns an empty string.
 func ConvertSubjectNameFromServiceAccountName(saName string) (subjName string) {
-	subjName = strings.TrimPrefix(saName, "walrus-subject-")
+	subjName = strings.TrimPrefix(saName, _ServiceAccountNamePrefix)
 	if subjName != saName {
 		return subjName
 	}
@@ -57,7 +64,7 @@ func ConvertSubjectNameFromServiceAccountName(saName string) (subjName string) {
 // If the JWT subject is not a subject-delegated JWT subject,
 // it returns empty strings.
 func ConvertSubjectNamesFromJwtSubject(jwtSubject string) (subjNamespace, subjName string, ok bool) {
-	subjNamespace, subjName, ok = strings.Cut(strings.TrimPrefix(jwtSubject, "system:serviceaccount:"), ":")
+	subjNamespace, subjName, ok = strings.Cut(strings.TrimPrefix(jwtSubject, _ServiceAccountUsernamePrefix), _UsernameSeparator)
 	if ok {
 		subjName = ConvertSubjectNameFromServiceAccountName(subjName)
 	}
@@ -74,9 +81,9 @@ func ConvertSubjectNamesFromJwtSubject(jwtSubject string) (subjNamespace, subjNa
 func ConvertSubjectNamesFromAuthnUser(user authnuser.Info) (subjNamespace, subjName string, ok bool) {
 	un := user.GetName()
 	switch {
-	case strings.HasPrefix(un, "walrus:"):
+	case strings.HasPrefix(un, _ImpersonateUsernamePrefix):
 		return ConvertSubjectNamesFromImpersonateUser(un)
-	case strings.HasPrefix(un, "system:serviceaccount:"):
+	case strings.HasPrefix(un, _ServiceAccountUsernamePrefix):
 		return ConvertSubjectNamesFromJwtSubject(un)
 	}
 	return "", "", false
