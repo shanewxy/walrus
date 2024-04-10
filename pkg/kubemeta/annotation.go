@@ -157,3 +157,24 @@ func OverwriteLastAppliedAnnotation(obj MetaObject) {
 	}
 	obj.SetAnnotations(as)
 }
+
+// ConfigureLastAppliedAnnotation is similar to OverwriteLastAppliedAnnotation,
+// but it always sets the last-applied-configuration annotation.
+//
+// It usually to satisfy the requirement of the `kubectl apply ...`.
+func ConfigureLastAppliedAnnotation(obj MetaObject) {
+	if obj == nil {
+		panic("object is nil")
+	}
+
+	as := obj.GetAnnotations()
+	if as == nil {
+		as = map[string]string{}
+	}
+
+	// Imagine the last-applied-configuration annotation is existed.
+	as[_LastAppliedConfigAnnotation] = "{}"
+	obj.SetAnnotations(as)
+	// Then overwrite it.
+	OverwriteLastAppliedAnnotation(obj)
+}

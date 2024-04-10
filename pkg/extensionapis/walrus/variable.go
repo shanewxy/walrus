@@ -494,6 +494,23 @@ func (h *VariableHandler) OnDelete(ctx context.Context, obj runtime.Object, opts
 	return err
 }
 
+func convertSecretListOptsFromVariableListOpts(in ctrlcli.ListOptions) (out *ctrlcli.ListOptions) {
+	// Lock field selector.
+	in.FieldSelector = fields.SelectorFromSet(fields.Set{
+		"metadata.name": systemkuberes.VariablesDelegatedSecretName,
+	})
+
+	// Add necessary label selector.
+	if lbs := systemmeta.GetResourcesLabelSelectorOfType("variables"); in.LabelSelector == nil {
+		in.LabelSelector = lbs
+	} else {
+		reqs, _ := lbs.Requirements()
+		in.LabelSelector = in.LabelSelector.DeepCopySelector().Add(reqs...)
+	}
+
+	return &in
+}
+
 func convertVariableFromSecret(sec *core.Secret, name string) *walrus.Variable {
 	resType, notes := systemmeta.DescribeResource(sec)
 	if resType != "variables" {
@@ -526,13 +543,14 @@ func convertVariableFromSecret(sec *core.Secret, name string) *walrus.Variable {
 		value = value_
 	}
 
-	return &walrus.Variable{
+	vra := &walrus.Variable{
 		ObjectMeta: meta.ObjectMeta{
 			Namespace:         sec.Namespace,
 			Name:              name,
 			UID:               uid,
 			ResourceVersion:   sec.ResourceVersion,
 			CreationTimestamp: createAt,
+			DeletionTimestamp: sec.DeletionTimestamp,
 		},
 		Spec: walrus.VariableSpec{
 			Sensitive: sensitive,
@@ -544,23 +562,9 @@ func convertVariableFromSecret(sec *core.Secret, name string) *walrus.Variable {
 			Value_:      string(value_),
 		},
 	}
-}
 
-func convertSecretListOptsFromVariableListOpts(in ctrlcli.ListOptions) (out *ctrlcli.ListOptions) {
-	// Lock field selector.
-	in.FieldSelector = fields.SelectorFromSet(fields.Set{
-		"metadata.name": systemkuberes.VariablesDelegatedSecretName,
-	})
-
-	// Add necessary label selector.
-	if lbs := systemmeta.GetResourcesLabelSelectorOfType("variables"); in.LabelSelector == nil {
-		in.LabelSelector = lbs
-	} else {
-		reqs, _ := lbs.Requirements()
-		in.LabelSelector = in.LabelSelector.DeepCopySelector().Add(reqs...)
-	}
-
-	return &in
+	kubemeta.ConfigureLastAppliedAnnotation(vra)
+	return vra
 }
 
 func convertVariableListFromSecret(sec *core.Secret, opts ctrlcli.ListOptions) *walrus.VariableList {
@@ -601,13 +605,14 @@ func convertVariableListFromSecret(sec *core.Secret, opts ctrlcli.ListOptions) *
 			value = value_
 		}
 
-		vList.Items = append(vList.Items, walrus.Variable{
+		vra := &walrus.Variable{
 			ObjectMeta: meta.ObjectMeta{
 				Namespace:         sec.Namespace,
 				Name:              name,
 				UID:               uid,
 				ResourceVersion:   sec.ResourceVersion,
 				CreationTimestamp: createAt,
+				DeletionTimestamp: sec.DeletionTimestamp,
 			},
 			Spec: walrus.VariableSpec{
 				Sensitive: sensitive,
@@ -618,7 +623,10 @@ func convertVariableListFromSecret(sec *core.Secret, opts ctrlcli.ListOptions) *
 				Value:       string(value),
 				Value_:      string(value_),
 			},
-		})
+		}
+
+		kubemeta.OverwriteLastAppliedAnnotation(vra)
+		vList.Items = append(vList.Items, *vra)
 	}
 
 	return vList

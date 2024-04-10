@@ -20,6 +20,7 @@ import (
 
 	walrus "github.com/seal-io/walrus/pkg/apis/walrus/v1"
 	"github.com/seal-io/walrus/pkg/extensionapi"
+	"github.com/seal-io/walrus/pkg/kubemeta"
 	"github.com/seal-io/walrus/pkg/systemmeta"
 	"github.com/seal-io/walrus/pkg/systemsetting"
 )
@@ -334,13 +335,14 @@ func convertSettingFromSecret(sec *core.Secret, reqName string) *walrus.Setting 
 		value = value_
 	}
 
-	return &walrus.Setting{
+	set := &walrus.Setting{
 		ObjectMeta: meta.ObjectMeta{
 			Namespace:         sec.Namespace,
 			Name:              reqName,
 			UID:               uid,
 			ResourceVersion:   sec.ResourceVersion,
 			CreationTimestamp: sec.CreationTimestamp,
+			DeletionTimestamp: sec.DeletionTimestamp,
 		},
 		Status: walrus.SettingStatus{
 			Description: s.Description(),
@@ -351,6 +353,9 @@ func convertSettingFromSecret(sec *core.Secret, reqName string) *walrus.Setting 
 			Value_:      string(value_),
 		},
 	}
+
+	kubemeta.OverwriteLastAppliedAnnotation(set)
+	return set
 }
 
 func convertSettingListFromSecret(sec *core.Secret, opts ctrlcli.ListOptions) *walrus.SettingList {
@@ -391,13 +396,14 @@ func convertSettingListFromSecret(sec *core.Secret, opts ctrlcli.ListOptions) *w
 			value = value_
 		}
 
-		sList.Items = append(sList.Items, walrus.Setting{
+		set := &walrus.Setting{
 			ObjectMeta: meta.ObjectMeta{
 				Namespace:         sec.Namespace,
 				Name:              name,
 				UID:               uid,
 				ResourceVersion:   sec.ResourceVersion,
 				CreationTimestamp: sec.CreationTimestamp,
+				DeletionTimestamp: sec.DeletionTimestamp,
 			},
 			Status: walrus.SettingStatus{
 				Description: s.Description(),
@@ -407,7 +413,10 @@ func convertSettingListFromSecret(sec *core.Secret, opts ctrlcli.ListOptions) *w
 				Value:       string(value),
 				Value_:      string(value_),
 			},
-		})
+		}
+
+		kubemeta.ConfigureLastAppliedAnnotation(set)
+		sList.Items = append(sList.Items, *set)
 	}
 
 	return sList
