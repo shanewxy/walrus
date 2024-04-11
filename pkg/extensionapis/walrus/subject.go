@@ -57,15 +57,45 @@ func (h *SubjectHandler) SetupHandler(
 			return []string{obj.GetName()}
 		})
 	if err != nil {
-		return
+		return gvr, srs, err
 	}
 
 	// Declare GVR.
 	gvr = walrus.SchemeGroupVersionResource("subjects")
 
+	// Create table convertor to pretty the kubectl's output.
+	var tc rest.TableConvertor
+	{
+		tc, err = extensionapi.NewJSONPathTableConvertor(
+			extensionapi.JSONPathTableColumnDefinition{
+				TableColumnDefinition: meta.TableColumnDefinition{
+					Name: "Role",
+					Type: "string",
+				},
+				JSONPath: ".spec.role",
+			},
+			extensionapi.JSONPathTableColumnDefinition{
+				TableColumnDefinition: meta.TableColumnDefinition{
+					Name: "Email",
+					Type: "string",
+				},
+				JSONPath: ".spec.email",
+			},
+			extensionapi.JSONPathTableColumnDefinition{
+				TableColumnDefinition: meta.TableColumnDefinition{
+					Name: "Groups",
+					Type: "string",
+				},
+				JSONPath: ".spec.groups",
+			})
+		if err != nil {
+			return gvr, srs, err
+		}
+	}
+
 	// As storage.
 	h.ObjectInfo = &walrus.Subject{}
-	h.CurdOperations = extensionapi.WithCurd(nil, h)
+	h.CurdOperations = extensionapi.WithCurd(tc, h)
 
 	// Set client.
 	h.Client = opts.Manager.GetClient()
@@ -77,7 +107,7 @@ func (h *SubjectHandler) SetupHandler(
 		"token": newSubjectTokenHandler(opts),
 	}
 
-	return
+	return gvr, srs, err
 }
 
 var (

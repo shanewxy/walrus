@@ -60,9 +60,32 @@ func (h *SubjectProviderHandler) SetupHandler(
 	// Declare GVR.
 	gvr = walrus.SchemeGroupVersionResource("subjectproviders")
 
+	// Create table convertor to pretty the kubectl's output.
+	var tc rest.TableConvertor
+	{
+		tc, err = extensionapi.NewJSONPathTableConvertor(
+			extensionapi.JSONPathTableColumnDefinition{
+				TableColumnDefinition: meta.TableColumnDefinition{
+					Name: "Type",
+					Type: "string",
+				},
+				JSONPath: ".spec.type",
+			},
+			extensionapi.JSONPathTableColumnDefinition{
+				TableColumnDefinition: meta.TableColumnDefinition{
+					Name: "Password Login",
+					Type: "boolean",
+				},
+				JSONPath: ".status.loginWithPassword",
+			})
+		if err != nil {
+			return
+		}
+	}
+
 	// As storage.
 	h.ObjectInfo = &walrus.SubjectProvider{}
-	h.CurdOperations = extensionapi.WithCurd(nil, h)
+	h.CurdOperations = extensionapi.WithCurd(tc, h)
 
 	// Set client.
 	h.Client = opts.Manager.GetClient()
