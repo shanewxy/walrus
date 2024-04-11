@@ -33,54 +33,54 @@ const (
 	// SubjectProviderTypeInternal means the subject provider is builtin.
 	//
 	// It is only support using username/password to authenticate.
-	SubjectProviderTypeInternal SubjectProviderType = "internal"
+	SubjectProviderTypeInternal SubjectProviderType = "Internal"
 
 	// SubjectProviderTypeLDAP means the subject provider is based on LDAP.
 	//
 	// This type is an external subject provider type,
 	// which is able to use standards-compliant LDAP as an authentication source.
-	SubjectProviderTypeLDAP SubjectProviderType = "ldap"
+	SubjectProviderTypeLDAP SubjectProviderType = "LDAP"
 	// SubjectProviderTypeOAuth means the subject provider is based on OAuth 2.0.
 	//
 	// This type is an external subject provider type,
 	// which is able to use standards-compliant OAuth 2.0 provider as an authentication source.
-	SubjectProviderTypeOAuth SubjectProviderType = "oauth"
+	SubjectProviderTypeOAuth SubjectProviderType = "OAuth"
 	// SubjectProviderTypeOIDC means the subject provider is based on OpenID Connect.
 	//
 	// This type is an external subject provider type,
 	// which is able to use standards-compliant OpenID Connect as an authentication source.
-	SubjectProviderTypeOIDC SubjectProviderType = "oidc"
+	SubjectProviderTypeOIDC SubjectProviderType = "OIDC"
 
-	// SubjectProviderTypeGithub means the subject provider is based on Github.
+	// SubjectProviderTypeGithub means the subject provider is based on GitHub.
 	//
 	// This type is an external subject provider type,
-	// which is able to use Github as an authentication source.
-	SubjectProviderTypeGithub SubjectProviderType = "github"
-	// SubjectProviderTypeGitlab means the subject provider is based on Gitlab.
+	// which is able to use GitHub as an authentication source.
+	SubjectProviderTypeGithub SubjectProviderType = "GitHub"
+	// SubjectProviderTypeGitlab means the subject provider is based on GitLab.
 	//
 	// This type is an external subject provider type,
-	// which is able to use Gitlab as an authentication source.
-	SubjectProviderTypeGitlab SubjectProviderType = "gitlab"
+	// which is able to use GitLab as an authentication source.
+	SubjectProviderTypeGitlab SubjectProviderType = "GitLab"
 	// SubjectProviderTypeBitbucket means the subject provider is based on Bitbucket.
 	//
 	// This type is an external subject provider type,
 	// which is able to use Bitbucket as an authentication source.
-	SubjectProviderTypeBitbucket SubjectProviderType = "bitbucket"
+	SubjectProviderTypeBitbucket SubjectProviderType = "Bitbucket"
 	// SubjectProviderTypeGitea means the subject provider is based on Gitea.
 	//
 	// This type is an external subject provider type,
 	// which is able to use Gitea as an authentication source.
-	SubjectProviderTypeGitea SubjectProviderType = "gitea"
+	SubjectProviderTypeGitea SubjectProviderType = "Gitea"
 	// SubjectProviderTypeGoogle means the subject provider is based on Google.
 	//
 	// This type is an external subject provider type,
 	// which is able to use Google as an authentication source.
-	SubjectProviderTypeGoogle SubjectProviderType = "google"
+	SubjectProviderTypeGoogle SubjectProviderType = "Google"
 	// SubjectProviderTypeMicrosoft means the subject provider is based on Microsoft.
 	//
 	// This type is an external subject provider type,
 	// which is able to use Microsoft as an authentication source.
-	SubjectProviderTypeMicrosoft SubjectProviderType = "microsoft"
+	SubjectProviderTypeMicrosoft SubjectProviderType = "Microsoft"
 )
 
 func (in SubjectProviderType) String() string {
@@ -105,7 +105,7 @@ type SubjectProviderSpec struct {
 	// Type is the type of the subject provider,
 	// which is immutable.
 	//
-	// +k8s:validation:enum=["internal","ldap","oidc","oauth","github","gitlab","bitbucket","gitea","google","microsoft"]
+	// +k8s:validation:enum=["Internal","LDAP","oidc","oauth","github","gitlab","bitbucket","gitea","google","microsoft"]
 	Type SubjectProviderType `json:"type"`
 
 	// DisplayName is the display name of the subject provider.
@@ -123,8 +123,8 @@ type (
 	// +enum
 	SubjectProviderMicrosoftTenant string
 
-	// SubjectProviderLdapUserSearch defines the user search configuration of the LDAP.
-	SubjectProviderLdapUserSearch struct {
+	// SubjectProviderLDAPUserSearch defines the user search configuration of the LDAP.
+	SubjectProviderLDAPUserSearch struct {
 		// BaseDN to start the search from.
 		BaseDN string `json:"baseDN"`
 		// Filter to apply to the search.
@@ -154,8 +154,8 @@ type (
 		UserAttribute string `json:"userAttribute"`
 	}
 
-	// SubjectProviderLdapGroupSearch defines the group search configuration of the LDAP.
-	SubjectProviderLdapGroupSearch struct {
+	// SubjectProviderLDAPGroupSearch defines the group search configuration of the LDAP.
+	SubjectProviderLDAPGroupSearch struct {
 		// BaseDN to start the search from.
 		BaseDN string `json:"baseDN"`
 		// Filter to apply to the search.
@@ -254,16 +254,16 @@ func (in SubjectProviderGitGroupsMatcher) ToMap() map[string][]string {
 type (
 	// SubjectProviderExternalConfig defines the configuration of the subject provider.
 	SubjectProviderExternalConfig struct {
-		// Ldap is the configuration of the LDAP.
-		Ldap *SubjectProviderLdapConfig `json:"ldap,omitempty"`
+		// LDAP is the configuration of the LDAP.
+		LDAP *SubjectProviderLDAPConfig `json:"ldap,omitempty"`
 		// OAuth is the configuration of the OAuth 2.0.
 		OAuth *SubjectProviderOAuthConfig `json:"oauth,omitempty"`
-		// Oidc is the configuration of the OpenID Connect.
-		Oidc *SubjectProviderOidcConfig `json:"oidc,omitempty"`
-		// Github is the configuration of the Github.
-		Github *SubjectProviderGithubConfig `json:"github,omitempty"`
-		// Gitlab is the configuration of the Gitlab.
-		Gitlab *SubjectProviderGitlabConfig `json:"gitlab,omitempty"`
+		// OIDC is the configuration of the OpenID Connect.
+		OIDC *SubjectProviderOIDCConfig `json:"oidc,omitempty"`
+		// GitHub is the configuration of the GitHub.
+		GitHub *SubjectProviderGitHubConfig `json:"github,omitempty"`
+		// GitLab is the configuration of the GitLab.
+		GitLab *SubjectProviderGitLabConfig `json:"gitlab,omitempty"`
 		// Bitbucket is the configuration of the Bitbucket.
 		Bitbucket *SubjectProviderBitbucketConfig `json:"bitbucket,omitempty"`
 		// Gitea is the configuration of the Gitea.
@@ -274,8 +274,8 @@ type (
 		Microsoft *SubjectProviderMicrosoftConfig `json:"microsoft,omitempty"`
 	}
 
-	// SubjectProviderLdapConfig defines the configuration of the LDAP.
-	SubjectProviderLdapConfig struct {
+	// SubjectProviderLDAPConfig defines the configuration of the LDAP.
+	SubjectProviderLDAPConfig struct {
 		// Host is the host of the LDAP server,
 		// which in form of "hostname:port".
 		//
@@ -294,11 +294,11 @@ type (
 		// GroupSearch is the group search configuration of the LDAP.
 		//
 		// It maps a group to a list of users.
-		GroupSearch SubjectProviderLdapGroupSearch `json:"groupSearch"`
+		GroupSearch SubjectProviderLDAPGroupSearch `json:"groupSearch"`
 		// UserSearch is the user search configuration of the LDAP.
 		//
 		// It maps a username and password entered by a user to the LDAP entry.
-		UserSearch SubjectProviderLdapUserSearch `json:"userSearch"`
+		UserSearch SubjectProviderLDAPUserSearch `json:"userSearch"`
 	}
 
 	// SubjectProviderOAuthConfig defines the configuration of the OAuth 2.0.
@@ -321,8 +321,8 @@ type (
 		ClaimMapping *SubjectProviderOAuthClaimMapping `json:"claimMapping,omitempty"`
 	}
 
-	// SubjectProviderOidcConfig defines the configuration of the OpenID Connect.
-	SubjectProviderOidcConfig struct {
+	// SubjectProviderOIDCConfig defines the configuration of the OpenID Connect.
+	SubjectProviderOIDCConfig struct {
 		// Issuer is the URL of the OpenID Connect issuer.
 		//
 		// This field is only used when the provider is set to "custom".
@@ -344,11 +344,11 @@ type (
 		ClaimMapping *SubjectProviderOAuthClaimMapping `json:"claimMapping,omitempty"`
 	}
 
-	// SubjectProviderGithubConfig defines the configuration of the Github.
-	SubjectProviderGithubConfig struct {
-		// ClientID is the client ID of the Github client.
+	// SubjectProviderGitHubConfig defines the configuration of the GitHub.
+	SubjectProviderGitHubConfig struct {
+		// ClientID is the client ID of the GitHub client.
 		ClientID string `json:"clientID"`
-		// ClientSecret is the client secret of the Github client.
+		// ClientSecret is the client secret of the GitHub client.
 		ClientSecret string `json:"clientSecret"`
 
 		// Groups are used to filter out which groups should be matched.
@@ -357,11 +357,11 @@ type (
 		Groups SubjectProviderGitGroupsMatcher `json:"groups,omitempty"`
 	}
 
-	// SubjectProviderGitlabConfig defines the configuration of the Gitlab.
-	SubjectProviderGitlabConfig struct {
-		// ClientID is the client ID of the Gitlab client.
+	// SubjectProviderGitLabConfig defines the configuration of the GitLab.
+	SubjectProviderGitLabConfig struct {
+		// ClientID is the client ID of the GitLab client.
 		ClientID string `json:"clientID"`
-		// ClientSecret is the client secret of the Gitlab client.
+		// ClientSecret is the client secret of the GitLab client.
 		ClientSecret string `json:"clientSecret"`
 
 		// Groups are used to filter out which groups should be matched.
@@ -430,11 +430,11 @@ func (in *SubjectProviderExternalConfig) ValidateWithType(pt SubjectProviderType
 
 	switch pt {
 	case SubjectProviderTypeLDAP:
-		if in.Ldap == nil {
+		if in.LDAP == nil {
 			return errors.New("ldap is required")
 		}
-		in.Ldap.Default()
-		return in.Ldap.Validate()
+		in.LDAP.Default()
+		return in.LDAP.Validate()
 	case SubjectProviderTypeOAuth:
 		if in.OAuth == nil {
 			return errors.New("oauth is required")
@@ -442,21 +442,21 @@ func (in *SubjectProviderExternalConfig) ValidateWithType(pt SubjectProviderType
 		in.OAuth.Default()
 		return in.OAuth.Validate()
 	case SubjectProviderTypeOIDC:
-		if in.Oidc == nil {
+		if in.OIDC == nil {
 			return errors.New("oidc is required")
 		}
-		in.Oidc.Default()
-		return in.Oidc.Validate()
+		in.OIDC.Default()
+		return in.OIDC.Validate()
 	case SubjectProviderTypeGithub:
-		if in.Github == nil {
+		if in.GitHub == nil {
 			return errors.New("github is required")
 		}
-		return in.Github.Validate()
+		return in.GitHub.Validate()
 	case SubjectProviderTypeGitlab:
-		if in.Gitlab == nil {
+		if in.GitLab == nil {
 			return errors.New("gitlab is required")
 		}
-		return in.Gitlab.Validate()
+		return in.GitLab.Validate()
 	case SubjectProviderTypeBitbucket:
 		if in.Bitbucket == nil {
 			return errors.New("bitbucket is required")
@@ -482,7 +482,7 @@ func (in *SubjectProviderExternalConfig) ValidateWithType(pt SubjectProviderType
 	return nil
 }
 
-func (in *SubjectProviderLdapConfig) Default() {
+func (in *SubjectProviderLDAPConfig) Default() {
 	if in == nil {
 		return
 	}
@@ -508,7 +508,7 @@ func (in *SubjectProviderLdapConfig) Default() {
 	}
 }
 
-func (in *SubjectProviderLdapConfig) Validate() error {
+func (in *SubjectProviderLDAPConfig) Validate() error {
 	if in == nil {
 		return nil
 	}
@@ -573,7 +573,7 @@ func (in *SubjectProviderOAuthConfig) Validate() error {
 	return nil
 }
 
-func (in *SubjectProviderOidcConfig) Default() {
+func (in *SubjectProviderOIDCConfig) Default() {
 	if in == nil {
 		return
 	}
@@ -584,7 +584,7 @@ func (in *SubjectProviderOidcConfig) Default() {
 	in.ClaimMapping.Default()
 }
 
-func (in *SubjectProviderOidcConfig) Validate() error {
+func (in *SubjectProviderOIDCConfig) Validate() error {
 	if in == nil {
 		return nil
 	}
@@ -601,7 +601,7 @@ func (in *SubjectProviderOidcConfig) Validate() error {
 	return nil
 }
 
-func (in *SubjectProviderGithubConfig) Validate() error {
+func (in *SubjectProviderGitHubConfig) Validate() error {
 	if in == nil {
 		return nil
 	}
@@ -615,7 +615,7 @@ func (in *SubjectProviderGithubConfig) Validate() error {
 	return nil
 }
 
-func (in *SubjectProviderGitlabConfig) Validate() error {
+func (in *SubjectProviderGitLabConfig) Validate() error {
 	if in == nil {
 		return nil
 	}

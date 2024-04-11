@@ -58,7 +58,7 @@ func GrantProjectSubjects(ctx context.Context, cli ctrlcli.Client, projSubjs *wa
 		eRb := &rbac.RoleBinding{
 			ObjectMeta: meta.ObjectMeta{
 				Namespace: projSubjs.Name,
-				Name:      getProjectSubjectRoleBindingName(&item.SubjectRef),
+				Name:      GetProjectSubjectRoleBindingName(&item.SubjectReference),
 			},
 			RoleRef: rbac.RoleRef{
 				APIGroup: rbac.GroupName,
@@ -79,66 +79,9 @@ func GrantProjectSubjects(ctx context.Context, cli ctrlcli.Client, projSubjs *wa
 			},
 		}
 		systemmeta.NoteResource(eRb, "rolebindings", map[string]string{
+			"scope":   "project",
 			"project": kubemeta.GetNamespacedNameKey(projSubjs),
-		})
-
-		// Create.
-		_, err := kubeclientset.CreateWithCtrlClient(ctx, cli, eRb,
-			kubeclientset.WithRecreateIfDuplicated(kubeclientset.NewRbacRoleBindingCompareFunc(eRb)))
-		if err != nil {
-			return fmt.Errorf("create role binding: %w", err)
-		}
-	}
-
-	return nil
-}
-
-// GrantProjectSubjectsToEnvironment (re)grants the given project role to the corresponding subjects under an environment.
-func GrantProjectSubjectsToEnvironment(ctx context.Context, cli ctrlcli.Client, projSubjs *walrus.ProjectSubjects, env *walrus.Environment) error {
-	if projSubjs == nil || len(projSubjs.Items) == 0 {
-		return nil
-	}
-
-	for i := range projSubjs.Items {
-		item := &projSubjs.Items[i]
-
-		// NB(thxCode): Degrade the project role if the subject is a viewer but the environment is production.
-		{
-			subj := new(walrus.Subject)
-			err := cli.Get(ctx, item.ToNamespacedName(), subj)
-			if err != nil {
-				return fmt.Errorf("get subject: %w", err)
-			}
-			if env.Spec.Type == walrus.EnvironmentTypeProduction && subj.Spec.Role == walrus.SubjectRoleViewer {
-				item.Role = walrus.ProjectRoleViewer
-			}
-		}
-
-		eRb := &rbac.RoleBinding{
-			ObjectMeta: meta.ObjectMeta{
-				Namespace: env.Name,
-				Name:      getProjectSubjectRoleBindingName(&item.SubjectRef),
-			},
-			RoleRef: rbac.RoleRef{
-				APIGroup: rbac.GroupName,
-				Kind:     "ClusterRole",
-				Name:     ConvertClusterRoleNameFromProjectRole(item.Role),
-			},
-			Subjects: []rbac.Subject{
-				{
-					Kind:      rbac.ServiceAccountKind,
-					Namespace: item.Namespace,
-					Name:      ConvertServiceAccountNameFromSubjectName(item.Name),
-				},
-				{
-					APIGroup: rbac.GroupName,
-					Kind:     rbac.UserKind,
-					Name:     ConvertImpersonateUserFromSubjectName(item.Namespace, item.Name),
-				},
-			},
-		}
-		systemmeta.NoteResource(eRb, "rolebindings", map[string]string{
-			"environment": kubemeta.GetNamespacedNameKey(env),
+			"subject": kubemeta.GetNamespacedNameKey(item.SubjectReference.ToNamespacedName()),
 		})
 
 		// Create.
@@ -164,7 +107,7 @@ func RevokeProjectSubjects(ctx context.Context, cli ctrlcli.Client, projSubjs *w
 		eRb := &rbac.RoleBinding{
 			ObjectMeta: meta.ObjectMeta{
 				Namespace: projSubjs.Name,
-				Name:      getProjectSubjectRoleBindingName(&item.SubjectRef),
+				Name:      GetProjectSubjectRoleBindingName(&item.SubjectReference),
 			},
 		}
 
@@ -205,18 +148,22 @@ func GrantProjectSubjectRoleFor(ctx context.Context, cli ctrlcli.Client, proj *w
 	}
 
 	// Convert.
-	subjNamespace, subjName, ok := ConvertSubjectNamesFromAuthnUser(user)
-	if !ok {
-		return errors.New("incomplete user")
+	var subjRef walrus.SubjectReference
+	{
+		subjNamespace, subjName, ok := ConvertSubjectNamesFromAuthnUser(user)
+		if !ok {
+			return errors.New("incomplete user")
+		}
+		subjRef = walrus.SubjectReference{
+			Namespace: subjNamespace,
+			Name:      subjName,
+		}
 	}
 
 	eRb := &rbac.RoleBinding{
 		ObjectMeta: meta.ObjectMeta{
 			Namespace: proj.Name,
-			Name: getProjectSubjectRoleBindingName(&walrus.SubjectRef{
-				Namespace: subjNamespace,
-				Name:      subjName,
-			}),
+			Name:      GetProjectSubjectRoleBindingName(&subjRef),
 		},
 		RoleRef: rbac.RoleRef{
 			APIGroup: rbac.GroupName,
@@ -227,17 +174,19 @@ func GrantProjectSubjectRoleFor(ctx context.Context, cli ctrlcli.Client, proj *w
 			{
 				APIGroup: rbac.GroupName,
 				Kind:     rbac.ServiceAccountKind,
-				Name:     ConvertServiceAccountNameFromSubjectName(subjName),
+				Name:     ConvertServiceAccountNameFromSubjectName(subjRef.Name),
 			},
 			{
 				APIGroup: rbac.GroupName,
 				Kind:     rbac.UserKind,
-				Name:     ConvertImpersonateUserFromSubjectName(subjNamespace, subjName),
+				Name:     ConvertImpersonateUserFromSubjectName(subjRef.Namespace, subjRef.Name),
 			},
 		},
 	}
 	systemmeta.NoteResource(eRb, "rolebindings", map[string]string{
+		"scope":   "project",
 		"project": kubemeta.GetNamespacedNameKey(proj),
+		"subject": kubemeta.GetNamespacedNameKey(subjRef.ToNamespacedName()),
 	})
 
 	// Create.
@@ -249,7 +198,8 @@ func GrantProjectSubjectRoleFor(ctx context.Context, cli ctrlcli.Client, proj *w
 	return nil
 }
 
-func getProjectSubjectRoleBindingName(subj *walrus.SubjectRef) string {
+// GetProjectSubjectRoleBindingName returns the role binding name for the project subject.
+func GetProjectSubjectRoleBindingName(subj *walrus.SubjectReference) string {
 	return fmt.Sprintf("walrus-project-subject-%s",
 		stringx.SumByFNV64a(subj.Namespace, subj.Name))
 }

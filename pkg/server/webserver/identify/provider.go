@@ -154,7 +154,7 @@ func getExternalConnectorFromSubjectProvider(subjProv *walrus.SubjectProvider) (
 	default:
 		return nil, fmt.Errorf("provider: unsupported type: %s", subjProv.Spec.Type)
 	case walrus.SubjectProviderTypeLDAP:
-		src := subjProv.Spec.ExternalConfig.Ldap
+		src := subjProv.Spec.ExternalConfig.LDAP
 		dst := &ldap.Config{
 			InsecureSkipVerify: src.SkipInsecureVerify,
 			Host:               src.Host,
@@ -203,7 +203,7 @@ func getExternalConnectorFromSubjectProvider(subjProv *walrus.SubjectProvider) (
 		return NewExternalCallbackConnector(dst, src.ClientID,
 			func(s string, o *oauth.Config) { o.RedirectURI = s }), nil
 	case walrus.SubjectProviderTypeOIDC:
-		src := subjProv.Spec.ExternalConfig.Oidc
+		src := subjProv.Spec.ExternalConfig.OIDC
 		dst := &oidc.Config{
 			InsecureSkipVerify:   src.SkipInsecureVerify,
 			Issuer:               src.Issuer,
@@ -221,7 +221,7 @@ func getExternalConnectorFromSubjectProvider(subjProv *walrus.SubjectProvider) (
 		return NewExternalCallbackConnector(dst, src.ClientID,
 			func(s string, o *oidc.Config) { o.RedirectURI = s }), nil
 	case walrus.SubjectProviderTypeGithub:
-		src := subjProv.Spec.ExternalConfig.Github
+		src := subjProv.Spec.ExternalConfig.GitHub
 		dst := &github.Config{
 			ClientID:      src.ClientID,
 			ClientSecret:  src.ClientSecret,
@@ -237,7 +237,7 @@ func getExternalConnectorFromSubjectProvider(subjProv *walrus.SubjectProvider) (
 		return NewExternalCallbackConnector(dst, src.ClientID,
 			func(s string, o *github.Config) { o.RedirectURI = s }), nil
 	case walrus.SubjectProviderTypeGitlab:
-		src := subjProv.Spec.ExternalConfig.Gitlab
+		src := subjProv.Spec.ExternalConfig.GitLab
 		dst := &gitlab.Config{
 			ClientID:     src.ClientID,
 			ClientSecret: src.ClientSecret,

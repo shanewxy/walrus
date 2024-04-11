@@ -42,7 +42,8 @@ type VariableHandler struct {
 	extensionapi.ObjectInfo
 	extensionapi.CurdOperations
 
-	Client ctrlcli.Client
+	Client    ctrlcli.Client
+	APIReader ctrlcli.Reader
 }
 
 func (h *VariableHandler) SetupHandler(
@@ -101,6 +102,7 @@ func (h *VariableHandler) SetupHandler(
 
 	// Set client.
 	h.Client = opts.Manager.GetClient()
+	h.APIReader = opts.Manager.GetAPIReader()
 
 	return
 }
@@ -240,7 +242,7 @@ func (h *VariableHandler) OnList(ctx context.Context, opts ctrlcli.ListOptions) 
 			Name:      systemkuberes.VariablesDelegatedSecretName,
 		},
 	}
-	err := h.Client.Get(ctx, ctrlcli.ObjectKeyFromObject(sec), sec)
+	err := h.APIReader.Get(ctx, ctrlcli.ObjectKeyFromObject(sec), sec)
 	if err != nil {
 		if !kerrors.IsNotFound(err) {
 			return nil, err
@@ -400,7 +402,7 @@ func (h *VariableHandler) OnGet(ctx context.Context, name types.NamespacedName, 
 			Name:      systemkuberes.VariablesDelegatedSecretName,
 		},
 	}
-	err := h.Client.Get(ctx, ctrlcli.ObjectKeyFromObject(sec), sec)
+	err := h.APIReader.Get(ctx, ctrlcli.ObjectKeyFromObject(sec), sec)
 	if err != nil {
 		return nil, err
 	}

@@ -15,6 +15,7 @@ import (
 	core "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/rest"
+	"k8s.io/klog/v2"
 
 	"github.com/seal-io/walrus/pkg/system"
 	"github.com/seal-io/walrus/pkg/systemapp/helm"
@@ -35,6 +36,11 @@ type _Installer func(context.Context, *helm.Client, map[string]any, sets.Set[str
 
 // Install installs the system applications.
 func Install(ctx context.Context, cliConfig rest.Config, disable sets.Set[string]) error {
+	if disable.Has("*") {
+		klog.Warningf("!!! all system applications are disabled !!!")
+		return nil
+	}
+
 	hc, err := helm.NewClient(&cliConfig, helm.WithNamespace(InstalledNamespaceName))
 	if err != nil {
 		return fmt.Errorf("create helm client: %w", err)

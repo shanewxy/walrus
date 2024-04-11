@@ -3,7 +3,6 @@ package system
 import (
 	"github.com/seal-io/utils/varx"
 	"k8s.io/client-go/rest"
-	ctrlcache "sigs.k8s.io/controller-runtime/pkg/cache"
 	ctrlcli "sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/seal-io/walrus/pkg/clients/clientset"
@@ -40,16 +39,19 @@ var (
 	// LoopbackCtrlClient is the controller client for the loopback Kubernetes cluster.
 	//
 	// LoopbackCtrlClient is similar to LoopbackKubeClient,
-	// but it has a self-manager cache,
+	// but it has a self-manager cache for tuning read-only accessing,
 	// which means we don't need to handle list/watch manually.
 	LoopbackCtrlClient varx.Once[ctrlcli.Client]
 
-	// LoopbackCtrlCache is the controller cache for the loopback Kubernetes cluster.
-	LoopbackCtrlCache varx.Once[ctrlcache.Cache]
+	// LoopbackCtrlAPIReader is the controller API reader for the loopback Kubernetes cluster.
+	//
+	// LoopbackCtrlAPIReader is similar to LoopbackCtrlClient,
+	// but it only has the read-only access to the API server.
+	LoopbackCtrlAPIReader varx.Once[ctrlcli.Reader]
 )
 
 // ConfigureLoopbackCtrlRuntime configures the loopback Kubernetes controller runtime.
-func ConfigureLoopbackCtrlRuntime(client ctrlcli.Client, cache ctrlcache.Cache) {
+func ConfigureLoopbackCtrlRuntime(client ctrlcli.Client, apiReader ctrlcli.Reader) {
 	LoopbackCtrlClient.Configure(client)
-	LoopbackCtrlCache.Configure(cache)
+	LoopbackCtrlAPIReader.Configure(apiReader)
 }

@@ -3,22 +3,23 @@ package kubemeta
 import "slices"
 
 // AddFinalizer adds a finalizer to the given resource.
-func AddFinalizer(obj MetaObject, finalizer string) {
+func AddFinalizer(obj MetaObject, finalizer string) (added bool) {
 	if obj == nil {
 		panic("object is nil")
 	}
 
 	fs := obj.GetFinalizers()
 	if slices.Contains(fs, finalizer) {
-		return
+		return false
 	}
 
 	fs = append(fs, finalizer)
 	obj.SetFinalizers(fs)
+	return true
 }
 
 // RemoveFinalizer removes a finalizer from the given resource.
-func RemoveFinalizer(obj MetaObject, finalizer string) {
+func RemoveFinalizer(obj MetaObject, finalizer string) (removed bool) {
 	if obj == nil {
 		panic("object is nil")
 	}
@@ -28,9 +29,10 @@ func RemoveFinalizer(obj MetaObject, finalizer string) {
 		return s == finalizer
 	})
 	if len(fs) == len(fs2) {
-		return
+		return false
 	}
 	obj.SetFinalizers(fs2)
+	return true
 }
 
 // HasFinalizer returns true if the given resource has the finalizer.

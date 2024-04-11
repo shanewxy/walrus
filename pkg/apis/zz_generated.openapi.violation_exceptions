@@ -1,5 +1,5 @@
 API rule violation: list_type_missing,github.com/seal-io/walrus/pkg/apis/walrus/v1,SubjectProviderBitbucketConfig,Groups
-API rule violation: list_type_missing,github.com/seal-io/walrus/pkg/apis/walrus/v1,SubjectProviderGitlabConfig,Groups
+API rule violation: list_type_missing,github.com/seal-io/walrus/pkg/apis/walrus/v1,SubjectProviderGitLabConfig,Groups
 API rule violation: list_type_missing,github.com/seal-io/walrus/pkg/apis/walrus/v1,SubjectProviderGoogleConfig,Groups
 API rule violation: list_type_missing,github.com/seal-io/walrus/pkg/apis/walrus/v1,SubjectProviderLdapGroupSearch,UserMatchers
 API rule violation: list_type_missing,github.com/seal-io/walrus/pkg/apis/walrus/v1,SubjectProviderMicrosoftConfig,Groups
@@ -28,6 +28,8 @@ API rule violation: list_type_missing,k8s.io/apimachinery/pkg/apis/meta/v1,Table
 API rule violation: list_type_missing,k8s.io/apimachinery/pkg/apis/meta/v1,TableRow,Cells
 API rule violation: list_type_missing,k8s.io/apimachinery/pkg/apis/meta/v1,TableRow,Conditions
 API rule violation: list_type_missing,k8s.io/apimachinery/pkg/apis/meta/v1,UpdateOptions,DryRun
+API rule violation: names_match,github.com/seal-io/walrus/pkg/apis/walrus/v1,SubjectProviderExternalConfig,GitHub
+API rule violation: names_match,github.com/seal-io/walrus/pkg/apis/walrus/v1,SubjectProviderExternalConfig,GitLab
 API rule violation: names_match,github.com/seal-io/walrus/pkg/apis/walrus/v1,SubjectProviderExternalConfig,OAuth
 API rule violation: names_match,k8s.io/apimachinery/pkg/api/resource,Quantity,Format
 API rule violation: names_match,k8s.io/apimachinery/pkg/api/resource,Quantity,d

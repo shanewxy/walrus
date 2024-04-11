@@ -25,13 +25,15 @@ type Subject struct {
 
 var _ runtime.Object = (*Subject)(nil)
 
-// SubjectRef is the reference of the subject.
-type SubjectRef struct {
+// SubjectReference is the reference of the subject.
+type SubjectReference struct {
+	// Namespace is the namespace of the subject.
 	Namespace string `json:"namespace"`
-	Name      string `json:"name"`
+	// Name is the name of the subject.
+	Name string `json:"name"`
 }
 
-func (in SubjectRef) ToNamespacedName() types.NamespacedName {
+func (in *SubjectReference) ToNamespacedName() types.NamespacedName {
 	return types.NamespacedName{
 		Namespace: in.Namespace,
 		Name:      in.Name,
@@ -44,11 +46,11 @@ type SubjectRole string
 
 const (
 	// SubjectRoleViewer is the subject role for subject viewer.
-	SubjectRoleViewer SubjectRole = "viewer"
+	SubjectRoleViewer SubjectRole = "Viewer"
 	// SubjectRoleManager is the subject role for subject manager.
-	SubjectRoleManager SubjectRole = "manager"
+	SubjectRoleManager SubjectRole = "Manager"
 	// SubjectRoleAdmin is the subject role for subject admin.
-	SubjectRoleAdmin SubjectRole = "admin"
+	SubjectRoleAdmin SubjectRole = "Admin"
 )
 
 func (in SubjectRole) String() string {
@@ -72,7 +74,7 @@ type SubjectSpec struct {
 
 	// Role is the role of the subject.
 	//
-	// +k8s:validation:enum=["viewer","manager","admin"]
+	// +k8s:validation:enum=["Viewer","Manager","Admin"]
 	Role SubjectRole `json:"role"`
 
 	// DisplayName is the display name of the subject.

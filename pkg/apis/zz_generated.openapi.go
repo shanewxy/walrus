@@ -57,11 +57,11 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProvider":                           schema_pkg_apis_walrus_v1_SubjectProvider(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderBitbucketConfig":            schema_pkg_apis_walrus_v1_SubjectProviderBitbucketConfig(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderExternalConfig":             schema_pkg_apis_walrus_v1_SubjectProviderExternalConfig(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGitHubConfig":               schema_pkg_apis_walrus_v1_SubjectProviderGitHubConfig(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGitLabConfig":               schema_pkg_apis_walrus_v1_SubjectProviderGitLabConfig(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGiteaConfig":                schema_pkg_apis_walrus_v1_SubjectProviderGiteaConfig(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGithubConfig":               schema_pkg_apis_walrus_v1_SubjectProviderGithubConfig(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGitlabConfig":               schema_pkg_apis_walrus_v1_SubjectProviderGitlabConfig(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGoogleConfig":               schema_pkg_apis_walrus_v1_SubjectProviderGoogleConfig(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLdapConfig":                 schema_pkg_apis_walrus_v1_SubjectProviderLdapConfig(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPConfig":                 schema_pkg_apis_walrus_v1_SubjectProviderLDAPConfig(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLdapGroupSearch":            schema_pkg_apis_walrus_v1_SubjectProviderLdapGroupSearch(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLdapGroupSearchUserMatcher": schema_pkg_apis_walrus_v1_SubjectProviderLdapGroupSearchUserMatcher(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLdapUserSearch":             schema_pkg_apis_walrus_v1_SubjectProviderLdapUserSearch(ref),
@@ -69,10 +69,10 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderMicrosoftConfig":            schema_pkg_apis_walrus_v1_SubjectProviderMicrosoftConfig(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOAuthClaimMapping":          schema_pkg_apis_walrus_v1_SubjectProviderOAuthClaimMapping(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOAuthConfig":                schema_pkg_apis_walrus_v1_SubjectProviderOAuthConfig(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOidcConfig":                 schema_pkg_apis_walrus_v1_SubjectProviderOidcConfig(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOIDCConfig":                 schema_pkg_apis_walrus_v1_SubjectProviderOIDCConfig(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderSpec":                       schema_pkg_apis_walrus_v1_SubjectProviderSpec(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderStatus":                     schema_pkg_apis_walrus_v1_SubjectProviderStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectRef":                                schema_pkg_apis_walrus_v1_SubjectRef(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectReference":                          schema_pkg_apis_walrus_v1_SubjectReference(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectSpec":                               schema_pkg_apis_walrus_v1_SubjectSpec(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectToken":                              schema_pkg_apis_walrus_v1_SubjectToken(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectTokenSpec":                          schema_pkg_apis_walrus_v1_SubjectTokenSpec(ref),
@@ -797,25 +797,27 @@ func schema_pkg_apis_walrus_v1_ProjectSubject(ref common.ReferenceCallback) comm
 				Properties: map[string]spec.Schema{
 					"namespace": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Description: "Namespace is the namespace of the subject.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"name": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Description: "Name is the name of the subject.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"role": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Role is the project role of the subject.\n\n\nPossible enum values:\n - `\"member\"` is the role for project member.\n - `\"owner\"` is the role for project owner.\n - `\"viewer\"` is the role for project viewer.",
+							Description: "Role is the project role of the subject.\n\n\nPossible enum values:\n - `\"Member\"` is the role for project member.\n - `\"Owner\"` is the role for project owner.\n - `\"Viewer\"` is the role for project viewer.",
 							Default:     "",
 							Type:        []string{"string"},
 							Format:      "",
-							Enum:        []interface{}{"member", "owner", "viewer"},
+							Enum:        []interface{}{"Member", "Owner", "Viewer"},
 						},
 					},
 				},
@@ -1702,8 +1704,8 @@ func schema_pkg_apis_walrus_v1_SubjectProviderExternalConfig(ref common.Referenc
 				Properties: map[string]spec.Schema{
 					"ldap": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Ldap is the configuration of the LDAP.",
-							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLdapConfig"),
+							Description: "LDAP is the configuration of the LDAP.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPConfig"),
 						},
 					},
 					"oauth": {
@@ -1714,20 +1716,20 @@ func schema_pkg_apis_walrus_v1_SubjectProviderExternalConfig(ref common.Referenc
 					},
 					"oidc": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Oidc is the configuration of the OpenID Connect.",
-							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOidcConfig"),
+							Description: "OIDC is the configuration of the OpenID Connect.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOIDCConfig"),
 						},
 					},
 					"github": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Github is the configuration of the Github.",
-							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGithubConfig"),
+							Description: "GitHub is the configuration of the GitHub.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGitHubConfig"),
 						},
 					},
 					"gitlab": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Gitlab is the configuration of the Gitlab.",
-							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGitlabConfig"),
+							Description: "GitLab is the configuration of the GitLab.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGitLabConfig"),
 						},
 					},
 					"bitbucket": {
@@ -1758,7 +1760,97 @@ func schema_pkg_apis_walrus_v1_SubjectProviderExternalConfig(ref common.Referenc
 			},
 		},
 		Dependencies: []string{
-			"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderBitbucketConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGiteaConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGithubConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGitlabConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGoogleConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLdapConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderMicrosoftConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOAuthConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOidcConfig"},
+			"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderBitbucketConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGitHubConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGitLabConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGiteaConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGoogleConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderMicrosoftConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOAuthConfig", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOIDCConfig"},
+	}
+}
+
+func schema_pkg_apis_walrus_v1_SubjectProviderGitHubConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "SubjectProviderGitHubConfig defines the configuration of the GitHub.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"clientID": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ClientID is the client ID of the GitHub client.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"clientSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ClientSecret is the client secret of the GitHub client.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"groups": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Groups are used to filter out which groups should be matched.\n\nEach item is in the form of \"organization:team\".",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"clientID", "clientSecret"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walrus_v1_SubjectProviderGitLabConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "SubjectProviderGitLabConfig defines the configuration of the GitLab.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"clientID": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ClientID is the client ID of the GitLab client.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"clientSecret": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ClientSecret is the client secret of the GitLab client.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"groups": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Groups are used to filter out which groups should be matched.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"clientID", "clientSecret"},
+			},
+		},
 	}
 }
 
@@ -1788,96 +1880,6 @@ func schema_pkg_apis_walrus_v1_SubjectProviderGiteaConfig(ref common.ReferenceCa
 					"groups": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Groups is used to filter out which groups should be matched.\n\nEach item is in the form of \"organization:team\".",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: "",
-										Type:    []string{"string"},
-										Format:  "",
-									},
-								},
-							},
-						},
-					},
-				},
-				Required: []string{"clientID", "clientSecret"},
-			},
-		},
-	}
-}
-
-func schema_pkg_apis_walrus_v1_SubjectProviderGithubConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "SubjectProviderGithubConfig defines the configuration of the Github.",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"clientID": {
-						SchemaProps: spec.SchemaProps{
-							Description: "ClientID is the client ID of the Github client.",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"clientSecret": {
-						SchemaProps: spec.SchemaProps{
-							Description: "ClientSecret is the client secret of the Github client.",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"groups": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Groups are used to filter out which groups should be matched.\n\nEach item is in the form of \"organization:team\".",
-							Type:        []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: "",
-										Type:    []string{"string"},
-										Format:  "",
-									},
-								},
-							},
-						},
-					},
-				},
-				Required: []string{"clientID", "clientSecret"},
-			},
-		},
-	}
-}
-
-func schema_pkg_apis_walrus_v1_SubjectProviderGitlabConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "SubjectProviderGitlabConfig defines the configuration of the Gitlab.",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"clientID": {
-						SchemaProps: spec.SchemaProps{
-							Description: "ClientID is the client ID of the Gitlab client.",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"clientSecret": {
-						SchemaProps: spec.SchemaProps{
-							Description: "ClientSecret is the client secret of the Gitlab client.",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"groups": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Groups are used to filter out which groups should be matched.",
 							Type:        []string{"array"},
 							Items: &spec.SchemaOrArray{
 								Schema: &spec.Schema{
@@ -1942,11 +1944,11 @@ func schema_pkg_apis_walrus_v1_SubjectProviderGoogleConfig(ref common.ReferenceC
 	}
 }
 
-func schema_pkg_apis_walrus_v1_SubjectProviderLdapConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_pkg_apis_walrus_v1_SubjectProviderLDAPConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "SubjectProviderLdapConfig defines the configuration of the LDAP.",
+				Description: "SubjectProviderLDAPConfig defines the configuration of the LDAP.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"host": {
@@ -2358,11 +2360,11 @@ func schema_pkg_apis_walrus_v1_SubjectProviderOAuthConfig(ref common.ReferenceCa
 	}
 }
 
-func schema_pkg_apis_walrus_v1_SubjectProviderOidcConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_pkg_apis_walrus_v1_SubjectProviderOIDCConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "SubjectProviderOidcConfig defines the configuration of the OpenID Connect.",
+				Description: "SubjectProviderOIDCConfig defines the configuration of the OpenID Connect.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"issuer": {
@@ -2420,11 +2422,11 @@ func schema_pkg_apis_walrus_v1_SubjectProviderSpec(ref common.ReferenceCallback)
 				Properties: map[string]spec.Schema{
 					"type": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Type is the type of the subject provider, which is immutable.\n\n\nPossible enum values:\n - `\"bitbucket\"` means the subject provider is based on Bitbucket. This type is an external subject provider type, which is able to use Bitbucket as an authentication source.\n - `\"gitea\"` means the subject provider is based on Gitea. This type is an external subject provider type, which is able to use Gitea as an authentication source.\n - `\"github\"` means the subject provider is based on Github. This type is an external subject provider type, which is able to use Github as an authentication source.\n - `\"gitlab\"` means the subject provider is based on Gitlab. This type is an external subject provider type, which is able to use Gitlab as an authentication source.\n - `\"google\"` means the subject provider is based on Google. This type is an external subject provider type, which is able to use Google as an authentication source.\n - `\"internal\"` means the subject provider is builtin. It is only support using username/password to authenticate.\n - `\"ldap\"` means the subject provider is based on LDAP. This type is an external subject provider type, which is able to use standards-compliant LDAP as an authentication source.\n - `\"microsoft\"` means the subject provider is based on Microsoft. This type is an external subject provider type, which is able to use Microsoft as an authentication source.\n - `\"oauth\"` means the subject provider is based on OAuth 2.0. This type is an external subject provider type, which is able to use standards-compliant OAuth 2.0 provider as an authentication source.\n - `\"oidc\"` means the subject provider is based on OpenID Connect. This type is an external subject provider type, which is able to use standards-compliant OpenID Connect as an authentication source.",
+							Description: "Type is the type of the subject provider, which is immutable.\n\n\nPossible enum values:\n - `\"Bitbucket\"` means the subject provider is based on Bitbucket. This type is an external subject provider type, which is able to use Bitbucket as an authentication source.\n - `\"GitHub\"` means the subject provider is based on GitHub. This type is an external subject provider type, which is able to use GitHub as an authentication source.\n - `\"GitLab\"` means the subject provider is based on GitLab. This type is an external subject provider type, which is able to use GitLab as an authentication source.\n - `\"Gitea\"` means the subject provider is based on Gitea. This type is an external subject provider type, which is able to use Gitea as an authentication source.\n - `\"Google\"` means the subject provider is based on Google. This type is an external subject provider type, which is able to use Google as an authentication source.\n - `\"Internal\"` means the subject provider is builtin. It is only support using username/password to authenticate.\n - `\"LDAP\"` means the subject provider is based on LDAP. This type is an external subject provider type, which is able to use standards-compliant LDAP as an authentication source.\n - `\"Microsoft\"` means the subject provider is based on Microsoft. This type is an external subject provider type, which is able to use Microsoft as an authentication source.\n - `\"OAuth\"` means the subject provider is based on OAuth 2.0. This type is an external subject provider type, which is able to use standards-compliant OAuth 2.0 provider as an authentication source.\n - `\"OIDC\"` means the subject provider is based on OpenID Connect. This type is an external subject provider type, which is able to use standards-compliant OpenID Connect as an authentication source.",
 							Default:     "",
 							Type:        []string{"string"},
 							Format:      "",
-							Enum:        []interface{}{"bitbucket", "gitea", "github", "gitlab", "google", "internal", "ldap", "microsoft", "oauth", "oidc"},
+							Enum:        []interface{}{"Bitbucket", "GitHub", "GitLab", "Gitea", "Google", "Internal", "LDAP", "Microsoft", "OAuth", "OIDC"},
 						},
 					},
 					"displayName": {
@@ -2479,25 +2481,27 @@ func schema_pkg_apis_walrus_v1_SubjectProviderStatus(ref common.ReferenceCallbac
 	}
 }
 
-func schema_pkg_apis_walrus_v1_SubjectRef(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_pkg_apis_walrus_v1_SubjectReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "SubjectRef is the reference of the subject.",
+				Description: "SubjectReference is the reference of the subject.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"namespace": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Description: "Namespace is the namespace of the subject.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"name": {
 						SchemaProps: spec.SchemaProps{
-							Default: "",
-							Type:    []string{"string"},
-							Format:  "",
+							Description: "Name is the name of the subject.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 				},
@@ -2524,11 +2528,11 @@ func schema_pkg_apis_walrus_v1_SubjectSpec(ref common.ReferenceCallback) common.
 					},
 					"role": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Role is the role of the subject.\n\n\nPossible enum values:\n - `\"admin\"` is the subject role for subject admin.\n - `\"manager\"` is the subject role for subject manager.\n - `\"viewer\"` is the subject role for subject viewer.",
+							Description: "Role is the role of the subject.\n\n\nPossible enum values:\n - `\"Admin\"` is the subject role for subject admin.\n - `\"Manager\"` is the subject role for subject manager.\n - `\"Viewer\"` is the subject role for subject viewer.",
 							Default:     "",
 							Type:        []string{"string"},
 							Format:      "",
-							Enum:        []interface{}{"admin", "manager", "viewer"},
+							Enum:        []interface{}{"Admin", "Manager", "Viewer"},
 						},
 					},
 					"displayName": {

@@ -1022,19 +1022,19 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &applyconfigurationwalrusv1.SubjectProviderExternalConfigApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderGiteaConfig"):
 		return &applyconfigurationwalrusv1.SubjectProviderGiteaConfigApplyConfiguration{}
-	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderGithubConfig"):
-		return &applyconfigurationwalrusv1.SubjectProviderGithubConfigApplyConfiguration{}
-	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderGitlabConfig"):
-		return &applyconfigurationwalrusv1.SubjectProviderGitlabConfigApplyConfiguration{}
+	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderGitHubConfig"):
+		return &applyconfigurationwalrusv1.SubjectProviderGitHubConfigApplyConfiguration{}
+	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderGitLabConfig"):
+		return &applyconfigurationwalrusv1.SubjectProviderGitLabConfigApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderGoogleConfig"):
 		return &applyconfigurationwalrusv1.SubjectProviderGoogleConfigApplyConfiguration{}
-	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderLdapConfig"):
-		return &applyconfigurationwalrusv1.SubjectProviderLdapConfigApplyConfiguration{}
-	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderLdapGroupSearch"):
+	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderLDAPConfig"):
+		return &applyconfigurationwalrusv1.SubjectProviderLDAPConfigApplyConfiguration{}
+	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderLDAPGroupSearch"):
 		return &applyconfigurationwalrusv1.SubjectProviderLdapGroupSearchApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderLdapGroupSearchUserMatcher"):
 		return &applyconfigurationwalrusv1.SubjectProviderLdapGroupSearchUserMatcherApplyConfiguration{}
-	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderLdapUserSearch"):
+	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderLDAPUserSearch"):
 		return &applyconfigurationwalrusv1.SubjectProviderLdapUserSearchApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderMicrosoftConfig"):
 		return &applyconfigurationwalrusv1.SubjectProviderMicrosoftConfigApplyConfiguration{}
@@ -1042,8 +1042,8 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &applyconfigurationwalrusv1.SubjectProviderOAuthClaimMappingApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderOAuthConfig"):
 		return &applyconfigurationwalrusv1.SubjectProviderOAuthConfigApplyConfiguration{}
-	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderOidcConfig"):
-		return &applyconfigurationwalrusv1.SubjectProviderOidcConfigApplyConfiguration{}
+	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderOIDCConfig"):
+		return &applyconfigurationwalrusv1.SubjectProviderOIDCConfigApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderSpec"):
 		return &applyconfigurationwalrusv1.SubjectProviderSpecApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderStatus"):

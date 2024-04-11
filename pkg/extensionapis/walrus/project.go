@@ -36,7 +36,8 @@ type ProjectHandler struct {
 	extensionapi.ObjectInfo
 	extensionapi.CurdOperations
 
-	Client ctrlcli.Client
+	Client    ctrlcli.Client
+	APIReader ctrlcli.Reader
 }
 
 func (h *ProjectHandler) SetupHandler(
@@ -81,6 +82,7 @@ func (h *ProjectHandler) SetupHandler(
 
 	// Set client.
 	h.Client = opts.Manager.GetClient()
+	h.APIReader = opts.Manager.GetAPIReader()
 
 	// Create subresource handlers.
 	srs = map[string]rest.Storage{
@@ -143,7 +145,10 @@ func (h *ProjectHandler) OnCreate(ctx context.Context, obj runtime.Object, opts 
 	if proj.Name == systemkuberes.DefaultProjectName {
 		// NB(thxCode): The default project is created by the system,
 		// so we need another approach to adopt the default project.
-		_, err := h.OnGet(ctx, ctrlcli.ObjectKeyFromObject(proj), ctrlcli.GetOptions{})
+		_, err := h.OnGet(ctx, ctrlcli.ObjectKeyFromObject(proj),
+			ctrlcli.GetOptions{
+				Raw: &meta.GetOptions{ResourceVersion: "0"},
+			})
 		if err == nil {
 			return nil, kerrors.NewAlreadyExists(walrus.SchemeResource("projects"), proj.Name)
 		}
@@ -188,7 +193,7 @@ func (h *ProjectHandler) NewList() runtime.Object {
 func (h *ProjectHandler) OnList(ctx context.Context, opts ctrlcli.ListOptions) (runtime.Object, error) {
 	// List.
 	nsList := new(core.NamespaceList)
-	err := h.Client.List(ctx, nsList,
+	err := h.APIReader.List(ctx, nsList,
 		convertNamespaceListOptsFromProjectListOpts(opts))
 	if err != nil {
 		return nil, err
@@ -285,7 +290,7 @@ func (h *ProjectHandler) OnGet(ctx context.Context, key types.NamespacedName, op
 			Name: key.Name,
 		},
 	}
-	err := h.Client.Get(ctx, ctrlcli.ObjectKeyFromObject(ns), ns, &opts)
+	err := h.APIReader.Get(ctx, ctrlcli.ObjectKeyFromObject(ns), ns, &opts)
 	if err != nil {
 		return nil, err
 	}
@@ -344,24 +349,9 @@ func (h *ProjectHandler) OnDelete(ctx context.Context, obj runtime.Object, opts 
 		}
 	}
 
-	// Unlock if needed.
-	ns := convertNamespaceFromProject(proj)
-	unlocked := systemmeta.Unlock(ns)
-	if !unlocked {
-		err := h.Client.Update(ctx, ns)
-		if err != nil {
-			return fmt.Errorf("unset finalizer: %w", err)
-		}
-	}
-
 	// Delete.
-	err := h.Client.Delete(ctx, ns, &opts)
-	if err != nil && kerrors.IsNotFound(err) && !unlocked {
-		// NB(thxCode): If deleting resource has been locked,
-		// we ignore the not found error after we unlock it.
-		return nil
-	}
-	return err
+	ns := convertNamespaceFromProject(proj)
+	return h.Client.Delete(ctx, ns, &opts)
 }
 
 func convertNamespaceListOptsFromProjectListOpts(in ctrlcli.ListOptions) (out *ctrlcli.ListOptions) {
@@ -402,9 +392,6 @@ func convertNamespaceFromProject(proj *walrus.Project) *core.Namespace {
 		"description": proj.Spec.Description,
 	})
 	ns.Namespace = ""
-	if ns.DeletionTimestamp == nil {
-		systemmeta.Lock(ns)
-	}
 	return ns
 }
 

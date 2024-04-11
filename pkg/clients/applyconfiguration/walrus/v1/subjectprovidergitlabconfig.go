@@ -5,24 +5,24 @@
 
 package v1
 
-// SubjectProviderGitlabConfigApplyConfiguration represents an declarative configuration of the SubjectProviderGitlabConfig type for use
+// SubjectProviderGitLabConfigApplyConfiguration represents an declarative configuration of the SubjectProviderGitLabConfig type for use
 // with apply.
-type SubjectProviderGitlabConfigApplyConfiguration struct {
+type SubjectProviderGitLabConfigApplyConfiguration struct {
 	ClientID     *string  `json:"clientID,omitempty"`
 	ClientSecret *string  `json:"clientSecret,omitempty"`
 	Groups       []string `json:"groups,omitempty"`
 }
 
-// SubjectProviderGitlabConfigApplyConfiguration constructs an declarative configuration of the SubjectProviderGitlabConfig type for use with
+// SubjectProviderGitLabConfigApplyConfiguration constructs an declarative configuration of the SubjectProviderGitLabConfig type for use with
 // apply.
-func SubjectProviderGitlabConfig() *SubjectProviderGitlabConfigApplyConfiguration {
-	return &SubjectProviderGitlabConfigApplyConfiguration{}
+func SubjectProviderGitLabConfig() *SubjectProviderGitLabConfigApplyConfiguration {
+	return &SubjectProviderGitLabConfigApplyConfiguration{}
 }
 
 // WithClientID sets the ClientID field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the ClientID field is set to the value of the last call.
-func (b *SubjectProviderGitlabConfigApplyConfiguration) WithClientID(value string) *SubjectProviderGitlabConfigApplyConfiguration {
+func (b *SubjectProviderGitLabConfigApplyConfiguration) WithClientID(value string) *SubjectProviderGitLabConfigApplyConfiguration {
 	b.ClientID = &value
 	return b
 }
@@ -30,7 +30,7 @@ func (b *SubjectProviderGitlabConfigApplyConfiguration) WithClientID(value strin
 // WithClientSecret sets the ClientSecret field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the ClientSecret field is set to the value of the last call.
-func (b *SubjectProviderGitlabConfigApplyConfiguration) WithClientSecret(value string) *SubjectProviderGitlabConfigApplyConfiguration {
+func (b *SubjectProviderGitLabConfigApplyConfiguration) WithClientSecret(value string) *SubjectProviderGitLabConfigApplyConfiguration {
 	b.ClientSecret = &value
 	return b
 }
@@ -38,7 +38,7 @@ func (b *SubjectProviderGitlabConfigApplyConfiguration) WithClientSecret(value s
 // WithGroups adds the given value to the Groups field in the declarative configuration
 // and returns the receiver, so that objects can be build by chaining "With" function invocations.
 // If called multiple times, values provided by each call will be appended to the Groups field.
-func (b *SubjectProviderGitlabConfigApplyConfiguration) WithGroups(values ...string) *SubjectProviderGitlabConfigApplyConfiguration {
+func (b *SubjectProviderGitLabConfigApplyConfiguration) WithGroups(values ...string) *SubjectProviderGitLabConfigApplyConfiguration {
 	for i := range values {
 		b.Groups = append(b.Groups, values[i])
 	}

@@ -376,7 +376,10 @@ func (s UpdateOperation) Update(
 	}
 
 	var creating bool
-	existing, err := s.Handler.OnGet(ctx, key, ctrlcli.GetOptions{})
+	existing, err := s.Handler.OnGet(ctx, key,
+		ctrlcli.GetOptions{
+			Raw: &meta.GetOptions{ResourceVersion: "0"},
+		})
 	if err != nil {
 		if !kerrors.IsNotFound(err) {
 			return nil, false, wrapError(ctx, name, err)
@@ -448,7 +451,7 @@ func (s UpdateOperation) Update(
 	if err != nil {
 		return nil, false, wrapError(ctx, name, err)
 	}
-	return obj, false, err
+	return obj, false, nil
 }
 
 func (s UpdateOperation) GetStatusSubResourceUpdater() UpdateOperation {
@@ -553,7 +556,10 @@ func (s DeleteOperation) Delete(
 		return nil, false, err
 	}
 
-	existing, err := s.Handler.OnGet(ctx, key, ctrlcli.GetOptions{})
+	existing, err := s.Handler.OnGet(ctx, key,
+		ctrlcli.GetOptions{
+			Raw: &meta.GetOptions{ResourceVersion: "0"},
+		})
 	if err != nil {
 		if !kerrors.IsNotFound(err) {
 			return nil, false, wrapError(ctx, name, err)
@@ -593,7 +599,7 @@ func (s DeleteOperation) Delete(
 	if err != nil {
 		return nil, false, wrapError(ctx, name, err)
 	}
-	return st, async, err
+	return st, async, nil
 }
 
 // CollectionDeleteOperation implements the rest.Lister, rest.GracefulDeleter and rest.CollectionDeleter interfaces.

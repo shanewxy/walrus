@@ -218,7 +218,7 @@ func metaData(ctx context.Context) map[string]interface{} {
 	meta := make(map[string]interface{})
 	md, _ := metadata.FromIncomingContext(ctx)
 	for k, v := range md {
-		// only allow headers `X-`  headers, e.g. `X-Github-Action`
+		// only allow headers `X-`  headers, e.g. `X-GitHub-Action`
 		// otherwise, deny, e.g. deny `authorization` as this would leak security credentials
 		if strings.HasPrefix(k, "x-") {
 			meta[k] = v

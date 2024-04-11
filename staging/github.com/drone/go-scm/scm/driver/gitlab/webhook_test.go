@@ -115,7 +115,7 @@ func TestWebhooks(t *testing.T) {
 			after:  "testdata/webhooks/pull_request_merge.json.golden",
 			obj:    new(scm.PullRequestHook),
 		},
-		// Note hook for Gitlab Merge Request comment
+		// Note hook for GitLab Merge Request comment
 		{
 			event:  "Note Hook",
 			before: "testdata/webhooks/merge_request_comment_create.json",
@@ -139,8 +139,8 @@ func TestWebhooks(t *testing.T) {
 
 			buf := bytes.NewBuffer(before)
 			r, _ := http.NewRequest("GET", "/", buf)
-			r.Header.Set("X-Gitlab-Event", test.event)
-			r.Header.Set("X-Gitlab-Token", "9edf3260d727e29d906bdb10c8a099a")
+			r.Header.Set("X-GitLab-Event", test.event)
+			r.Header.Set("X-GitLab-Token", "9edf3260d727e29d906bdb10c8a099a")
 			r.Header.Set("X-Request-Id", "ee8d97b4-1479-43f1-9cac-fbbd1b80da55")
 
 			s := new(webhookService)
@@ -185,8 +185,8 @@ func TestWebhooks(t *testing.T) {
 func TestWebhook_SignatureValid(t *testing.T) {
 	f, _ := ioutil.ReadFile("testdata/webhooks/branch_delete.json")
 	r, _ := http.NewRequest("GET", "/", bytes.NewBuffer(f))
-	r.Header.Set("X-Gitlab-Event", "Push Hook")
-	r.Header.Set("X-Gitlab-Token", "topsecret")
+	r.Header.Set("X-GitLab-Event", "Push Hook")
+	r.Header.Set("X-GitLab-Token", "topsecret")
 	r.Header.Set("X-Request-Id", "ee8d97b4-1479-43f1-9cac-fbbd1b80da55")
 
 	s := new(webhookService)
@@ -199,8 +199,8 @@ func TestWebhook_SignatureValid(t *testing.T) {
 func TestWebhook_SignatureInvalid(t *testing.T) {
 	f, _ := ioutil.ReadFile("testdata/webhooks/branch_delete.json")
 	r, _ := http.NewRequest("GET", "/", bytes.NewBuffer(f))
-	r.Header.Set("X-Gitlab-Event", "Push Hook")
-	r.Header.Set("X-Gitlab-Token", "void")
+	r.Header.Set("X-GitLab-Event", "Push Hook")
+	r.Header.Set("X-GitLab-Token", "void")
 	r.Header.Set("X-Request-Id", "ee8d97b4-1479-43f1-9cac-fbbd1b80da55")
 
 	s := new(webhookService)
@@ -213,8 +213,8 @@ func TestWebhook_SignatureInvalid(t *testing.T) {
 func TestWebhook_SignatureMissing(t *testing.T) {
 	f, _ := ioutil.ReadFile("testdata/webhooks/branch_delete.json")
 	r, _ := http.NewRequest("GET", "/", bytes.NewBuffer(f))
-	r.Header.Set("X-Gitlab-Event", "Push Hook")
-	r.Header.Set("X-Gitlab-Token", "")
+	r.Header.Set("X-GitLab-Event", "Push Hook")
+	r.Header.Set("X-GitLab-Token", "")
 	r.Header.Set("X-Request-Id", "ee8d97b4-1479-43f1-9cac-fbbd1b80da55")
 
 	s := new(webhookService)

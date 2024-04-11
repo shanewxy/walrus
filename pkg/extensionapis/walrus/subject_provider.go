@@ -2,7 +2,6 @@ package walrus
 
 import (
 	"context"
-	"fmt"
 	"slices"
 	"sort"
 	"strings"
@@ -37,7 +36,8 @@ type SubjectProviderHandler struct {
 	extensionapi.ObjectInfo
 	extensionapi.CurdOperations
 
-	Client ctrlcli.Client
+	Client    ctrlcli.Client
+	APIReader ctrlcli.Reader
 }
 
 func (h *SubjectProviderHandler) SetupHandler(
@@ -66,6 +66,7 @@ func (h *SubjectProviderHandler) SetupHandler(
 
 	// Set client.
 	h.Client = opts.Manager.GetClient()
+	h.APIReader = opts.Manager.GetAPIReader()
 
 	return
 }
@@ -134,7 +135,6 @@ func (h *SubjectProviderHandler) OnCreate(ctx context.Context, obj runtime.Objec
 	// Create.
 	{
 		sec := convertSecretFromSubjectProvider(subjProv)
-		systemmeta.Lock(sec)
 		err := h.Client.Create(ctx, sec, &opts)
 		if err != nil {
 			return nil, err
@@ -152,7 +152,7 @@ func (h *SubjectProviderHandler) NewList() runtime.Object {
 func (h *SubjectProviderHandler) OnList(ctx context.Context, opts ctrlcli.ListOptions) (runtime.Object, error) {
 	// List.
 	secList := new(core.SecretList)
-	err := h.Client.List(ctx, secList,
+	err := h.APIReader.List(ctx, secList,
 		convertSecretListOptsFromSubjectProviderListOpts(opts))
 	if err != nil {
 		return nil, err
@@ -235,7 +235,7 @@ func (h *SubjectProviderHandler) OnGet(ctx context.Context, key types.Namespaced
 			Name:      _SubjectProviderDelegatedSecretNamePrefix + key.Name,
 		},
 	}
-	err := h.Client.Get(ctx, ctrlcli.ObjectKeyFromObject(sec), sec, &opts)
+	err := h.APIReader.Get(ctx, ctrlcli.ObjectKeyFromObject(sec), sec, &opts)
 	if err != nil {
 		return nil, err
 	}
@@ -299,24 +299,9 @@ func (h *SubjectProviderHandler) OnDelete(ctx context.Context, obj runtime.Objec
 		}
 	}
 
-	// Unlock if needed.
-	sec := convertSecretFromSubjectProvider(subjProv)
-	unlocked := systemmeta.Unlock(sec)
-	if !unlocked {
-		err := h.Client.Update(ctx, sec)
-		if err != nil {
-			return fmt.Errorf("unset finalizer: %w", err)
-		}
-	}
-
 	// Delete.
-	err := h.Client.Delete(ctx, sec, &opts)
-	if err != nil && kerrors.IsNotFound(err) && !unlocked {
-		// NB(thxCode): If deleting resource has been locked,
-		// we ignore the not found error after we unlock it.
-		return nil
-	}
-	return err
+	sec := convertSecretFromSubjectProvider(subjProv)
+	return h.Client.Delete(ctx, sec, &opts)
 }
 
 func convertSecretListOptsFromSubjectProviderListOpts(in ctrlcli.ListOptions) (out *ctrlcli.ListOptions) {

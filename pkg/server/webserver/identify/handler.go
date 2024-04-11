@@ -78,7 +78,8 @@ func providers(w http.ResponseWriter, r *http.Request) {
 	subjProvList := new(walrus.SubjectProviderList)
 	{
 		cli := system.LoopbackCtrlClient.Get()
-		err := cli.List(ctx, subjProvList, ctrlcli.InNamespace(systemkuberes.SystemNamespaceName))
+		err := cli.List(ctx, subjProvList,
+			ctrlcli.InNamespace(systemkuberes.SystemNamespaceName))
 		if err != nil {
 			ui.ResponseErrorWithCode(w, http.StatusInternalServerError, fmt.Errorf("list providers: %w", err))
 			return

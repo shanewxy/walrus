@@ -88,7 +88,7 @@ func (c *Config) Apply(_ context.Context) (*Manager, error) {
 		return nil, fmt.Errorf("create controller manager: %w", err)
 	}
 
-	system.ConfigureLoopbackCtrlRuntime(ctrlManager.GetClient(), ctrlManager.GetCache())
+	system.ConfigureLoopbackCtrlRuntime(ctrlManager.GetClient(), ctrlManager.GetAPIReader())
 
 	return &Manager{
 		CtrlManager: &_CtrlManager{

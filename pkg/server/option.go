@@ -84,7 +84,8 @@ func (o *Options) AddFlags(fs *pflag.FlagSet) {
 	fs.BoolVar(&o.DisableAuths, "disable-auths", o.DisableAuths,
 		"disable authentication and authorization.")
 	fs.StringSliceVar(&o.DisableApplications, "disable-applications", o.DisableApplications,
-		"disable installing applications, select from [minio, hermitcrab, argoworkflow].")
+		"disable installing applications, select from [\"minio\", \"hermitcrab\", \"argo-workflows\"]. "+
+			"specified \"*\" to disable all applications.")
 	fs.StringSliceVar(&o.CorsAllowedOrigins, "cors-allowed-origins", o.CorsAllowedOrigins,
 		"the list of origins a cross-domain request can be executed from, comma separated. "+
 			"an allowed origin can be a regular expression to support subdomain matching. "+

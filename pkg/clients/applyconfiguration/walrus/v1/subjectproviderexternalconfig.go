@@ -8,11 +8,11 @@ package v1
 // SubjectProviderExternalConfigApplyConfiguration represents an declarative configuration of the SubjectProviderExternalConfig type for use
 // with apply.
 type SubjectProviderExternalConfigApplyConfiguration struct {
-	Ldap      *SubjectProviderLdapConfigApplyConfiguration      `json:"ldap,omitempty"`
+	LDAP      *SubjectProviderLDAPConfigApplyConfiguration      `json:"ldap,omitempty"`
 	OAuth     *SubjectProviderOAuthConfigApplyConfiguration     `json:"oauth,omitempty"`
-	Oidc      *SubjectProviderOidcConfigApplyConfiguration      `json:"oidc,omitempty"`
-	Github    *SubjectProviderGithubConfigApplyConfiguration    `json:"github,omitempty"`
-	Gitlab    *SubjectProviderGitlabConfigApplyConfiguration    `json:"gitlab,omitempty"`
+	OIDC      *SubjectProviderOIDCConfigApplyConfiguration      `json:"oidc,omitempty"`
+	GitHub    *SubjectProviderGitHubConfigApplyConfiguration    `json:"github,omitempty"`
+	GitLab    *SubjectProviderGitLabConfigApplyConfiguration    `json:"gitlab,omitempty"`
 	Bitbucket *SubjectProviderBitbucketConfigApplyConfiguration `json:"bitbucket,omitempty"`
 	Gitea     *SubjectProviderGiteaConfigApplyConfiguration     `json:"gitea,omitempty"`
 	Google    *SubjectProviderGoogleConfigApplyConfiguration    `json:"google,omitempty"`
@@ -25,11 +25,11 @@ func SubjectProviderExternalConfig() *SubjectProviderExternalConfigApplyConfigur
 	return &SubjectProviderExternalConfigApplyConfiguration{}
 }
 
-// WithLdap sets the Ldap field in the declarative configuration to the given value
+// WithLDAP sets the LDAP field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the Ldap field is set to the value of the last call.
-func (b *SubjectProviderExternalConfigApplyConfiguration) WithLdap(value *SubjectProviderLdapConfigApplyConfiguration) *SubjectProviderExternalConfigApplyConfiguration {
-	b.Ldap = value
+// If called multiple times, the LDAP field is set to the value of the last call.
+func (b *SubjectProviderExternalConfigApplyConfiguration) WithLDAP(value *SubjectProviderLDAPConfigApplyConfiguration) *SubjectProviderExternalConfigApplyConfiguration {
+	b.LDAP = value
 	return b
 }
 
@@ -41,27 +41,27 @@ func (b *SubjectProviderExternalConfigApplyConfiguration) WithOAuth(value *Subje
 	return b
 }
 
-// WithOidc sets the Oidc field in the declarative configuration to the given value
+// WithOIDC sets the OIDC field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the Oidc field is set to the value of the last call.
-func (b *SubjectProviderExternalConfigApplyConfiguration) WithOidc(value *SubjectProviderOidcConfigApplyConfiguration) *SubjectProviderExternalConfigApplyConfiguration {
-	b.Oidc = value
+// If called multiple times, the OIDC field is set to the value of the last call.
+func (b *SubjectProviderExternalConfigApplyConfiguration) WithOIDC(value *SubjectProviderOIDCConfigApplyConfiguration) *SubjectProviderExternalConfigApplyConfiguration {
+	b.OIDC = value
 	return b
 }
 
-// WithGithub sets the Github field in the declarative configuration to the given value
+// WithGitHub sets the GitHub field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the Github field is set to the value of the last call.
-func (b *SubjectProviderExternalConfigApplyConfiguration) WithGithub(value *SubjectProviderGithubConfigApplyConfiguration) *SubjectProviderExternalConfigApplyConfiguration {
-	b.Github = value
+// If called multiple times, the GitHub field is set to the value of the last call.
+func (b *SubjectProviderExternalConfigApplyConfiguration) WithGitHub(value *SubjectProviderGitHubConfigApplyConfiguration) *SubjectProviderExternalConfigApplyConfiguration {
+	b.GitHub = value
 	return b
 }
 
-// WithGitlab sets the Gitlab field in the declarative configuration to the given value
+// WithGitLab sets the GitLab field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the Gitlab field is set to the value of the last call.
-func (b *SubjectProviderExternalConfigApplyConfiguration) WithGitlab(value *SubjectProviderGitlabConfigApplyConfiguration) *SubjectProviderExternalConfigApplyConfiguration {
-	b.Gitlab = value
+// If called multiple times, the GitLab field is set to the value of the last call.
+func (b *SubjectProviderExternalConfigApplyConfiguration) WithGitLab(value *SubjectProviderGitLabConfigApplyConfiguration) *SubjectProviderExternalConfigApplyConfiguration {
+	b.GitLab = value
 	return b
 }
 

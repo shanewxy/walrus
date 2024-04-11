@@ -39,7 +39,8 @@ type SubjectHandler struct {
 	extensionapi.ObjectInfo
 	extensionapi.CurdOperations
 
-	Client ctrlcli.Client
+	Client    ctrlcli.Client
+	APIReader ctrlcli.Reader
 }
 
 func (h *SubjectHandler) SetupHandler(
@@ -68,6 +69,7 @@ func (h *SubjectHandler) SetupHandler(
 
 	// Set client.
 	h.Client = opts.Manager.GetClient()
+	h.APIReader = opts.Manager.GetAPIReader()
 
 	// Create subresource handlers.
 	srs = map[string]rest.Storage{
@@ -180,6 +182,8 @@ func (h *SubjectHandler) OnCreate(ctx context.Context, obj runtime.Object, opts 
 		}
 	}
 
+	// NB(thxCode): the permission grant is handled by SubjectAuthzReconciler.
+
 	// Create.
 	{
 		sa, err := convertServiceAccountFromSubject(subj)
@@ -194,12 +198,6 @@ func (h *SubjectHandler) OnCreate(ctx context.Context, obj runtime.Object, opts 
 		subj = convertSubjectFromServiceAccount(sa)
 	}
 
-	// Grant.
-	err := systemauthz.GrantSubject(ctx, h.Client, subj)
-	if err != nil {
-		return nil, kerrors.NewInternalError(err)
-	}
-
 	return subj, nil
 }
 
@@ -210,7 +208,7 @@ func (h *SubjectHandler) NewList() runtime.Object {
 func (h *SubjectHandler) OnList(ctx context.Context, opts ctrlcli.ListOptions) (runtime.Object, error) {
 	// List.
 	saList := new(core.ServiceAccountList)
-	err := h.Client.List(ctx, saList,
+	err := h.APIReader.List(ctx, saList,
 		convertServiceAccountListOptsFromSubjectListOpts(opts))
 	if err != nil {
 		return nil, err
@@ -353,6 +351,15 @@ func (h *SubjectHandler) OnUpdate(ctx context.Context, obj, oldObj runtime.Objec
 		}
 	}
 
+	// NB(thxCode): we revoke the stale permission here if the role has changed,
+	// and the new permission grant is handled by SubjectAuthzReconciler.
+	if subj.Spec.Role != oldSubj.Spec.Role {
+		err := systemauthz.RevokeSubject(ctx, h.Client, oldSubj)
+		if err != nil {
+			return nil, kerrors.NewInternalError(err)
+		}
+	}
+
 	// Update.
 	{
 		sa, err := convertServiceAccountFromSubject(subj)
@@ -364,20 +371,6 @@ func (h *SubjectHandler) OnUpdate(ctx context.Context, obj, oldObj runtime.Objec
 			return nil, err
 		}
 		subj = convertSubjectFromServiceAccount(sa)
-	}
-
-	if subj.Spec.Role != oldSubj.Spec.Role {
-		// Revoke.
-		err := systemauthz.RevokeSubject(ctx, h.Client, oldSubj)
-		if err != nil {
-			return nil, kerrors.NewInternalError(err)
-		}
-
-		// Grant.
-		err = systemauthz.GrantSubject(ctx, h.Client, subj)
-		if err != nil {
-			return nil, kerrors.NewInternalError(err)
-		}
 	}
 
 	return subj, nil

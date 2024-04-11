@@ -121,7 +121,7 @@ func (c *wrapper) do(ctx context.Context, method, path string, in, out interface
 	return res, json.NewDecoder(res.Body).Decode(out)
 }
 
-// Error represents a Github error.
+// Error represents a GitHub error.
 type Error struct {
 	Message string `json:"message"`
 }

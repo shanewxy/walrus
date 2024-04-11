@@ -32,11 +32,11 @@ type ProjectRole string
 
 const (
 	// ProjectRoleViewer is the role for project viewer.
-	ProjectRoleViewer ProjectRole = "viewer"
+	ProjectRoleViewer ProjectRole = "Viewer"
 	// ProjectRoleMember is the role for project member.
-	ProjectRoleMember ProjectRole = "member"
+	ProjectRoleMember ProjectRole = "Member"
 	// ProjectRoleOwner is the role for project owner.
-	ProjectRoleOwner ProjectRole = "owner"
+	ProjectRoleOwner ProjectRole = "Owner"
 )
 
 func (in ProjectRole) String() string {
@@ -54,11 +54,10 @@ func (in ProjectRole) Validate() error {
 
 // ProjectSubject is the schema for the project subject API.
 type ProjectSubject struct {
-	// Subject is the reference to the subject.
-	SubjectRef `json:",inline"`
+	SubjectReference `json:",inline"`
 
 	// Role is the project role of the subject.
 	//
-	// +k8s:validation:enum=["viewer","member","owner"]
+	// +k8s:validation:enum=["Viewer","Member","Owner"]
 	Role ProjectRole `json:"role"`
 }

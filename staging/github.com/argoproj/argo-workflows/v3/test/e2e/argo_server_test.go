@@ -165,7 +165,7 @@ spec:
 		And(func() {
 			s.e().
 				POST("/api/v1/events/argo/").
-				WithHeader("X-Github-Event", "push").
+				WithHeader("X-GitHub-Event", "push").
 				WithHeader("X-Hub-Signature", "sha1=c09e61386e81c2669e015049350500448148205c").
 				WithBytes(data).
 				Expect().

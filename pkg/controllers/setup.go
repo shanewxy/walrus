@@ -14,7 +14,6 @@ import (
 
 // NB(thxCode): Register controllers below.
 var setupers = []controller.Setup{
-	new(walrus.EnvironmentAuthzReconciler),
 	new(walrus.ProjectSubjectAuthzReconciler),
 	new(walrus.SubjectAuthzReconciler),
 	new(walruscore.CatalogReconciler),

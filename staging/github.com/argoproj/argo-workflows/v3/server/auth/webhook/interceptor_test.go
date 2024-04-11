@@ -57,17 +57,17 @@ func TestInterceptor(t *testing.T) {
 		})
 		assert.Equal(t, []string{"Bearer my-bitbucketserver-token"}, r.Header["Authorization"])
 	})
-	t.Run("Github", func(t *testing.T) {
+	t.Run("GitHub", func(t *testing.T) {
 		r, _ := intercept("POST", "/api/v1/events/my-ns/my-d", map[string]string{
-			"X-Github-Event":  "push",
+			"X-GitHub-Event":  "push",
 			"X-Hub-Signature": "00000ba880174336fbe22d4723a67ba5c4c356ec9c696",
 		})
 		assert.Equal(t, []string{"Bearer my-github-token"}, r.Header["Authorization"])
 	})
-	t.Run("Gitlab", func(t *testing.T) {
+	t.Run("GitLab", func(t *testing.T) {
 		r, _ := intercept("POST", "/api/v1/events/my-ns/my-d", map[string]string{
-			"X-Gitlab-Event": "Push Hook",
-			"X-Gitlab-Token": "sh!",
+			"X-GitLab-Event": "Push Hook",
+			"X-GitLab-Token": "sh!",
 		})
 		assert.Equal(t, []string{"Bearer my-gitlab-token"}, r.Header["Authorization"])
 	})

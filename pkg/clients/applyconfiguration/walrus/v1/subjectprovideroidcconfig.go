@@ -5,9 +5,9 @@
 
 package v1
 
-// SubjectProviderOidcConfigApplyConfiguration represents an declarative configuration of the SubjectProviderOidcConfig type for use
+// SubjectProviderOIDCConfigApplyConfiguration represents an declarative configuration of the SubjectProviderOIDCConfig type for use
 // with apply.
-type SubjectProviderOidcConfigApplyConfiguration struct {
+type SubjectProviderOIDCConfigApplyConfiguration struct {
 	Issuer             *string                                             `json:"issuer,omitempty"`
 	SkipInsecureVerify *bool                                               `json:"skipInsecureVerify,omitempty"`
 	ClientID           *string                                             `json:"clientID,omitempty"`
@@ -15,16 +15,16 @@ type SubjectProviderOidcConfigApplyConfiguration struct {
 	ClaimMapping       *SubjectProviderOAuthClaimMappingApplyConfiguration `json:"claimMapping,omitempty"`
 }
 
-// SubjectProviderOidcConfigApplyConfiguration constructs an declarative configuration of the SubjectProviderOidcConfig type for use with
+// SubjectProviderOIDCConfigApplyConfiguration constructs an declarative configuration of the SubjectProviderOIDCConfig type for use with
 // apply.
-func SubjectProviderOidcConfig() *SubjectProviderOidcConfigApplyConfiguration {
-	return &SubjectProviderOidcConfigApplyConfiguration{}
+func SubjectProviderOIDCConfig() *SubjectProviderOIDCConfigApplyConfiguration {
+	return &SubjectProviderOIDCConfigApplyConfiguration{}
 }
 
 // WithIssuer sets the Issuer field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Issuer field is set to the value of the last call.
-func (b *SubjectProviderOidcConfigApplyConfiguration) WithIssuer(value string) *SubjectProviderOidcConfigApplyConfiguration {
+func (b *SubjectProviderOIDCConfigApplyConfiguration) WithIssuer(value string) *SubjectProviderOIDCConfigApplyConfiguration {
 	b.Issuer = &value
 	return b
 }
@@ -32,7 +32,7 @@ func (b *SubjectProviderOidcConfigApplyConfiguration) WithIssuer(value string) *
 // WithSkipInsecureVerify sets the SkipInsecureVerify field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the SkipInsecureVerify field is set to the value of the last call.
-func (b *SubjectProviderOidcConfigApplyConfiguration) WithSkipInsecureVerify(value bool) *SubjectProviderOidcConfigApplyConfiguration {
+func (b *SubjectProviderOIDCConfigApplyConfiguration) WithSkipInsecureVerify(value bool) *SubjectProviderOIDCConfigApplyConfiguration {
 	b.SkipInsecureVerify = &value
 	return b
 }
@@ -40,7 +40,7 @@ func (b *SubjectProviderOidcConfigApplyConfiguration) WithSkipInsecureVerify(val
 // WithClientID sets the ClientID field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the ClientID field is set to the value of the last call.
-func (b *SubjectProviderOidcConfigApplyConfiguration) WithClientID(value string) *SubjectProviderOidcConfigApplyConfiguration {
+func (b *SubjectProviderOIDCConfigApplyConfiguration) WithClientID(value string) *SubjectProviderOIDCConfigApplyConfiguration {
 	b.ClientID = &value
 	return b
 }
@@ -48,7 +48,7 @@ func (b *SubjectProviderOidcConfigApplyConfiguration) WithClientID(value string)
 // WithClientSecret sets the ClientSecret field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the ClientSecret field is set to the value of the last call.
-func (b *SubjectProviderOidcConfigApplyConfiguration) WithClientSecret(value string) *SubjectProviderOidcConfigApplyConfiguration {
+func (b *SubjectProviderOIDCConfigApplyConfiguration) WithClientSecret(value string) *SubjectProviderOIDCConfigApplyConfiguration {
 	b.ClientSecret = &value
 	return b
 }
@@ -56,7 +56,7 @@ func (b *SubjectProviderOidcConfigApplyConfiguration) WithClientSecret(value str
 // WithClaimMapping sets the ClaimMapping field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the ClaimMapping field is set to the value of the last call.
-func (b *SubjectProviderOidcConfigApplyConfiguration) WithClaimMapping(value *SubjectProviderOAuthClaimMappingApplyConfiguration) *SubjectProviderOidcConfigApplyConfiguration {
+func (b *SubjectProviderOIDCConfigApplyConfiguration) WithClaimMapping(value *SubjectProviderOAuthClaimMappingApplyConfiguration) *SubjectProviderOIDCConfigApplyConfiguration {
 	b.ClaimMapping = value
 	return b
 }

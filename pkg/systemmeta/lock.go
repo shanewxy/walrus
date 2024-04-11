@@ -11,6 +11,10 @@ const LockedResourceFinalizer = "walrus.seal.io/controlled"
 //
 // If the resource has been controlled, returns true,
 // otherwise, returns false.
+//
+//	if !systemmeta.Lock(obj) {
+//	    _, _ = kubeclientset.UpdateWithCtrlClient(ctx, r.Client, obj)
+//	}
 func Lock(obj MetaObject) (locked bool) {
 	if obj == nil {
 		panic("object is nil")
@@ -30,6 +34,12 @@ func Lock(obj MetaObject) (locked bool) {
 //
 // If the resource is not be controlled, returns true,
 // otherwise, returns false.
+//
+//	if systemmeta.Unlock(obj) {
+//	    return ctrl.Result{}, nil
+//	}
+//	// Clean
+//	_, _ = kubeclientset.UpdateWithCtrlClient(ctx, r.Client, obj)
 func Unlock(obj MetaObject) (unlocked bool) {
 	if obj == nil {
 		panic("object is nil")

@@ -37,7 +37,8 @@ type SettingHandler struct {
 	extensionapi.GetOperation
 	extensionapi.UpdateOperation
 
-	Client ctrlcli.Client
+	Client    ctrlcli.Client
+	APIReader ctrlcli.Reader
 }
 
 func (h *SettingHandler) SetupHandler(
@@ -84,6 +85,7 @@ func (h *SettingHandler) SetupHandler(
 
 	// Set client.
 	h.Client = opts.Manager.GetClient()
+	h.APIReader = opts.Manager.GetAPIReader()
 
 	return
 }
@@ -120,7 +122,7 @@ func (h *SettingHandler) OnList(ctx context.Context, opts ctrlcli.ListOptions) (
 			Name:      systemsetting.DelegatedSecretName,
 		},
 	}
-	err := h.Client.Get(ctx, ctrlcli.ObjectKeyFromObject(sec), sec)
+	err := h.APIReader.Get(ctx, ctrlcli.ObjectKeyFromObject(sec), sec)
 	if err != nil {
 		if !kerrors.IsNotFound(err) {
 			return nil, err
@@ -250,7 +252,7 @@ func (h *SettingHandler) OnGet(ctx context.Context, key types.NamespacedName, op
 			Name:      systemsetting.DelegatedSecretName,
 		},
 	}
-	err := h.Client.Get(ctx, ctrlcli.ObjectKeyFromObject(sec), sec)
+	err := h.APIReader.Get(ctx, ctrlcli.ObjectKeyFromObject(sec), sec)
 	if err != nil {
 		return nil, err
 	}
@@ -288,7 +290,10 @@ func (h *SettingHandler) OnUpdate(ctx context.Context, obj, _ runtime.Object, op
 	}
 
 	// Get.
-	return h.OnGet(ctx, ctrlcli.ObjectKeyFromObject(set), ctrlcli.GetOptions{})
+	return h.OnGet(ctx, ctrlcli.ObjectKeyFromObject(set),
+		ctrlcli.GetOptions{
+			Raw: &meta.GetOptions{ResourceVersion: "0"},
+		})
 }
 
 func convertSecretListOptsFromSettingListOpts(in ctrlcli.ListOptions) (out *ctrlcli.ListOptions) {

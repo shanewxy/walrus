@@ -61,6 +61,8 @@ func Initialize(ctx context.Context, cli clientset.Interface) error {
 				Name: AnonymousClusterRoleName,
 			},
 			Rules: []rbac.PolicyRule{
+				// Read limited resources include:
+				// - Specific settings.
 				{
 					APIGroups: []string{
 						walrus.GroupName,
@@ -84,6 +86,8 @@ func Initialize(ctx context.Context, cli clientset.Interface) error {
 				Name: ViewerClusterRoleName,
 			},
 			Rules: []rbac.PolicyRule{
+				// View all resources exclude:
+				// - Subject Providers
 				{
 					APIGroups: []string{
 						walrus.GroupName,
@@ -111,6 +115,7 @@ func Initialize(ctx context.Context, cli clientset.Interface) error {
 						"watch",
 					},
 				},
+				// Manage self Project.
 				{
 					APIGroups: []string{
 						walrus.GroupName,
@@ -130,6 +135,11 @@ func Initialize(ctx context.Context, cli clientset.Interface) error {
 				Name: EditorClusterRoleName,
 			},
 			Rules: []rbac.PolicyRule{
+				// Manage all resources exclude:
+				// - Subject
+				// - Subject Login
+				// - Subject Token
+				// - Subject Providers
 				{
 					APIGroups: []string{
 						walrus.GroupName,
@@ -156,12 +166,29 @@ func Initialize(ctx context.Context, cli clientset.Interface) error {
 				Name: AdminClusterRoleName,
 			},
 			Rules: []rbac.PolicyRule{
+				// Manage all resources exclude:
+				// - Subject Login
+				// - Subject Token
 				{
 					APIGroups: []string{
 						walrus.GroupName,
 					},
 					Resources: []string{
-						rbac.ResourceAll,
+						"catalogs",
+						"connectors",
+						"environments",
+						"fileexamples",
+						"projects",
+						"projects/subjects",
+						"resources",
+						"resources/components",
+						"resourcedefinitions",
+						"resourceruns",
+						"settings",
+						"subjects",
+						"subjectproviders",
+						"templates",
+						"variables",
 					},
 					Verbs: []string{
 						rbac.VerbAll,

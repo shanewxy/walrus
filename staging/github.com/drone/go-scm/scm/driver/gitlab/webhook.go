@@ -30,7 +30,7 @@ func (s *webhookService) Parse(req *http.Request, fn scm.SecretFunc) (scm.Webhoo
 	}
 
 	var hook scm.Webhook
-	switch req.Header.Get("X-Gitlab-Event") {
+	switch req.Header.Get("X-GitLab-Event") {
 	case "Push Hook", "Tag Push Hook":
 		hook, err = parsePushHook(data)
 	case "Issue Hook":
@@ -56,7 +56,7 @@ func (s *webhookService) Parse(req *http.Request, fn scm.SecretFunc) (scm.Webhoo
 		return hook, nil
 	}
 
-	if token != req.Header.Get("X-Gitlab-Token") {
+	if token != req.Header.Get("X-GitLab-Token") {
 		return hook, scm.ErrSignatureInvalid
 	}
 

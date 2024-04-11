@@ -91,7 +91,7 @@ func ConvertSubjectNamesFromAuthnUser(user authnuser.Info) (subjNamespace, subjN
 
 // GrantSubject (re)grants the role of the subject for the subject.
 func GrantSubject(ctx context.Context, cli ctrlcli.Client, subj *walrus.Subject) error {
-	n := getSubjectRoleBindingName(subj)
+	n := GetSubjectRoleBindingName(subj)
 	imName := ConvertImpersonateUserFromSubjectName(subj.Namespace, subj.Name)
 	saName := ConvertServiceAccountNameFromSubjectName(subj.Name)
 
@@ -161,8 +161,18 @@ func GrantSubject(ctx context.Context, cli ctrlcli.Client, subj *walrus.Subject)
 		},
 	}
 	for i := range eP {
+		switch eP[i].(type) {
+		case *rbac.Role:
+			systemmeta.NoteResource(eP[i], "roles", nil)
+		case *rbac.RoleBinding:
+			systemmeta.NoteResource(eP[i], "rolebindings", map[string]string{
+				"scope":   "organization",
+				"subject": kubemeta.GetNamespacedNameKey(subj),
+			})
+		}
+
 		// Create.
-		kubemeta.ControlOnWithoutBlock(eP[i], subj, walrus.SchemeGroupVersion.WithKind("Subject"))
+		kubemeta.ControlOnWithoutBlock(eP[i], subj, walrus.SchemeGroupVersionKind("Subject"))
 		_, err := kubeclientset.CreateWithCtrlClient(ctx, cli, eP[i])
 		if err != nil {
 			return fmt.Errorf("create role or role binding: %w", err)
@@ -195,7 +205,10 @@ func GrantSubject(ctx context.Context, cli ctrlcli.Client, subj *walrus.Subject)
 				},
 			},
 		}
-		systemmeta.NoteResource(eRb, "rolebindings", nil)
+		systemmeta.NoteResource(eRb, "rolebindings", map[string]string{
+			"scope":   "organization",
+			"subject": kubemeta.GetNamespacedNameKey(subj),
+		})
 
 		// Create.
 		kubemeta.ControlOnWithoutBlock(eRb, subj, walrus.SchemeGroupVersion.WithKind("Subject"))
@@ -228,10 +241,13 @@ func GrantSubject(ctx context.Context, cli ctrlcli.Client, subj *walrus.Subject)
 				},
 			},
 		}
-		systemmeta.NoteResource(eCrb, "rolebindings", nil)
+		systemmeta.NoteResource(eCrb, "rolebindings", map[string]string{
+			"scope":   "organization",
+			"subject": kubemeta.GetNamespacedNameKey(subj),
+		})
 
 		// Create.
-		kubemeta.ControlOnWithoutBlock(eCrb, subj, walrus.SchemeGroupVersion.WithKind("Subject"))
+		kubemeta.ControlOnWithoutBlock(eCrb, subj, walrus.SchemeGroupVersionKind("Subject"))
 		_, err := kubeclientset.CreateWithCtrlClient(ctx, cli, eCrb,
 			kubeclientset.WithRecreateIfDuplicated(kubeclientset.NewRbacClusterRoleBindingCompareFunc(eCrb)))
 		if err != nil {
@@ -245,7 +261,7 @@ func GrantSubject(ctx context.Context, cli ctrlcli.Client, subj *walrus.Subject)
 
 // RevokeSubject revokes the role of the subject from the subject.
 func RevokeSubject(ctx context.Context, cli ctrlcli.Client, subj *walrus.Subject) error {
-	n := getSubjectRoleBindingName(subj)
+	n := GetSubjectRoleBindingName(subj)
 
 	switch subj.Spec.Role {
 	case walrus.SubjectRoleManager:
@@ -278,7 +294,8 @@ func RevokeSubject(ctx context.Context, cli ctrlcli.Client, subj *walrus.Subject
 	return nil
 }
 
-func getSubjectRoleBindingName(subj *walrus.Subject) string {
+// GetSubjectRoleBindingName gets the role binding name for the subject.
+func GetSubjectRoleBindingName(subj *walrus.Subject) string {
 	return fmt.Sprintf("walrus-subject-%s",
 		stringx.SumByFNV64a(subj.Namespace, subj.Name))
 }

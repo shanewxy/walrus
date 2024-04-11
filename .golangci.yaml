@@ -134,6 +134,12 @@ linters-settings:
         alias: ctrlpredicate
       - pkg: sigs.k8s.io/controller-runtime/pkg/controller/controllerutil
         alias: ctrlutil
+      - pkg: sigs.k8s.io/controller-runtime/pkg/handler
+        alias: ctrlhandler
+      - pkg: sigs.k8s.io/controller-runtime/pkg/event
+        alias: ctrlevent
+      - pkg: sigs.k8s.io/controller-runtime/pkg/builder
+        alias: ctrlbuilder
   lll:
     line-length: 150
     tab-width: 1

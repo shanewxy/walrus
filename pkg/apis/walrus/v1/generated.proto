@@ -186,12 +186,11 @@ message ProjectStatus {
 
 // ProjectSubject is the schema for the project subject API.
 message ProjectSubject {
-  // Subject is the reference to the subject.
-  optional SubjectRef subjectRef = 1;
+  optional SubjectReference subjectReference = 1;
 
   // Role is the project role of the subject.
   //
-  // +k8s:validation:enum=["viewer","member","owner"]
+  // +k8s:validation:enum=["Viewer","Member","Owner"]
   optional string role = 2;
 }
 
@@ -432,20 +431,20 @@ message SubjectProviderBitbucketConfig {
 
 // SubjectProviderExternalConfig defines the configuration of the subject provider.
 message SubjectProviderExternalConfig {
-  // Ldap is the configuration of the LDAP.
-  optional SubjectProviderLdapConfig ldap = 1;
+  // LDAP is the configuration of the LDAP.
+  optional SubjectProviderLDAPConfig ldap = 1;
 
   // OAuth is the configuration of the OAuth 2.0.
   optional SubjectProviderOAuthConfig oauth = 2;
 
-  // Oidc is the configuration of the OpenID Connect.
-  optional SubjectProviderOidcConfig oidc = 3;
+  // OIDC is the configuration of the OpenID Connect.
+  optional SubjectProviderOIDCConfig oidc = 3;
 
-  // Github is the configuration of the Github.
-  optional SubjectProviderGithubConfig github = 4;
+  // GitHub is the configuration of the GitHub.
+  optional SubjectProviderGitHubConfig github = 4;
 
-  // Gitlab is the configuration of the Gitlab.
-  optional SubjectProviderGitlabConfig gitlab = 5;
+  // GitLab is the configuration of the GitLab.
+  optional SubjectProviderGitLabConfig gitlab = 5;
 
   // Bitbucket is the configuration of the Bitbucket.
   optional SubjectProviderBitbucketConfig bitbucket = 6;
@@ -458,6 +457,32 @@ message SubjectProviderExternalConfig {
 
   // Microsoft is the configuration of the Microsoft.
   optional SubjectProviderMicrosoftConfig microsoft = 9;
+}
+
+// SubjectProviderGitHubConfig defines the configuration of the GitHub.
+message SubjectProviderGitHubConfig {
+  // ClientID is the client ID of the GitHub client.
+  optional string clientID = 1;
+
+  // ClientSecret is the client secret of the GitHub client.
+  optional string clientSecret = 2;
+
+  // Groups are used to filter out which groups should be matched.
+  //
+  // Each item is in the form of "organization:team".
+  repeated string groups = 3;
+}
+
+// SubjectProviderGitLabConfig defines the configuration of the GitLab.
+message SubjectProviderGitLabConfig {
+  // ClientID is the client ID of the GitLab client.
+  optional string clientID = 1;
+
+  // ClientSecret is the client secret of the GitLab client.
+  optional string clientSecret = 2;
+
+  // Groups are used to filter out which groups should be matched.
+  repeated string groups = 3;
 }
 
 // SubjectProviderGiteaConfig defines the configuration of the Gitea.
@@ -474,32 +499,6 @@ message SubjectProviderGiteaConfig {
   repeated string groups = 3;
 }
 
-// SubjectProviderGithubConfig defines the configuration of the Github.
-message SubjectProviderGithubConfig {
-  // ClientID is the client ID of the Github client.
-  optional string clientID = 1;
-
-  // ClientSecret is the client secret of the Github client.
-  optional string clientSecret = 2;
-
-  // Groups are used to filter out which groups should be matched.
-  //
-  // Each item is in the form of "organization:team".
-  repeated string groups = 3;
-}
-
-// SubjectProviderGitlabConfig defines the configuration of the Gitlab.
-message SubjectProviderGitlabConfig {
-  // ClientID is the client ID of the Gitlab client.
-  optional string clientID = 1;
-
-  // ClientSecret is the client secret of the Gitlab client.
-  optional string clientSecret = 2;
-
-  // Groups are used to filter out which groups should be matched.
-  repeated string groups = 3;
-}
-
 // SubjectProviderGoogleConfig defines the configuration of the Google.
 message SubjectProviderGoogleConfig {
   // ClientID is the client ID of the Google client.
@@ -512,8 +511,8 @@ message SubjectProviderGoogleConfig {
   repeated string groups = 3;
 }
 
-// SubjectProviderLdapConfig defines the configuration of the LDAP.
-message SubjectProviderLdapConfig {
+// SubjectProviderLDAPConfig defines the configuration of the LDAP.
+message SubjectProviderLDAPConfig {
   // Host is the host of the LDAP server,
   // which in form of "hostname:port".
   //
@@ -672,8 +671,8 @@ message SubjectProviderOAuthConfig {
   optional SubjectProviderOAuthClaimMapping claimMapping = 7;
 }
 
-// SubjectProviderOidcConfig defines the configuration of the OpenID Connect.
-message SubjectProviderOidcConfig {
+// SubjectProviderOIDCConfig defines the configuration of the OpenID Connect.
+message SubjectProviderOIDCConfig {
   // Issuer is the URL of the OpenID Connect issuer.
   //
   // This field is only used when the provider is set to "custom".
@@ -702,7 +701,7 @@ message SubjectProviderSpec {
   // Type is the type of the subject provider,
   // which is immutable.
   //
-  // +k8s:validation:enum=["internal","ldap","oidc","oauth","github","gitlab","bitbucket","gitea","google","microsoft"]
+  // +k8s:validation:enum=["Internal","LDAP","oidc","oauth","github","gitlab","bitbucket","gitea","google","microsoft"]
   optional string type = 1;
 
   // DisplayName is the display name of the subject provider.
@@ -721,10 +720,12 @@ message SubjectProviderStatus {
   optional bool loginWithPassword = 1;
 }
 
-// SubjectRef is the reference of the subject.
-message SubjectRef {
+// SubjectReference is the reference of the subject.
+message SubjectReference {
+  // Namespace is the namespace of the subject.
   optional string namespace = 1;
 
+  // Name is the name of the subject.
   optional string name = 2;
 }
 
@@ -736,7 +737,7 @@ message SubjectSpec {
 
   // Role is the role of the subject.
   //
-  // +k8s:validation:enum=["viewer","manager","admin"]
+  // +k8s:validation:enum=["Viewer","Manager","Admin"]
   optional string role = 2;
 
   // DisplayName is the display name of the subject.

@@ -5,9 +5,9 @@
 
 package v1
 
-// SubjectProviderLdapConfigApplyConfiguration represents an declarative configuration of the SubjectProviderLdapConfig type for use
+// SubjectProviderLDAPConfigApplyConfiguration represents an declarative configuration of the SubjectProviderLDAPConfig type for use
 // with apply.
-type SubjectProviderLdapConfigApplyConfiguration struct {
+type SubjectProviderLDAPConfigApplyConfiguration struct {
 	Host                   *string                                           `json:"host,omitempty"`
 	SkipInsecureVerify     *bool                                             `json:"skipInsecureVerify,omitempty"`
 	ServiceAccountDN       *string                                           `json:"serviceAccountDN,omitempty"`
@@ -16,16 +16,16 @@ type SubjectProviderLdapConfigApplyConfiguration struct {
 	UserSearch             *SubjectProviderLdapUserSearchApplyConfiguration  `json:"userSearch,omitempty"`
 }
 
-// SubjectProviderLdapConfigApplyConfiguration constructs an declarative configuration of the SubjectProviderLdapConfig type for use with
+// SubjectProviderLDAPConfigApplyConfiguration constructs an declarative configuration of the SubjectProviderLDAPConfig type for use with
 // apply.
-func SubjectProviderLdapConfig() *SubjectProviderLdapConfigApplyConfiguration {
-	return &SubjectProviderLdapConfigApplyConfiguration{}
+func SubjectProviderLDAPConfig() *SubjectProviderLDAPConfigApplyConfiguration {
+	return &SubjectProviderLDAPConfigApplyConfiguration{}
 }
 
 // WithHost sets the Host field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Host field is set to the value of the last call.
-func (b *SubjectProviderLdapConfigApplyConfiguration) WithHost(value string) *SubjectProviderLdapConfigApplyConfiguration {
+func (b *SubjectProviderLDAPConfigApplyConfiguration) WithHost(value string) *SubjectProviderLDAPConfigApplyConfiguration {
 	b.Host = &value
 	return b
 }
@@ -33,7 +33,7 @@ func (b *SubjectProviderLdapConfigApplyConfiguration) WithHost(value string) *Su
 // WithSkipInsecureVerify sets the SkipInsecureVerify field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the SkipInsecureVerify field is set to the value of the last call.
-func (b *SubjectProviderLdapConfigApplyConfiguration) WithSkipInsecureVerify(value bool) *SubjectProviderLdapConfigApplyConfiguration {
+func (b *SubjectProviderLDAPConfigApplyConfiguration) WithSkipInsecureVerify(value bool) *SubjectProviderLDAPConfigApplyConfiguration {
 	b.SkipInsecureVerify = &value
 	return b
 }
@@ -41,7 +41,7 @@ func (b *SubjectProviderLdapConfigApplyConfiguration) WithSkipInsecureVerify(val
 // WithServiceAccountDN sets the ServiceAccountDN field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the ServiceAccountDN field is set to the value of the last call.
-func (b *SubjectProviderLdapConfigApplyConfiguration) WithServiceAccountDN(value string) *SubjectProviderLdapConfigApplyConfiguration {
+func (b *SubjectProviderLDAPConfigApplyConfiguration) WithServiceAccountDN(value string) *SubjectProviderLDAPConfigApplyConfiguration {
 	b.ServiceAccountDN = &value
 	return b
 }
@@ -49,7 +49,7 @@ func (b *SubjectProviderLdapConfigApplyConfiguration) WithServiceAccountDN(value
 // WithServiceAccountPassword sets the ServiceAccountPassword field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the ServiceAccountPassword field is set to the value of the last call.
-func (b *SubjectProviderLdapConfigApplyConfiguration) WithServiceAccountPassword(value string) *SubjectProviderLdapConfigApplyConfiguration {
+func (b *SubjectProviderLDAPConfigApplyConfiguration) WithServiceAccountPassword(value string) *SubjectProviderLDAPConfigApplyConfiguration {
 	b.ServiceAccountPassword = &value
 	return b
 }
@@ -57,7 +57,7 @@ func (b *SubjectProviderLdapConfigApplyConfiguration) WithServiceAccountPassword
 // WithGroupSearch sets the GroupSearch field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the GroupSearch field is set to the value of the last call.
-func (b *SubjectProviderLdapConfigApplyConfiguration) WithGroupSearch(value *SubjectProviderLdapGroupSearchApplyConfiguration) *SubjectProviderLdapConfigApplyConfiguration {
+func (b *SubjectProviderLDAPConfigApplyConfiguration) WithGroupSearch(value *SubjectProviderLdapGroupSearchApplyConfiguration) *SubjectProviderLDAPConfigApplyConfiguration {
 	b.GroupSearch = value
 	return b
 }
@@ -65,7 +65,7 @@ func (b *SubjectProviderLdapConfigApplyConfiguration) WithGroupSearch(value *Sub
 // WithUserSearch sets the UserSearch field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the UserSearch field is set to the value of the last call.
-func (b *SubjectProviderLdapConfigApplyConfiguration) WithUserSearch(value *SubjectProviderLdapUserSearchApplyConfiguration) *SubjectProviderLdapConfigApplyConfiguration {
+func (b *SubjectProviderLDAPConfigApplyConfiguration) WithUserSearch(value *SubjectProviderLdapUserSearchApplyConfiguration) *SubjectProviderLDAPConfigApplyConfiguration {
 	b.UserSearch = value
 	return b
 }

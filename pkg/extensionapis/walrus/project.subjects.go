@@ -7,6 +7,7 @@ import (
 	"golang.org/x/exp/maps"
 	rbac "k8s.io/api/rbac/v1"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -70,7 +71,9 @@ func (h *ProjectSubjectsHandler) OnGet(ctx context.Context, key types.Namespaced
 	rbList := new(rbac.RoleBindingList)
 	err := h.Client.List(ctx, rbList,
 		ctrlcli.InNamespace(key.Name),
-		ctrlcli.MatchingLabelsSelector{Selector: systemmeta.GetResourcesLabelSelectorOfType("rolebindings")})
+		ctrlcli.MatchingLabelsSelector{
+			Selector: systemmeta.GetResourcesLabelSelectorOfType("rolebindings"),
+		})
 	if err != nil {
 		return nil, kerrors.NewInternalError(err)
 	}
@@ -103,7 +106,7 @@ func (h *ProjectSubjectsHandler) OnUpdate(ctx context.Context, obj, objOld runti
 			err := h.Client.Get(ctx, psbj.ToNamespacedName(), new(walrus.Subject))
 			if err != nil {
 				errs = append(errs, field.Invalid(
-					field.NewPath(fmt.Sprintf("items[%d]", i)), psbj.SubjectRef, err.Error()),
+					field.NewPath(fmt.Sprintf("items[%d]", i)), psbj.SubjectReference, err.Error()),
 				)
 			}
 			if err := psbj.Role.Validate(); err != nil {
@@ -135,14 +138,16 @@ func (h *ProjectSubjectsHandler) OnUpdate(ctx context.Context, obj, objOld runti
 		}
 	}
 
-	// Revoke.
+	// NB(thxCode): we revoke the old permission from the Project namespace first,
+	// then ProjectSubjectAuthzReconciler will take care of revoking the old permission from the Environment namespace.
 	psbjsOld.Items = maps.Keys(psbjsOldSet)
 	err := systemauthz.RevokeProjectSubjects(ctx, h.Client, psbjsOld)
 	if err != nil {
 		return nil, kerrors.NewInternalError(fmt.Errorf("revoke project subject: %w", err))
 	}
 
-	// Grant.
+	// NB(thxCode): we grant the new permission to the Project namespace first,
+	// then ProjectSubjectAuthzReconciler will take care of granting the new permission to the Environment namespace.
 	psbjs.Items = maps.Keys(psbjsReverseIndex)
 	err = systemauthz.GrantProjectSubjects(ctx, h.Client, psbjs)
 	if err != nil {
@@ -150,7 +155,10 @@ func (h *ProjectSubjectsHandler) OnUpdate(ctx context.Context, obj, objOld runti
 	}
 
 	// Get.
-	return h.OnGet(ctx, ctrlcli.ObjectKeyFromObject(psbjs), ctrlcli.GetOptions{})
+	return h.OnGet(ctx, ctrlcli.ObjectKeyFromObject(psbjs),
+		ctrlcli.GetOptions{
+			Raw: &meta.GetOptions{ResourceVersion: "0"},
+		})
 }
 
 // ConvertProjectSubjectFromRoleBinding converts a rbac RoleBinding object to a walrus ProjectSubject object.
@@ -183,7 +191,7 @@ func ConvertProjectSubjectFromRoleBinding(rb *rbac.RoleBinding) *walrus.ProjectS
 	}
 
 	psbj := &walrus.ProjectSubject{
-		SubjectRef: walrus.SubjectRef{
+		SubjectReference: walrus.SubjectReference{
 			Namespace: ns,
 			Name:      n,
 		},

@@ -40,7 +40,8 @@ type EnvironmentHandler struct {
 	extensionapi.ObjectInfo
 	extensionapi.CurdOperations
 
-	Client ctrlcli.Client
+	Client    ctrlcli.Client
+	APIReader ctrlcli.Reader
 }
 
 func (h *EnvironmentHandler) SetupHandler(
@@ -99,6 +100,7 @@ func (h *EnvironmentHandler) SetupHandler(
 
 	// Set client.
 	h.Client = opts.Manager.GetClient()
+	h.APIReader = opts.Manager.GetAPIReader()
 
 	return
 }
@@ -166,7 +168,7 @@ func (h *EnvironmentHandler) OnCreate(ctx context.Context, obj runtime.Object, o
 	// Create.
 	{
 		ns := convertNamespaceFromEnvironment(env)
-		kubemeta.ControlOn(ns, proj, walrus.SchemeGroupVersion.WithKind("Project"))
+		kubemeta.ControlOn(ns, proj, walrus.SchemeGroupVersionKind("Project"))
 		err = h.Client.Create(ctx, ns, &opts)
 		if err != nil {
 			return nil, err
@@ -184,7 +186,7 @@ func (h *EnvironmentHandler) NewList() runtime.Object {
 func (h *EnvironmentHandler) OnList(ctx context.Context, opts ctrlcli.ListOptions) (runtime.Object, error) {
 	// List.
 	nsList := new(core.NamespaceList)
-	err := h.Client.List(ctx, nsList,
+	err := h.APIReader.List(ctx, nsList,
 		convertNamespaceListOptsFromEnvironmentListOpts(opts))
 	if err != nil {
 		return nil, err
@@ -272,7 +274,7 @@ func (h *EnvironmentHandler) OnGet(ctx context.Context, key types.NamespacedName
 			Name: key.Name,
 		},
 	}
-	err := h.Client.Get(ctx, ctrlcli.ObjectKeyFromObject(ns), ns, &opts)
+	err := h.APIReader.Get(ctx, ctrlcli.ObjectKeyFromObject(ns), ns, &opts)
 	if err != nil {
 		return nil, err
 	}
@@ -345,24 +347,9 @@ func (h *EnvironmentHandler) OnDelete(ctx context.Context, obj runtime.Object, o
 		}
 	}
 
-	// Unlock if needed.
-	ns := convertNamespaceFromEnvironment(env)
-	unlocked := systemmeta.Unlock(ns)
-	if !unlocked {
-		err := h.Client.Update(ctx, ns)
-		if err != nil {
-			return fmt.Errorf("unset finalizer: %w", err)
-		}
-	}
-
 	// Delete.
-	err := h.Client.Delete(ctx, ns, &opts)
-	if err != nil && kerrors.IsNotFound(err) && !unlocked {
-		// NB(thxCode): If deleting resource has been locked,
-		// we ignore the not found error after we unlock it.
-		return nil
-	}
-	return err
+	ns := convertNamespaceFromEnvironment(env)
+	return h.Client.Delete(ctx, ns, &opts)
 }
 
 func convertNamespaceListOptsFromEnvironmentListOpts(in ctrlcli.ListOptions) (out *ctrlcli.ListOptions) {
@@ -400,9 +387,6 @@ func convertNamespaceFromEnvironment(env *walrus.Environment) *core.Namespace {
 		"description": env.Spec.Description,
 	})
 	ns.Namespace = ""
-	if ns.DeletionTimestamp == nil {
-		systemmeta.Lock(ns)
-	}
 	return ns
 }
 
