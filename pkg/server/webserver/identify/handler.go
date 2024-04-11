@@ -160,7 +160,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	// Get connector.
 	conn, err := getExternalConnectorFromSubjectProvider(subjProv)
 	if err != nil {
-		ui.RedirectErrorWithCode(w, http.StatusInternalServerError, err)
+		ui.RedirectErrorWithCode(w, r, http.StatusInternalServerError, err)
 		return
 	}
 
@@ -275,7 +275,7 @@ func callback(w http.ResponseWriter, r *http.Request) {
 	// Get provider.
 	subjProv, err := getSubjectProvider(ctx, req.Provider)
 	if err != nil {
-		ui.RedirectErrorWithCode(w, http.StatusInternalServerError, fmt.Errorf("get provider: %w", err))
+		ui.RedirectErrorWithCode(w, r, http.StatusInternalServerError, fmt.Errorf("get provider: %w", err))
 		return
 	}
 
@@ -284,7 +284,7 @@ func callback(w http.ResponseWriter, r *http.Request) {
 	{
 		conn, err := getExternalConnectorFromSubjectProvider(subjProv)
 		if err != nil {
-			ui.RedirectErrorWithCode(w, http.StatusInternalServerError, err)
+			ui.RedirectErrorWithCode(w, r, http.StatusInternalServerError, err)
 			return
 		}
 		var ok bool
@@ -298,7 +298,7 @@ func callback(w http.ResponseWriter, r *http.Request) {
 	// Handle callback.
 	id, err := cn.HandleCallback(r)
 	if err != nil {
-		ui.RedirectErrorWithCode(w, http.StatusInternalServerError, fmt.Errorf("handle callback: %w", err))
+		ui.RedirectErrorWithCode(w, r, http.StatusInternalServerError, fmt.Errorf("handle callback: %w", err))
 		return
 	}
 
@@ -314,9 +314,9 @@ func callback(w http.ResponseWriter, r *http.Request) {
 		err = cli.Get(ctx, ctrlcli.ObjectKeyFromObject(sec), sec)
 		if err != nil {
 			if !kerrors.IsNotFound(err) {
-				ui.RedirectErrorWithCode(w, http.StatusInternalServerError, fmt.Errorf("get state: %w", err))
+				ui.RedirectErrorWithCode(w, r, http.StatusInternalServerError, fmt.Errorf("get state: %w", err))
 			} else {
-				ui.RedirectErrorWithCode(w, http.StatusForbidden, errors.New("state not found"))
+				ui.RedirectErrorWithCode(w, r, http.StatusForbidden, errors.New("state not found"))
 			}
 			return
 		}
@@ -334,7 +334,7 @@ func callback(w http.ResponseWriter, r *http.Request) {
 			return nil
 		}()
 		if err != nil {
-			ui.RedirectErrorWithCode(w, http.StatusForbidden, err)
+			ui.RedirectErrorWithCode(w, r, http.StatusForbidden, err)
 			return
 		}
 	}
@@ -342,7 +342,7 @@ func callback(w http.ResponseWriter, r *http.Request) {
 	// Get subject.
 	subj, err := convertSubjectFromExternalIdentity(ctx, req.Provider, id)
 	if err != nil {
-		ui.RedirectErrorWithCode(w, http.StatusInternalServerError, fmt.Errorf("get subject: %w", err))
+		ui.RedirectErrorWithCode(w, r, http.StatusInternalServerError, fmt.Errorf("get subject: %w", err))
 		return
 	}
 
@@ -608,7 +608,7 @@ func loginSubject(w http.ResponseWriter, r *http.Request, subj *walrus.Subject, 
 		Login(r.Context(), subj.Name, subjl, meta.CreateOptions{})
 	if err != nil {
 		if redirect {
-			ui.RedirectError(w, fmt.Errorf("login: %w", err))
+			ui.RedirectError(w, r, fmt.Errorf("login: %w", err))
 		} else {
 			ui.ResponseError(w, fmt.Errorf("login: %w", err))
 		}

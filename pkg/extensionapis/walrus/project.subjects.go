@@ -161,8 +161,7 @@ func (h *ProjectSubjectsHandler) OnUpdate(ctx context.Context, obj, objOld runti
 		})
 }
 
-// ConvertProjectSubjectFromRoleBinding converts a rbac RoleBinding object to a walrus ProjectSubject object.
-func ConvertProjectSubjectFromRoleBinding(rb *rbac.RoleBinding) *walrus.ProjectSubject {
+func convertProjectSubjectFromRoleBinding(rb *rbac.RoleBinding) *walrus.ProjectSubject {
 	if rb == nil || rb.RoleRef.Kind != "ClusterRole" {
 		return nil
 	}
@@ -210,7 +209,7 @@ func convertProjectSubjectsFromRoleBindingList(rbList *rbac.RoleBindingList) *wa
 	}
 
 	for i := range rbList.Items {
-		psbj := ConvertProjectSubjectFromRoleBinding(&rbList.Items[i])
+		psbj := convertProjectSubjectFromRoleBinding(&rbList.Items[i])
 		if psbj == nil {
 			continue
 		}

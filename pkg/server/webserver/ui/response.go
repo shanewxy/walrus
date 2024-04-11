@@ -3,6 +3,9 @@ package ui
 import (
 	"errors"
 	"net/http"
+	"net/url"
+	"strconv"
+	"strings"
 
 	"github.com/seal-io/utils/httpx"
 	"github.com/seal-io/utils/stringx"
@@ -47,38 +50,39 @@ func ResponseError(w http.ResponseWriter, err error) {
 }
 
 // RedirectErrorWithCode redirects to the error page with the given status code and error message.
-func RedirectErrorWithCode(w http.ResponseWriter, code int, err error) {
-	s := meta.Status{
-		TypeMeta: meta.TypeMeta{
-			APIVersion: "meta.k8s.io/v1",
-			Kind:       "Status",
-		},
-		Status: meta.StatusFailure,
-		Reason: meta.StatusReason(stringx.TrimAllSpace(http.StatusText(code))),
-		Code:   int32(code),
-	}
+func RedirectErrorWithCode(w http.ResponseWriter, r *http.Request, c int, err error) {
+	errMsg := http.StatusText(c)
 	if err != nil {
-		s.Message = err.Error()
+		errMsg += ": "
+		errMsg += err.Error()
 	}
 
-	// TODO(thxCode): redirect to error page
-	httpx.JSON(w, code, s)
+	u := "/#/redirect?"
+	q := (url.Values{"code": {strconv.Itoa(c)}, "err": {errMsg}}).Encode()
+
+	var sb strings.Builder
+	sb.Grow(len(u) + len(q))
+	sb.WriteString(u)
+	sb.WriteString(q)
+
+	// Redirect to the error page with the status code and error message.
+	http.Redirect(w, r, sb.String(), c)
 }
 
 // RedirectError is similar to RedirectErrorWithCode,
 // but it analyzes the error and redirects to the error page with the appropriate status code and error message.
-func RedirectError(w http.ResponseWriter, err error) {
+func RedirectError(w http.ResponseWriter, r *http.Request, err error) {
 	rerr := errors.Unwrap(err)
 	switch {
 	case kerrors.IsInvalid(rerr):
-		RedirectErrorWithCode(w, http.StatusBadRequest, err)
+		RedirectErrorWithCode(w, r, http.StatusBadRequest, err)
 	case kerrors.IsBadRequest(rerr):
-		RedirectErrorWithCode(w, http.StatusBadRequest, err)
+		RedirectErrorWithCode(w, r, http.StatusBadRequest, err)
 	case kerrors.IsNotFound(rerr):
-		RedirectErrorWithCode(w, http.StatusBadRequest, err)
+		RedirectErrorWithCode(w, r, http.StatusBadRequest, err)
 	case kerrors.IsUnauthorized(rerr):
-		RedirectErrorWithCode(w, http.StatusUnauthorized, err)
+		RedirectErrorWithCode(w, r, http.StatusUnauthorized, err)
 	default:
-		RedirectErrorWithCode(w, http.StatusInternalServerError, err)
+		RedirectErrorWithCode(w, r, http.StatusInternalServerError, err)
 	}
 }
