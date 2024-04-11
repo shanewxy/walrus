@@ -32,6 +32,7 @@ var setupers = []extensionapi.Setup{
 	new(walrus.SubjectProviderHandler),
 	new(walrus.TemplateHandler),
 	new(walrus.VariableHandler),
+	new(walrus.SchemaHandler),
 }
 
 type _APIOptions struct {

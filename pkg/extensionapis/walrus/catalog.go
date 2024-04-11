@@ -2,7 +2,10 @@ package walrus
 
 import (
 	"context"
+	"fmt"
+	"regexp"
 
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apiserver/pkg/registry/rest"
@@ -19,6 +22,8 @@ import (
 type CatalogHandler struct {
 	extensionapi.ObjectInfo
 	extensionapi.CurdOperations
+
+	client ctrlcli.Client
 }
 
 func (h *CatalogHandler) SetupHandler(
@@ -28,13 +33,53 @@ func (h *CatalogHandler) SetupHandler(
 	// Declare GVR.
 	gvr = walrus.SchemeGroupVersionResource("catalogs")
 
+	// Create table convertor to pretty the kubectl's output.
+	var tc rest.TableConvertor
+	{
+		tc, err = extensionapi.NewJSONPathTableConvertor(
+			extensionapi.JSONPathTableColumnDefinition{
+				TableColumnDefinition: meta.TableColumnDefinition{
+					Name: "Format",
+					Type: "string",
+				},
+				JSONPath: ".spec.templateFormat",
+			},
+			extensionapi.JSONPathTableColumnDefinition{
+				TableColumnDefinition: meta.TableColumnDefinition{
+					Name: "URL",
+					Type: "string",
+				},
+				JSONPath: ".status.url",
+			},
+			extensionapi.JSONPathTableColumnDefinition{
+				TableColumnDefinition: meta.TableColumnDefinition{
+					Name: "Project",
+					Type: "string",
+				},
+				JSONPath: ".status.project",
+			},
+			extensionapi.JSONPathTableColumnDefinition{
+				TableColumnDefinition: meta.TableColumnDefinition{
+					Name: "Status",
+					Type: "string",
+				},
+				JSONPath: ".status.phase",
+			},
+		)
+		if err != nil {
+			return gvr, srs, err
+		}
+	}
+
 	// As storage.
 	h.ObjectInfo = &walrus.Catalog{}
 	h.CurdOperations = extensionapi.WithCurdProxy[
 		*walrus.Catalog, *walrus.CatalogList, *walruscore.Catalog, *walruscore.CatalogList,
-	](nil, h, opts.Manager.GetClient().(ctrlcli.WithWatch))
+	](tc, h, opts.Manager.GetClient().(ctrlcli.WithWatch))
 
-	return
+	// Set client.
+	h.client = opts.Manager.GetClient()
+	return gvr, srs, nil
 }
 
 var (
@@ -65,13 +110,69 @@ func (h *CatalogHandler) CastObjectTo(do *walrus.Catalog) (uo *walruscore.Catalo
 }
 
 func (h *CatalogHandler) CastObjectFrom(uo *walruscore.Catalog) (do *walrus.Catalog) {
-	return (*walrus.Catalog)(uo)
+	do = (*walrus.Catalog)(uo)
+	do.APIVersion = walrus.SchemeGroupVersion.String()
+	return do
 }
 
 func (h *CatalogHandler) CastObjectListTo(dol *walrus.CatalogList) (uol *walruscore.CatalogList) {
-	return (*walruscore.CatalogList)(dol)
+	uol = (*walruscore.CatalogList)(dol)
+	for i := range dol.Items {
+		dol.Items[i].APIVersion = walruscore.SchemeGroupVersion.String()
+	}
+	return uol
 }
 
 func (h *CatalogHandler) CastObjectListFrom(uol *walruscore.CatalogList) (dol *walrus.CatalogList) {
-	return (*walrus.CatalogList)(uol)
+	dol = (*walrus.CatalogList)(uol)
+	for i := range dol.Items {
+		dol.Items[i].APIVersion = walrus.SchemeGroupVersion.String()
+	}
+	return dol
+}
+
+func (h *CatalogHandler) OnCreate(ctx context.Context, obj runtime.Object, opts ctrlcli.CreateOptions) (runtime.Object, error) {
+	// Validate.
+	c := obj.(*walrus.Catalog)
+	err := h.validateFilter(c)
+	if err != nil {
+		return nil, err
+	}
+
+	uo := h.CastObjectTo(c)
+	err = h.client.Create(ctx, uo, &opts)
+	return h.CastObjectFrom(uo), err
+}
+
+func (h *CatalogHandler) OnUpdate(ctx context.Context, obj, _ runtime.Object, opts ctrlcli.UpdateOptions) (runtime.Object, error) {
+	// Validate.
+	c := obj.(*walrus.Catalog)
+	err := h.validateFilter(c)
+	if err != nil {
+		return nil, err
+	}
+
+	uo := h.CastObjectTo(c)
+	err = h.client.Update(ctx, uo, &opts)
+	return h.CastObjectFrom(uo), err
+}
+
+func (h *CatalogHandler) validateFilter(obj *walrus.Catalog) error {
+	filters := obj.Spec.Filters
+	if filters == nil {
+		return nil
+	}
+
+	if filters.IncludeExpression != "" {
+		if _, err := regexp.Compile(filters.IncludeExpression); err != nil {
+			return fmt.Errorf("invalid include expression: %w", err)
+		}
+	}
+
+	if filters.ExcludeExpression != "" {
+		if _, err := regexp.Compile(filters.ExcludeExpression); err != nil {
+			return fmt.Errorf("invalid exclude expression: %w", err)
+		}
+	}
+	return nil
 }
