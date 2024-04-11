@@ -1031,11 +1031,11 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderLDAPConfig"):
 		return &applyconfigurationwalrusv1.SubjectProviderLDAPConfigApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderLDAPGroupSearch"):
-		return &applyconfigurationwalrusv1.SubjectProviderLdapGroupSearchApplyConfiguration{}
+		return &applyconfigurationwalrusv1.SubjectProviderLDAPGroupSearchApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderLdapGroupSearchUserMatcher"):
 		return &applyconfigurationwalrusv1.SubjectProviderLdapGroupSearchUserMatcherApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderLDAPUserSearch"):
-		return &applyconfigurationwalrusv1.SubjectProviderLdapUserSearchApplyConfiguration{}
+		return &applyconfigurationwalrusv1.SubjectProviderLDAPUserSearchApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderMicrosoftConfig"):
 		return &applyconfigurationwalrusv1.SubjectProviderMicrosoftConfigApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("SubjectProviderOAuthClaimMapping"):

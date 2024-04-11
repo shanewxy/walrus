@@ -53,10 +53,6 @@ func crd_crd_gen_generators_testdata_crd_gen_Dummy() *v1.CustomResourceDefinitio
 						OpenAPIV3Schema: &v1.JSONSchemaProps{
 							Description: "Dummy is the schema for the projects API.",
 							Type:        "object",
-							Required: []string{
-								"metadata",
-								"spec",
-							},
 							Properties: map[string]v1.JSONSchemaProps{
 								"apiVersion": {
 									Type: "string",
@@ -70,39 +66,10 @@ func crd_crd_gen_generators_testdata_crd_gen_Dummy() *v1.CustomResourceDefinitio
 								"spec": {
 									Type: "object",
 									Required: []string{
-										"integerPointer",
-										"floatPointer",
-										"stringPointer",
-										"boolPointer",
-										"microTime",
-										"duration",
-										"time",
-										"intOrString",
-										"rawExtension",
-										"microTimePointer",
-										"durationPointer",
-										"timePointer",
-										"intOrStringPointer",
-										"rawExtensionPointer",
-										"mapString",
-										"mapPointString",
-										"mapObject",
-										"mapInOrString",
-										"mapStringPointer",
-										"mapInterface",
-										"sliceString",
-										"slicePointString",
-										"sliceObject",
-										"sliceBytes",
-										"sliceBytesPointer",
-										"sliceInterface",
 										"arrayString",
 										"arrayPointString",
 										"arrayObject",
-										"subDummySpecPointer",
-										"sliceSubDummySpec",
 										"dummyX",
-										"dummyY",
 										"quantity",
 										"container",
 									},
@@ -170,7 +137,10 @@ func crd_crd_gen_generators_testdata_crd_gen_Dummy() *v1.CustomResourceDefinitio
 											Type: "boolean",
 										},
 										"boolPointer": {
-											Type:     "boolean",
+											Type: "boolean",
+											Default: &v1.JSON{
+												Raw: []byte(`true`),
+											},
 											Nullable: true,
 										},
 										"container": {
@@ -1883,7 +1853,10 @@ func crd_crd_gen_generators_testdata_crd_gen_Dummy() *v1.CustomResourceDefinitio
 											},
 										},
 										"stringPointer": {
-											Type:     "string",
+											Type: "string",
+											Default: &v1.JSON{
+												Raw: []byte(`"x"`),
+											},
 											Nullable: true,
 										},
 										"subDummySpecPointer": {
@@ -1904,9 +1877,6 @@ func crd_crd_gen_generators_testdata_crd_gen_Dummy() *v1.CustomResourceDefinitio
 								},
 								"status": {
 									Type: "object",
-									Required: []string{
-										"conditions",
-									},
 									Properties: map[string]v1.JSONSchemaProps{
 										"conditions": {
 											Type: "array",

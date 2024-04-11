@@ -62,9 +62,9 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGiteaConfig":                schema_pkg_apis_walrus_v1_SubjectProviderGiteaConfig(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGoogleConfig":               schema_pkg_apis_walrus_v1_SubjectProviderGoogleConfig(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPConfig":                 schema_pkg_apis_walrus_v1_SubjectProviderLDAPConfig(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLdapGroupSearch":            schema_pkg_apis_walrus_v1_SubjectProviderLdapGroupSearch(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPGroupSearch":            schema_pkg_apis_walrus_v1_SubjectProviderLDAPGroupSearch(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPUserSearch":             schema_pkg_apis_walrus_v1_SubjectProviderLDAPUserSearch(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLdapGroupSearchUserMatcher": schema_pkg_apis_walrus_v1_SubjectProviderLdapGroupSearchUserMatcher(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLdapUserSearch":             schema_pkg_apis_walrus_v1_SubjectProviderLdapUserSearch(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderList":                       schema_pkg_apis_walrus_v1_SubjectProviderList(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderMicrosoftConfig":            schema_pkg_apis_walrus_v1_SubjectProviderMicrosoftConfig(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOAuthClaimMapping":          schema_pkg_apis_walrus_v1_SubjectProviderOAuthClaimMapping(ref),
@@ -396,6 +396,7 @@ func schema_pkg_apis_walrus_v1_Environment(ref common.ReferenceCallback) common.
 						},
 					},
 				},
+				Required: []string{"spec"},
 			},
 		},
 		Dependencies: []string{
@@ -553,6 +554,7 @@ func schema_pkg_apis_walrus_v1_FileExample(ref common.ReferenceCallback) common.
 						},
 					},
 				},
+				Required: []string{"status"},
 			},
 		},
 		Dependencies: []string{
@@ -1293,6 +1295,7 @@ func schema_pkg_apis_walrus_v1_Setting(ref common.ReferenceCallback) common.Open
 						},
 					},
 				},
+				Required: []string{"spec"},
 			},
 		},
 		Dependencies: []string{
@@ -1456,6 +1459,7 @@ func schema_pkg_apis_walrus_v1_Subject(ref common.ReferenceCallback) common.Open
 						},
 					},
 				},
+				Required: []string{"spec"},
 			},
 		},
 		Dependencies: []string{
@@ -1552,6 +1556,7 @@ func schema_pkg_apis_walrus_v1_SubjectLogin(ref common.ReferenceCallback) common
 						},
 					},
 				},
+				Required: []string{"spec"},
 			},
 		},
 		Dependencies: []string{
@@ -1643,6 +1648,7 @@ func schema_pkg_apis_walrus_v1_SubjectProvider(ref common.ReferenceCallback) com
 						},
 					},
 				},
+				Required: []string{"spec"},
 			},
 		},
 		Dependencies: []string{
@@ -1986,14 +1992,14 @@ func schema_pkg_apis_walrus_v1_SubjectProviderLDAPConfig(ref common.ReferenceCal
 						SchemaProps: spec.SchemaProps{
 							Description: "GroupSearch is the group search configuration of the LDAP.\n\nIt maps a group to a list of users.",
 							Default:     map[string]interface{}{},
-							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLdapGroupSearch"),
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPGroupSearch"),
 						},
 					},
 					"userSearch": {
 						SchemaProps: spec.SchemaProps{
 							Description: "UserSearch is the user search configuration of the LDAP.\n\nIt maps a username and password entered by a user to the LDAP entry.",
 							Default:     map[string]interface{}{},
-							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLdapUserSearch"),
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPUserSearch"),
 						},
 					},
 				},
@@ -2001,15 +2007,15 @@ func schema_pkg_apis_walrus_v1_SubjectProviderLDAPConfig(ref common.ReferenceCal
 			},
 		},
 		Dependencies: []string{
-			"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLdapGroupSearch", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLdapUserSearch"},
+			"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPGroupSearch", "github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPUserSearch"},
 	}
 }
 
-func schema_pkg_apis_walrus_v1_SubjectProviderLdapGroupSearch(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_pkg_apis_walrus_v1_SubjectProviderLDAPGroupSearch(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "SubjectProviderLdapGroupSearch defines the group search configuration of the LDAP.",
+				Description: "SubjectProviderLDAPGroupSearch defines the group search configuration of the LDAP.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"baseDN": {
@@ -2059,41 +2065,11 @@ func schema_pkg_apis_walrus_v1_SubjectProviderLdapGroupSearch(ref common.Referen
 	}
 }
 
-func schema_pkg_apis_walrus_v1_SubjectProviderLdapGroupSearchUserMatcher(ref common.ReferenceCallback) common.OpenAPIDefinition {
+func schema_pkg_apis_walrus_v1_SubjectProviderLDAPUserSearch(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "SubjectProviderLdapGroupSearchUserMatcher defines the user matcher of the LDAP group search.",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"groupAttribute": {
-						SchemaProps: spec.SchemaProps{
-							Description: "GroupAttribute is the attribute of the group.",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-					"userAttribute": {
-						SchemaProps: spec.SchemaProps{
-							Description: "UserAttribute is the attribute of the user.",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-				},
-				Required: []string{"groupAttribute", "userAttribute"},
-			},
-		},
-	}
-}
-
-func schema_pkg_apis_walrus_v1_SubjectProviderLdapUserSearch(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "SubjectProviderLdapUserSearch defines the user search configuration of the LDAP.",
+				Description: "SubjectProviderLDAPUserSearch defines the user search configuration of the LDAP.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"baseDN": {
@@ -2138,6 +2114,36 @@ func schema_pkg_apis_walrus_v1_SubjectProviderLdapUserSearch(ref common.Referenc
 					},
 				},
 				Required: []string{"baseDN"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walrus_v1_SubjectProviderLdapGroupSearchUserMatcher(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "SubjectProviderLdapGroupSearchUserMatcher defines the user matcher of the LDAP group search.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"groupAttribute": {
+						SchemaProps: spec.SchemaProps{
+							Description: "GroupAttribute is the attribute of the group.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"userAttribute": {
+						SchemaProps: spec.SchemaProps{
+							Description: "UserAttribute is the attribute of the user.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"groupAttribute", "userAttribute"},
 			},
 		},
 	}
@@ -2822,6 +2828,7 @@ func schema_pkg_apis_walrus_v1_Variable(ref common.ReferenceCallback) common.Ope
 						},
 					},
 				},
+				Required: []string{"spec"},
 			},
 		},
 		Dependencies: []string{

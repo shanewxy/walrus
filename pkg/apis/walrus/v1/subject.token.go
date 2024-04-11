@@ -14,7 +14,7 @@ type SubjectToken struct {
 	meta.ObjectMeta `json:"metadata,omitempty"`
 
 	// +optional
-	Spec   SubjectTokenSpec   `json:"spec,omitempty"`
+	Spec   SubjectTokenSpec   `json:"spec"`
 	Status SubjectTokenStatus `json:"status,omitempty"`
 }
 

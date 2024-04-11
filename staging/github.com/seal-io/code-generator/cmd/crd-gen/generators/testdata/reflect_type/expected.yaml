@@ -1696,39 +1696,10 @@ spec:
                 nullable: true
                 type: string
             required:
-            - integerPointer
-            - floatPointer
-            - stringPointer
-            - boolPointer
-            - microTime
-            - duration
-            - time
-            - intOrString
-            - rawExtension
-            - microTimePointer
-            - durationPointer
-            - timePointer
-            - intOrStringPointer
-            - rawExtensionPointer
-            - mapString
-            - mapPointString
-            - mapObject
-            - mapInOrString
-            - mapStringPointer
-            - mapInterface
-            - sliceString
-            - slicePointString
-            - sliceObject
-            - sliceBytes
-            - sliceBytesPointer
-            - sliceInterface
             - arrayString
             - arrayPointString
             - arrayObject
-            - subDummySpecPointer
-            - sliceSubDummySpec
             - dummyX
-            - dummyY
             - quantity
             - container
             type: object
@@ -1794,12 +1765,7 @@ spec:
                   type: object
                 nullable: true
                 type: array
-            required:
-            - conditions
             type: object
-        required:
-        - metadata
-        - spec
         type: object
     served: true
     storage: true

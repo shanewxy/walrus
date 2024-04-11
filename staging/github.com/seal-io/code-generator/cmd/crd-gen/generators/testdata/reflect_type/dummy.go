@@ -63,12 +63,12 @@ type DummySpec struct {
 	MapString      map[string]string  `json:"mapString,omitempty"`
 	MapPointString map[string]*string `json:"mapPointString,omitempty"`
 	MapObject      map[string]struct {
-		A string              `json:"a,omitempty"`
-		B int                 `json:"b,omitempty"`
-		C bool                `json:"c,omitempty"`
-		D float64             `json:"d,omitempty"`
-		E map[string]struct{} `json:"e,omitempty"`
-		F []struct{}          `json:"f,omitempty"`
+		A string              `json:"a"`
+		B int                 `json:"b"`
+		C bool                `json:"c"`
+		D float64             `json:"d"`
+		E map[string]struct{} `json:"e"`
+		F []struct{}          `json:"f"`
 	} `json:"mapObject,omitempty"`
 	// +mapType="atomic"
 	MapInOrString    map[string]intstr.IntOrString `json:"mapInOrString,omitempty"`
@@ -84,12 +84,12 @@ type DummySpec struct {
 	// +k8s:validation:cel[0]:rule="self.b > 0"
 	// +k8s:validation:cel[0]:message="b must be greater than 0"
 	SliceObject []struct {
-		A string              `json:"a,omitempty"`
-		B int                 `json:"b,omitempty"`
-		C bool                `json:"c,omitempty"`
-		D float64             `json:"d,omitempty"`
-		E map[string]struct{} `json:"e,omitempty"`
-		F []struct{}          `json:"f,omitempty"`
+		A string              `json:"a"`
+		B int                 `json:"b"`
+		C bool                `json:"c"`
+		D float64             `json:"d"`
+		E map[string]struct{} `json:"e"`
+		F []struct{}          `json:"f"`
 	} `json:"sliceObject,omitempty"`
 	SliceBytes        []byte  `json:"sliceBytes,omitempty"`
 	SliceBytesPointer *[]byte `json:"sliceBytesPointer,omitempty"`
@@ -97,8 +97,8 @@ type DummySpec struct {
 
 	// Array.
 
-	ArrayString      [3]string  `json:"arrayString,omitempty"`
-	ArrayPointString [3]*string `json:"arrayPointString,omitempty"`
+	ArrayString      [3]string  `json:"arrayString"`
+	ArrayPointString [3]*string `json:"arrayPointString"`
 	// +k8s:validation:cel[0]:rule> self.b > 0
 	// +k8s:validation:cel[0]:message> b must be greater than 0,
 	// +k8s:validation:cel[1]:rule> self.e.length() % 2 == 0
@@ -107,18 +107,18 @@ type DummySpec struct {
 	// +k8s:validation:cel[1]:message> mutate a
 	// +k8s:validation:cel[1]:reason="FieldValueRequired"
 	ArrayObject [3]struct {
-		A string              `json:"a,omitempty"`
-		B int                 `json:"b,omitempty"`
-		C bool                `json:"c,omitempty"`
-		D float64             `json:"d,omitempty"`
-		E map[string]struct{} `json:"e,omitempty"`
+		A string              `json:"a"`
+		B int                 `json:"b"`
+		C bool                `json:"c"`
+		D float64             `json:"d"`
+		E map[string]struct{} `json:"e"`
 	}
 
 	// Reference.
 
 	SubDummySpecPointer *DummySpec  `json:"subDummySpecPointer,omitempty"`
 	SliceSubDummySpec   []DummySpec `json:"sliceSubDummySpec,omitempty"`
-	DummyX              DummyX      `json:"dummyX,omitempty"`
+	DummyX              DummyX      `json:"dummyX"`
 	DummyY              DummyY      `json:"dummyY,omitempty"`
 
 	Quantity  resource.Quantity `json:"quantity"`

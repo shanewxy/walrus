@@ -446,9 +446,10 @@ func schemeType(logger klog.Logger, visited map[*types.Type]struct{}, t *types.T
 
 			for _, mem := range t.Members {
 				var (
-					name   = stringx.CamelizeDownFirst(mem.Name)
-					inline bool
-					hidden bool
+					name      = stringx.CamelizeDownFirst(mem.Name)
+					inline    bool
+					hidden    bool
+					omitempty bool
 				)
 				if tg := parseStructTags(mem.Tags).Get("json"); tg.Available() {
 					c, tg, s := tg.Next()
@@ -462,6 +463,8 @@ func schemeType(logger klog.Logger, visited map[*types.Type]struct{}, t *types.T
 							inline = true
 						case "-":
 							hidden = true
+						case "omitempty":
+							omitempty = true
 						}
 					}
 				}
@@ -484,7 +487,7 @@ func schemeType(logger klog.Logger, visited map[*types.Type]struct{}, t *types.T
 					continue
 				}
 
-				if name != "status" || (name == "status" && lvl != 0) {
+				if !omitempty {
 					props.Required = append(props.Required, name)
 				}
 

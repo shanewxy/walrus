@@ -5,25 +5,25 @@
 
 package v1
 
-// SubjectProviderLdapGroupSearchApplyConfiguration represents an declarative configuration of the SubjectProviderLdapGroupSearch type for use
+// SubjectProviderLDAPGroupSearchApplyConfiguration represents an declarative configuration of the SubjectProviderLDAPGroupSearch type for use
 // with apply.
-type SubjectProviderLdapGroupSearchApplyConfiguration struct {
+type SubjectProviderLDAPGroupSearchApplyConfiguration struct {
 	BaseDN        *string                                                       `json:"baseDN,omitempty"`
 	Filter        *string                                                       `json:"filter,omitempty"`
 	UserMatchers  []SubjectProviderLdapGroupSearchUserMatcherApplyConfiguration `json:"userMatchers,omitempty"`
 	NameAttribute *string                                                       `json:"nameAttribute,omitempty"`
 }
 
-// SubjectProviderLdapGroupSearchApplyConfiguration constructs an declarative configuration of the SubjectProviderLdapGroupSearch type for use with
+// SubjectProviderLDAPGroupSearchApplyConfiguration constructs an declarative configuration of the SubjectProviderLDAPGroupSearch type for use with
 // apply.
-func SubjectProviderLdapGroupSearch() *SubjectProviderLdapGroupSearchApplyConfiguration {
-	return &SubjectProviderLdapGroupSearchApplyConfiguration{}
+func SubjectProviderLDAPGroupSearch() *SubjectProviderLDAPGroupSearchApplyConfiguration {
+	return &SubjectProviderLDAPGroupSearchApplyConfiguration{}
 }
 
 // WithBaseDN sets the BaseDN field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the BaseDN field is set to the value of the last call.
-func (b *SubjectProviderLdapGroupSearchApplyConfiguration) WithBaseDN(value string) *SubjectProviderLdapGroupSearchApplyConfiguration {
+func (b *SubjectProviderLDAPGroupSearchApplyConfiguration) WithBaseDN(value string) *SubjectProviderLDAPGroupSearchApplyConfiguration {
 	b.BaseDN = &value
 	return b
 }
@@ -31,7 +31,7 @@ func (b *SubjectProviderLdapGroupSearchApplyConfiguration) WithBaseDN(value stri
 // WithFilter sets the Filter field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Filter field is set to the value of the last call.
-func (b *SubjectProviderLdapGroupSearchApplyConfiguration) WithFilter(value string) *SubjectProviderLdapGroupSearchApplyConfiguration {
+func (b *SubjectProviderLDAPGroupSearchApplyConfiguration) WithFilter(value string) *SubjectProviderLDAPGroupSearchApplyConfiguration {
 	b.Filter = &value
 	return b
 }
@@ -39,7 +39,7 @@ func (b *SubjectProviderLdapGroupSearchApplyConfiguration) WithFilter(value stri
 // WithUserMatchers adds the given value to the UserMatchers field in the declarative configuration
 // and returns the receiver, so that objects can be build by chaining "With" function invocations.
 // If called multiple times, values provided by each call will be appended to the UserMatchers field.
-func (b *SubjectProviderLdapGroupSearchApplyConfiguration) WithUserMatchers(values ...*SubjectProviderLdapGroupSearchUserMatcherApplyConfiguration) *SubjectProviderLdapGroupSearchApplyConfiguration {
+func (b *SubjectProviderLDAPGroupSearchApplyConfiguration) WithUserMatchers(values ...*SubjectProviderLdapGroupSearchUserMatcherApplyConfiguration) *SubjectProviderLDAPGroupSearchApplyConfiguration {
 	for i := range values {
 		if values[i] == nil {
 			panic("nil value passed to WithUserMatchers")
@@ -52,7 +52,7 @@ func (b *SubjectProviderLdapGroupSearchApplyConfiguration) WithUserMatchers(valu
 // WithNameAttribute sets the NameAttribute field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the NameAttribute field is set to the value of the last call.
-func (b *SubjectProviderLdapGroupSearchApplyConfiguration) WithNameAttribute(value string) *SubjectProviderLdapGroupSearchApplyConfiguration {
+func (b *SubjectProviderLDAPGroupSearchApplyConfiguration) WithNameAttribute(value string) *SubjectProviderLDAPGroupSearchApplyConfiguration {
 	b.NameAttribute = &value
 	return b
 }

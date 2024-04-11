@@ -5,9 +5,9 @@
 
 package v1
 
-// SubjectProviderLdapUserSearchApplyConfiguration represents an declarative configuration of the SubjectProviderLdapUserSearch type for use
+// SubjectProviderLDAPUserSearchApplyConfiguration represents an declarative configuration of the SubjectProviderLDAPUserSearch type for use
 // with apply.
-type SubjectProviderLdapUserSearchApplyConfiguration struct {
+type SubjectProviderLDAPUserSearchApplyConfiguration struct {
 	BaseDN               *string `json:"baseDN,omitempty"`
 	Filter               *string `json:"filter,omitempty"`
 	NameAttribute        *string `json:"nameAttribute,omitempty"`
@@ -15,16 +15,16 @@ type SubjectProviderLdapUserSearchApplyConfiguration struct {
 	EmailAttribute       *string `json:"emailAttribute,omitempty"`
 }
 
-// SubjectProviderLdapUserSearchApplyConfiguration constructs an declarative configuration of the SubjectProviderLdapUserSearch type for use with
+// SubjectProviderLDAPUserSearchApplyConfiguration constructs an declarative configuration of the SubjectProviderLDAPUserSearch type for use with
 // apply.
-func SubjectProviderLdapUserSearch() *SubjectProviderLdapUserSearchApplyConfiguration {
-	return &SubjectProviderLdapUserSearchApplyConfiguration{}
+func SubjectProviderLDAPUserSearch() *SubjectProviderLDAPUserSearchApplyConfiguration {
+	return &SubjectProviderLDAPUserSearchApplyConfiguration{}
 }
 
 // WithBaseDN sets the BaseDN field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the BaseDN field is set to the value of the last call.
-func (b *SubjectProviderLdapUserSearchApplyConfiguration) WithBaseDN(value string) *SubjectProviderLdapUserSearchApplyConfiguration {
+func (b *SubjectProviderLDAPUserSearchApplyConfiguration) WithBaseDN(value string) *SubjectProviderLDAPUserSearchApplyConfiguration {
 	b.BaseDN = &value
 	return b
 }
@@ -32,7 +32,7 @@ func (b *SubjectProviderLdapUserSearchApplyConfiguration) WithBaseDN(value strin
 // WithFilter sets the Filter field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Filter field is set to the value of the last call.
-func (b *SubjectProviderLdapUserSearchApplyConfiguration) WithFilter(value string) *SubjectProviderLdapUserSearchApplyConfiguration {
+func (b *SubjectProviderLDAPUserSearchApplyConfiguration) WithFilter(value string) *SubjectProviderLDAPUserSearchApplyConfiguration {
 	b.Filter = &value
 	return b
 }
@@ -40,7 +40,7 @@ func (b *SubjectProviderLdapUserSearchApplyConfiguration) WithFilter(value strin
 // WithNameAttribute sets the NameAttribute field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the NameAttribute field is set to the value of the last call.
-func (b *SubjectProviderLdapUserSearchApplyConfiguration) WithNameAttribute(value string) *SubjectProviderLdapUserSearchApplyConfiguration {
+func (b *SubjectProviderLDAPUserSearchApplyConfiguration) WithNameAttribute(value string) *SubjectProviderLDAPUserSearchApplyConfiguration {
 	b.NameAttribute = &value
 	return b
 }
@@ -48,7 +48,7 @@ func (b *SubjectProviderLdapUserSearchApplyConfiguration) WithNameAttribute(valu
 // WithDisplayNameAttribute sets the DisplayNameAttribute field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the DisplayNameAttribute field is set to the value of the last call.
-func (b *SubjectProviderLdapUserSearchApplyConfiguration) WithDisplayNameAttribute(value string) *SubjectProviderLdapUserSearchApplyConfiguration {
+func (b *SubjectProviderLDAPUserSearchApplyConfiguration) WithDisplayNameAttribute(value string) *SubjectProviderLDAPUserSearchApplyConfiguration {
 	b.DisplayNameAttribute = &value
 	return b
 }
@@ -56,7 +56,7 @@ func (b *SubjectProviderLdapUserSearchApplyConfiguration) WithDisplayNameAttribu
 // WithEmailAttribute sets the EmailAttribute field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the EmailAttribute field is set to the value of the last call.
-func (b *SubjectProviderLdapUserSearchApplyConfiguration) WithEmailAttribute(value string) *SubjectProviderLdapUserSearchApplyConfiguration {
+func (b *SubjectProviderLDAPUserSearchApplyConfiguration) WithEmailAttribute(value string) *SubjectProviderLDAPUserSearchApplyConfiguration {
 	b.EmailAttribute = &value
 	return b
 }

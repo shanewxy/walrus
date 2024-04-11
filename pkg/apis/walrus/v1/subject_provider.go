@@ -19,7 +19,7 @@ type SubjectProvider struct {
 	meta.TypeMeta   `json:",inline"`
 	meta.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   SubjectProviderSpec   `json:"spec,omitempty"`
+	Spec   SubjectProviderSpec   `json:"spec"`
 	Status SubjectProviderStatus `json:"status,omitempty"`
 }
 

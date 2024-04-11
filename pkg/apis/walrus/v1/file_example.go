@@ -15,7 +15,7 @@ type FileExample struct {
 	meta.TypeMeta   `json:",inline"`
 	meta.ObjectMeta `json:"metadata,omitempty"`
 
-	Status FileExampleStatus `json:"status,omitempty"`
+	Status FileExampleStatus `json:"status"`
 }
 
 var _ runtime.Object = (*FileExample)(nil)

@@ -19,7 +19,7 @@ type Environment struct {
 	meta.TypeMeta   `json:",inline"`
 	meta.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   EnvironmentSpec   `json:"spec,omitempty"`
+	Spec   EnvironmentSpec   `json:"spec"`
 	Status EnvironmentStatus `json:"status,omitempty"`
 }
 

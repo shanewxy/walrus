@@ -17,7 +17,7 @@ type Variable struct {
 	meta.TypeMeta   `json:",inline"`
 	meta.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   VariableSpec   `json:"spec,omitempty"`
+	Spec   VariableSpec   `json:"spec"`
 	Status VariableStatus `json:"status,omitempty"`
 }
 

@@ -21,7 +21,6 @@ type Project struct {
 	meta.TypeMeta   `json:",inline"`
 	meta.ObjectMeta `json:"metadata,omitempty"`
 
-	// +optional
 	Spec   ProjectSpec   `json:"spec,omitempty"`
 	Status ProjectStatus `json:"status,omitempty"`
 }

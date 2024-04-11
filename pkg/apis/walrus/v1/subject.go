@@ -20,7 +20,7 @@ type Subject struct {
 	meta.TypeMeta   `json:",inline"`
 	meta.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec SubjectSpec `json:"spec,omitempty"`
+	Spec SubjectSpec `json:"spec"`
 }
 
 var _ runtime.Object = (*Subject)(nil)

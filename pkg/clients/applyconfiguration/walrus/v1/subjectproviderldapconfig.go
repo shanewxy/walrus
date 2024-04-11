@@ -12,8 +12,8 @@ type SubjectProviderLDAPConfigApplyConfiguration struct {
 	SkipInsecureVerify     *bool                                             `json:"skipInsecureVerify,omitempty"`
 	ServiceAccountDN       *string                                           `json:"serviceAccountDN,omitempty"`
 	ServiceAccountPassword *string                                           `json:"serviceAccountPassword,omitempty"`
-	GroupSearch            *SubjectProviderLdapGroupSearchApplyConfiguration `json:"groupSearch,omitempty"`
-	UserSearch             *SubjectProviderLdapUserSearchApplyConfiguration  `json:"userSearch,omitempty"`
+	GroupSearch            *SubjectProviderLDAPGroupSearchApplyConfiguration `json:"groupSearch,omitempty"`
+	UserSearch             *SubjectProviderLDAPUserSearchApplyConfiguration  `json:"userSearch,omitempty"`
 }
 
 // SubjectProviderLDAPConfigApplyConfiguration constructs an declarative configuration of the SubjectProviderLDAPConfig type for use with
@@ -57,7 +57,7 @@ func (b *SubjectProviderLDAPConfigApplyConfiguration) WithServiceAccountPassword
 // WithGroupSearch sets the GroupSearch field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the GroupSearch field is set to the value of the last call.
-func (b *SubjectProviderLDAPConfigApplyConfiguration) WithGroupSearch(value *SubjectProviderLdapGroupSearchApplyConfiguration) *SubjectProviderLDAPConfigApplyConfiguration {
+func (b *SubjectProviderLDAPConfigApplyConfiguration) WithGroupSearch(value *SubjectProviderLDAPGroupSearchApplyConfiguration) *SubjectProviderLDAPConfigApplyConfiguration {
 	b.GroupSearch = value
 	return b
 }
@@ -65,7 +65,7 @@ func (b *SubjectProviderLDAPConfigApplyConfiguration) WithGroupSearch(value *Sub
 // WithUserSearch sets the UserSearch field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the UserSearch field is set to the value of the last call.
-func (b *SubjectProviderLDAPConfigApplyConfiguration) WithUserSearch(value *SubjectProviderLdapUserSearchApplyConfiguration) *SubjectProviderLDAPConfigApplyConfiguration {
+func (b *SubjectProviderLDAPConfigApplyConfiguration) WithUserSearch(value *SubjectProviderLDAPUserSearchApplyConfiguration) *SubjectProviderLDAPConfigApplyConfiguration {
 	b.UserSearch = value
 	return b
 }

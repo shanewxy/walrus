@@ -15,7 +15,7 @@ type Setting struct {
 	meta.TypeMeta   `json:",inline"`
 	meta.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   SettingSpec   `json:"spec,omitempty"`
+	Spec   SettingSpec   `json:"spec"`
 	Status SettingStatus `json:"status,omitempty"`
 }
 

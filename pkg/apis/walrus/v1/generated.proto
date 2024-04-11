@@ -154,7 +154,6 @@ message FileExampleStatus {
 message Project {
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
 
-  // +optional
   optional ProjectSpec spec = 2;
 
   optional ProjectStatus status = 3;
@@ -533,16 +532,16 @@ message SubjectProviderLDAPConfig {
   // GroupSearch is the group search configuration of the LDAP.
   //
   // It maps a group to a list of users.
-  optional SubjectProviderLdapGroupSearch groupSearch = 5;
+  optional SubjectProviderLDAPGroupSearch groupSearch = 5;
 
   // UserSearch is the user search configuration of the LDAP.
   //
   // It maps a username and password entered by a user to the LDAP entry.
-  optional SubjectProviderLdapUserSearch userSearch = 6;
+  optional SubjectProviderLDAPUserSearch userSearch = 6;
 }
 
-// SubjectProviderLdapGroupSearch defines the group search configuration of the LDAP.
-message SubjectProviderLdapGroupSearch {
+// SubjectProviderLDAPGroupSearch defines the group search configuration of the LDAP.
+message SubjectProviderLDAPGroupSearch {
   // BaseDN to start the search from.
   optional string baseDN = 1;
 
@@ -560,17 +559,8 @@ message SubjectProviderLdapGroupSearch {
   optional string nameAttribute = 4;
 }
 
-// SubjectProviderLdapGroupSearchUserMatcher defines the user matcher of the LDAP group search.
-message SubjectProviderLdapGroupSearchUserMatcher {
-  // GroupAttribute is the attribute of the group.
-  optional string groupAttribute = 1;
-
-  // UserAttribute is the attribute of the user.
-  optional string userAttribute = 2;
-}
-
-// SubjectProviderLdapUserSearch defines the user search configuration of the LDAP.
-message SubjectProviderLdapUserSearch {
+// SubjectProviderLDAPUserSearch defines the user search configuration of the LDAP.
+message SubjectProviderLDAPUserSearch {
   // BaseDN to start the search from.
   optional string baseDN = 1;
 
@@ -593,6 +583,15 @@ message SubjectProviderLdapUserSearch {
   //
   // +default="mail"
   optional string emailAttribute = 5;
+}
+
+// SubjectProviderLdapGroupSearchUserMatcher defines the user matcher of the LDAP group search.
+message SubjectProviderLdapGroupSearchUserMatcher {
+  // GroupAttribute is the attribute of the group.
+  optional string groupAttribute = 1;
+
+  // UserAttribute is the attribute of the user.
+  optional string userAttribute = 2;
 }
 
 // SubjectProviderList holds the list of SubjectProvider.

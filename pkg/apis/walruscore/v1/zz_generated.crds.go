@@ -51,10 +51,6 @@ func crd_pkg_apis_walruscore_v1_Catalog() *v1.CustomResourceDefinition {
 						OpenAPIV3Schema: &v1.JSONSchemaProps{
 							Description: "Catalog is the schema for the catalogs API.",
 							Type:        "object",
-							Required: []string{
-								"metadata",
-								"spec",
-							},
 							Properties: map[string]v1.JSONSchemaProps{
 								"apiVersion": {
 									Type: "string",
@@ -110,10 +106,6 @@ func crd_pkg_apis_walruscore_v1_Connector() *v1.CustomResourceDefinition {
 						OpenAPIV3Schema: &v1.JSONSchemaProps{
 							Description: "Connector is the schema for the connectors API.",
 							Type:        "object",
-							Required: []string{
-								"metadata",
-								"spec",
-							},
 							Properties: map[string]v1.JSONSchemaProps{
 								"apiVersion": {
 									Type: "string",
@@ -169,10 +161,6 @@ func crd_pkg_apis_walruscore_v1_Resource() *v1.CustomResourceDefinition {
 						OpenAPIV3Schema: &v1.JSONSchemaProps{
 							Description: "Resource is the schema for the resources API.",
 							Type:        "object",
-							Required: []string{
-								"metadata",
-								"spec",
-							},
 							Properties: map[string]v1.JSONSchemaProps{
 								"apiVersion": {
 									Type: "string",
@@ -228,10 +216,6 @@ func crd_pkg_apis_walruscore_v1_ResourceDefinition() *v1.CustomResourceDefinitio
 						OpenAPIV3Schema: &v1.JSONSchemaProps{
 							Description: "ResourceDefinition is the schema for the resource definitions API.",
 							Type:        "object",
-							Required: []string{
-								"metadata",
-								"spec",
-							},
 							Properties: map[string]v1.JSONSchemaProps{
 								"apiVersion": {
 									Type: "string",
@@ -287,10 +271,6 @@ func crd_pkg_apis_walruscore_v1_ResourceRun() *v1.CustomResourceDefinition {
 						OpenAPIV3Schema: &v1.JSONSchemaProps{
 							Description: "ResourceRun is the schema for the resource runs API.",
 							Type:        "object",
-							Required: []string{
-								"metadata",
-								"spec",
-							},
 							Properties: map[string]v1.JSONSchemaProps{
 								"apiVersion": {
 									Type: "string",
@@ -346,10 +326,6 @@ func crd_pkg_apis_walruscore_v1_Template() *v1.CustomResourceDefinition {
 						OpenAPIV3Schema: &v1.JSONSchemaProps{
 							Description: "Template is the schema for the templates API.",
 							Type:        "object",
-							Required: []string{
-								"metadata",
-								"spec",
-							},
 							Properties: map[string]v1.JSONSchemaProps{
 								"apiVersion": {
 									Type: "string",

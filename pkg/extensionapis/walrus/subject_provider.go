@@ -336,10 +336,7 @@ const _SubjectProviderDelegatedSecretNamePrefix = "walrus-subjectprovider-"
 
 func convertSecretFromSubjectProvider(subjProv *walrus.SubjectProvider) *core.Secret {
 	sec := &core.Secret{
-		ObjectMeta: meta.ObjectMeta{
-			Namespace: subjProv.Namespace,
-			Name:      _SubjectProviderDelegatedSecretNamePrefix + subjProv.Name,
-		},
+		ObjectMeta: subjProv.ObjectMeta,
 	}
 	systemmeta.NoteResource(sec, "subjectproviders", map[string]string{
 		"type":        subjProv.Spec.Type.String(),
@@ -349,6 +346,7 @@ func convertSecretFromSubjectProvider(subjProv *walrus.SubjectProvider) *core.Se
 	sec.Data = map[string][]byte{
 		"externalConfig": json.MustMarshal(subjProv.Spec.ExternalConfig),
 	}
+	sec.Name = _SubjectProviderDelegatedSecretNamePrefix + subjProv.Name
 	return sec
 }
 

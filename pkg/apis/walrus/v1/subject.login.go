@@ -13,7 +13,7 @@ type SubjectLogin struct {
 	meta.TypeMeta   `json:",inline"`
 	meta.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   SubjectLoginSpec   `json:"spec,omitempty"`
+	Spec   SubjectLoginSpec   `json:"spec"`
 	Status SubjectLoginStatus `json:"status,omitempty"`
 }
 

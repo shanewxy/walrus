@@ -253,7 +253,7 @@ func (s ListWatchOperation) Watch(
 					om, err := kmeta.Accessor(e.Object)
 					if err == nil {
 						swapped := wm.SwapResourceVersion(om.GetResourceVersion())
-						if !swapped {
+						if !swapped && om.GetDeletionTimestamp() == nil {
 							// If the revision is not updated, ignore the event.
 							continue
 						}
