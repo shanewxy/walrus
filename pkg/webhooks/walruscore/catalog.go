@@ -26,13 +26,9 @@ func (r *CatalogWebhook) SetupWebhook(_ context.Context, opts webhook.SetupOptio
 var _ ctrlwebhook.CustomValidator = (*CatalogWebhook)(nil)
 
 func (r *CatalogWebhook) ValidateUpdate(ctx context.Context, oldObj, newObj runtime.Object) (ctrladmission.Warnings, error) {
-	// TODO: your logic here
-
 	return nil, nil
 }
 
 func (r *CatalogWebhook) ValidateDelete(ctx context.Context, obj runtime.Object) (ctrladmission.Warnings, error) {
-	// TODO: your logic here
-
 	return nil, nil
 }

@@ -17,6 +17,7 @@ import (
 	"k8s.io/client-go/rest"
 	cliflag "k8s.io/component-base/cli/flag"
 
+	walruscore "github.com/seal-io/walrus/pkg/apis/walruscore/v1"
 	"github.com/seal-io/walrus/pkg/manager"
 	"github.com/seal-io/walrus/pkg/servers/serverset/scheme"
 	"github.com/seal-io/walrus/pkg/system"
@@ -44,6 +45,9 @@ type Options struct {
 	AuditPolicyFile        string
 	AuditLogFile           string
 	AuditWebhookConfigFile string
+
+	// Catalog.
+	BuiltinCatalogVCSPlatform string
 }
 
 func NewOptions() *Options {
@@ -71,6 +75,9 @@ func NewOptions() *Options {
 		AuditPolicyFile:        "",
 		AuditLogFile:           "",
 		AuditWebhookConfigFile: "",
+
+		// Catalog.
+		BuiltinCatalogVCSPlatform: string(walruscore.VCSPlatformGitHub),
 	}
 }
 
@@ -118,6 +125,10 @@ func (o *Options) AddFlags(fs *pflag.FlagSet) {
 			"'-' means standard out.")
 	fs.StringVar(&o.AuditWebhookConfigFile, "audit-webhook-config-file", o.AuditWebhookConfigFile,
 		"path to a kubeconfig formatted file that defines the audit webhook configuration.")
+
+	// Catalog.
+	fs.StringVar(&o.BuiltinCatalogVCSPlatform, "builtin-catalog-vcs-platform", o.BuiltinCatalogVCSPlatform,
+		"Specify the vcs platform builtin catalogs used, select from 'GitHub' or 'Gitee'.")
 }
 
 func (o *Options) Validate(ctx context.Context) error {
@@ -173,7 +184,11 @@ func (o *Options) Complete(ctx context.Context) (*Config, error) {
 		return nil, err
 	}
 
-	system.ConfigureControl(o.BootstrapPassword, o.DisableAuths, o.DisableApplications)
+	system.ConfigureControl(
+		o.BootstrapPassword,
+		o.DisableAuths,
+		o.DisableApplications,
+		o.BuiltinCatalogVCSPlatform)
 
 	serve := &genericoptions.SecureServingOptions{
 		BindAddress: o.ManagerOptions.BindAddress,

@@ -155,6 +155,11 @@ func (s *Server) Prepare(ctx context.Context) error {
 			return err
 		}
 
+		// Initialize built catalog.
+		err = systemkuberes.InstallBuiltinCatalog(ctx, loopbackKubeCli, system.BuiltinCatalogVCSPlatform.Get())
+		if err != nil {
+			return err
+		}
 		return nil
 	})
 	if err != nil {

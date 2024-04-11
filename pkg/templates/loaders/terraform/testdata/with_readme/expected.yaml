@@ -1,0 +1,12 @@
+template:
+  data:
+    readme: '# test readme'
+  schema:
+    components: {}
+    info:
+      title: OpenAPI schema for template dev-template
+      version: ""
+    openapi: 3.0.3
+    paths: null
+ui:
+  schema: null

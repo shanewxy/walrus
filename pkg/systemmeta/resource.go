@@ -18,18 +18,20 @@ const (
 	ResourceNoteAnnoPrefix = "note.walrus.seal.io/"
 )
 
-// NoteResource armors the resource.
+// NoteResource armors the resource by adding a label if resType is not empty and setting an annotation if notes is not empty.
 func NoteResource(obj MetaObject, resType string, notes map[string]string) {
 	if obj == nil {
 		panic("object is nil")
 	}
 
-	ls := obj.GetLabels()
-	if ls == nil {
-		ls = make(map[string]string)
+	if resType != "" {
+		ls := obj.GetLabels()
+		if ls == nil {
+			ls = make(map[string]string)
+		}
+		ls[ResourceTypeLabel] = resType
+		obj.SetLabels(ls)
 	}
-	ls[ResourceTypeLabel] = resType
-	obj.SetLabels(ls)
 
 	if len(notes) > 0 {
 		as := obj.GetAnnotations()
@@ -45,7 +47,7 @@ func NoteResource(obj MetaObject, resType string, notes map[string]string) {
 	}
 }
 
-// DescribeResource explains the details of resource.
+// DescribeResource explains the details of resource, resource type and notes may be empty.
 func DescribeResource(obj MetaObject) (resType string, notes map[string]string) {
 	if obj == nil {
 		panic("object is nil")
@@ -66,7 +68,7 @@ func DescribeResource(obj MetaObject) (resType string, notes map[string]string) 
 	return
 }
 
-// DescribeResourceType explains the resource type of resource.
+// DescribeResourceType explains the resource type of resource, resource type may be empty.
 func DescribeResourceType(obj MetaObject) string {
 	if obj == nil {
 		panic("object is nil")
