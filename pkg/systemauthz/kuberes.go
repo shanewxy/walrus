@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	batch "k8s.io/api/batch/v1"
+	core "k8s.io/api/core/v1"
 	rbac "k8s.io/api/rbac/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -23,6 +25,8 @@ const (
 	AnonymousClusterRoleName = "walrus-anonymous"
 	// ViewerClusterRoleName is the name of the Kubernetes ClusterRole for system viewer.
 	ViewerClusterRoleName = "walrus-viewer"
+	// DeployerClusterRoleName is the name of the Kubernetes ClusterRole for system deployer.
+	DeployerClusterRoleName = "walrus-deployer"
 	// EditorClusterRoleName is the name of the Kubernetes ClusterRole for system editor.
 	EditorClusterRoleName = "walrus-editor"
 	// AdminClusterRoleName is the name of the Kubernetes ClusterRole for system administrator.
@@ -122,6 +126,64 @@ func Initialize(ctx context.Context, cli clientset.Interface) error {
 					},
 					Resources: []string{
 						"projects",
+					},
+					Verbs: []string{
+						rbac.VerbAll,
+					},
+				},
+			},
+		},
+		// Deployer.
+		{
+			ObjectMeta: meta.ObjectMeta{
+				Name: DeployerClusterRoleName,
+			},
+			Rules: []rbac.PolicyRule{
+				// Manage partial resources.
+				{
+					APIGroups: []string{
+						walrus.GroupName,
+					},
+					Resources: []string{
+						"resources",
+					},
+					Verbs: []string{
+						"get",
+						"list",
+						"watch",
+					},
+				},
+				{
+					APIGroups: []string{
+						walrus.GroupName,
+					},
+					Resources: []string{
+						"resources/components",
+					},
+					Verbs: []string{
+						rbac.VerbAll,
+					},
+				},
+				// Kaniko need to manage basic Jobs, Secrets, Pods and Pods/Log for kaniko.
+				{
+					APIGroups: []string{
+						batch.GroupName,
+					},
+					Resources: []string{
+						"jobs",
+					},
+					Verbs: []string{
+						rbac.VerbAll,
+					},
+				},
+				{
+					APIGroups: []string{
+						core.GroupName,
+					},
+					Resources: []string{
+						"secrets",
+						"pods",
+						"pods/log",
 					},
 					Verbs: []string{
 						rbac.VerbAll,

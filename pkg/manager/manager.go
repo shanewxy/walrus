@@ -28,7 +28,6 @@ import (
 	"github.com/seal-io/walrus/pkg/controllers"
 	"github.com/seal-io/walrus/pkg/kuberest"
 	"github.com/seal-io/walrus/pkg/system"
-	"github.com/seal-io/walrus/pkg/systemdeployer"
 	"github.com/seal-io/walrus/pkg/webhooks"
 )
 
@@ -43,12 +42,6 @@ func (m *Manager) Prepare(ctx context.Context) error {
 	err := apis.InstallCustomResourceDefinitions(ctx, loopbackKubeCli)
 	if err != nil {
 		return fmt.Errorf("install CRDs: %w", err)
-	}
-
-	// Initialize deployer cluster role.
-	err = systemdeployer.Initialize(ctx, loopbackKubeCli)
-	if err != nil {
-		return fmt.Errorf("install deployer cluster role: %w", err)
 	}
 
 	// Register metric collectors.
