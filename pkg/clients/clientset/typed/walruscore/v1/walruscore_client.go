@@ -20,6 +20,7 @@ type WalruscoreV1Interface interface {
 	ResourcesGetter
 	ResourceDefinitionsGetter
 	ResourceRunsGetter
+	SchemasGetter
 	TemplatesGetter
 }
 
@@ -46,6 +47,10 @@ func (c *WalruscoreV1Client) ResourceDefinitions(namespace string) ResourceDefin
 
 func (c *WalruscoreV1Client) ResourceRuns(namespace string) ResourceRunInterface {
 	return newResourceRuns(c, namespace)
+}
+
+func (c *WalruscoreV1Client) Schemas(namespace string) SchemaInterface {
+	return newSchemas(c, namespace)
 }
 
 func (c *WalruscoreV1Client) Templates(namespace string) TemplateInterface {

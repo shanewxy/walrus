@@ -1006,6 +1006,8 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &applyconfigurationwalrusv1.ResourceDefinitionApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("ResourceRun"):
 		return &applyconfigurationwalrusv1.ResourceRunApplyConfiguration{}
+	case walrusv1.SchemeGroupVersion.WithKind("Schema"):
+		return &applyconfigurationwalrusv1.SchemaApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("Setting"):
 		return &applyconfigurationwalrusv1.SettingApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("SettingSpec"):
@@ -1062,16 +1064,42 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		// Group=walruscore.seal.io, Version=v1
 	case walruscorev1.SchemeGroupVersion.WithKind("Catalog"):
 		return &applyconfigurationwalruscorev1.CatalogApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("CatalogSpec"):
+		return &applyconfigurationwalruscorev1.CatalogSpecApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("CatalogStatus"):
+		return &applyconfigurationwalruscorev1.CatalogStatusApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("Condition"):
+		return &applyconfigurationwalruscorev1.ConditionApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ConditionSummary"):
+		return &applyconfigurationwalruscorev1.ConditionSummaryApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("Connector"):
 		return &applyconfigurationwalruscorev1.ConnectorApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("Filters"):
+		return &applyconfigurationwalruscorev1.FiltersApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("Resource"):
 		return &applyconfigurationwalruscorev1.ResourceApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("ResourceDefinition"):
 		return &applyconfigurationwalruscorev1.ResourceDefinitionApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("ResourceRun"):
 		return &applyconfigurationwalruscorev1.ResourceRunApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("Schema"):
+		return &applyconfigurationwalruscorev1.SchemaApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("SchemaStatus"):
+		return &applyconfigurationwalruscorev1.SchemaStatusApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("StatusDescriptor"):
+		return &applyconfigurationwalruscorev1.StatusDescriptorApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("Template"):
 		return &applyconfigurationwalruscorev1.TemplateApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("TemplateSpec"):
+		return &applyconfigurationwalruscorev1.TemplateSpecApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("TemplateStatus"):
+		return &applyconfigurationwalruscorev1.TemplateStatusApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("TemplateVersion"):
+		return &applyconfigurationwalruscorev1.TemplateVersionApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("VCSRepository"):
+		return &applyconfigurationwalruscorev1.VCSRepositoryApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("VCSSource"):
+		return &applyconfigurationwalruscorev1.VCSSourceApplyConfiguration{}
 
 	}
 	return nil

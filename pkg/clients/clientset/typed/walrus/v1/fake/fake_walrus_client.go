@@ -47,6 +47,10 @@ func (c *FakeWalrusV1) ResourceRuns(namespace string) v1.ResourceRunInterface {
 	return &FakeResourceRuns{c, namespace}
 }
 
+func (c *FakeWalrusV1) Schemas(namespace string) v1.SchemaInterface {
+	return &FakeSchemas{c, namespace}
+}
+
 func (c *FakeWalrusV1) Settings(namespace string) v1.SettingInterface {
 	return &FakeSettings{c, namespace}
 }

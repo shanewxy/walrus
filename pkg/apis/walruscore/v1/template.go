@@ -80,7 +80,8 @@ type VCSRepository struct {
 	// +k8s:validation:cel[0]:message="immutable field"
 	Platform VCSPlatform `json:"platform"`
 
-	// URL of download the template from vsc repository, may include reference and subpath, e.g. https://github.com/walrus-catalog/terraform-static-redis.
+	// URL of download the template from vsc repository, may include reference and subpath.
+	// e.g. https://github.com/walrus-catalog/terraform-static-redis.
 	//
 	// +k8s:validation:cel[0]:rule="oldSelf == self"
 	// +k8s:validation:cel[0]:message="immutable field"

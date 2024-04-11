@@ -6,7 +6,6 @@
 package v1
 
 import (
-	walruscorev1 "github.com/seal-io/walrus/pkg/apis/walruscore/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	v1 "k8s.io/client-go/applyconfigurations/meta/v1"
@@ -17,8 +16,8 @@ import (
 type CatalogApplyConfiguration struct {
 	v1.TypeMetaApplyConfiguration    `json:",inline"`
 	*v1.ObjectMetaApplyConfiguration `json:"metadata,omitempty"`
-	Spec                             *walruscorev1.CatalogSpec   `json:"spec,omitempty"`
-	Status                           *walruscorev1.CatalogStatus `json:"status,omitempty"`
+	Spec                             *CatalogSpecApplyConfiguration   `json:"spec,omitempty"`
+	Status                           *CatalogStatusApplyConfiguration `json:"status,omitempty"`
 }
 
 // Catalog constructs an declarative configuration of the Catalog type for use with
@@ -193,15 +192,15 @@ func (b *CatalogApplyConfiguration) ensureObjectMetaApplyConfigurationExists() {
 // WithSpec sets the Spec field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Spec field is set to the value of the last call.
-func (b *CatalogApplyConfiguration) WithSpec(value walruscorev1.CatalogSpec) *CatalogApplyConfiguration {
-	b.Spec = &value
+func (b *CatalogApplyConfiguration) WithSpec(value *CatalogSpecApplyConfiguration) *CatalogApplyConfiguration {
+	b.Spec = value
 	return b
 }
 
 // WithStatus sets the Status field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Status field is set to the value of the last call.
-func (b *CatalogApplyConfiguration) WithStatus(value walruscorev1.CatalogStatus) *CatalogApplyConfiguration {
-	b.Status = &value
+func (b *CatalogApplyConfiguration) WithStatus(value *CatalogStatusApplyConfiguration) *CatalogApplyConfiguration {
+	b.Status = value
 	return b
 }

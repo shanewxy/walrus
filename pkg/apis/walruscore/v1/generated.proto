@@ -41,10 +41,73 @@ message CatalogList {
 
 // CatalogSpec defines the desired state of Catalog.
 message CatalogSpec {
+  // Builtin indicate the catalog is builtin catalog.
+  //
+  // +k8s:validation:cel[0]:rule="oldSelf == self"
+  // +k8s:validation:cel[0]:message="immutable field"
+  optional bool builtin = 1;
+
+  // TemplateFormat of the catalog.
+  //
+  // +k8s:validation:cel[0]:rule="oldSelf == self"
+  // +k8s:validation:cel[0]:message="immutable field"
+  optional string templateFormat = 2;
+
+  // Description of the catalog.
+  optional string description = 3;
+
+  // Filters specifies the filtering rules for the catalog.
+  optional Filters filters = 4;
+
+  // VCSSource specifies the vcs source configure, should update to optional after we support more storage source.
+  optional VCSSource vcsSource = 5;
 }
 
 // CatalogStatus defines the observed state of Catalog.
 message CatalogStatus {
+  // StatusDescriptor defines the status of the catalog.
+  optional StatusDescriptor statusDescriptor = 1;
+
+  // LastSyncTime record the last sync catalog time.
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastSyncTime = 2;
+
+  // TemplateCount is the count of templates.
+  optional int64 templateCount = 3;
+
+  //  URL of the catalog.
+  optional string url = 4;
+
+  // Project is the project to which the catalog belongs.
+  optional string project = 5;
+}
+
+// Condition describes the state of a condition at a certain point.
+message Condition {
+  // Type of condition name in CamelCase.
+  optional string type = 1;
+
+  // Status of the condition, one of True, False, Unknown.
+  //
+  // +k8s:validation:enum=["True","False","Unknown"]
+  optional string status = 2;
+
+  // LastTransitionTime is the last time the condition transitioned from one status to another.
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastTransitionTime = 3;
+
+  // Reason contains a programmatic identifier indicating the reason for the condition's last transition.
+  optional string reason = 4;
+
+  // Message is a human-readable message indicating details about the transition.
+  optional string message = 5;
+}
+
+// ConditionSummary is the summary of conditions.
+message ConditionSummary {
+  // Phase is the summary of conditions.
+  optional string phase = 1;
+
+  // PhaseMessage is the message of the phase.
+  optional string phaseMessage = 2;
 }
 
 // Connector is the schema for the connectors API.
@@ -75,6 +138,15 @@ message ConnectorSpec {
 
 // ConnectorStatus defines the observed state of Connector.
 message ConnectorStatus {
+}
+
+// Filters specifies the filtering rules for filtering templates imported from the catalog.
+message Filters {
+  // IncludeExpression specifies the regular expression used to match the names of included templates.
+  optional string includeExpression = 1;
+
+  // ExcludeExpression specifies the regular expression used to match the names of excluded templates.
+  optional string excludeExpression = 2;
 }
 
 // Resource is the schema for the resources API.
@@ -167,6 +239,46 @@ message ResourceSpec {
 message ResourceStatus {
 }
 
+// Schema API for the template's version.
+//
+// +genclient
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +k8s:crd-gen:resource:scope="Namespaced"
+message Schema {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+
+  optional SchemaStatus status = 2;
+}
+
+// SchemaList holds the list of Schema.
+//
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+message SchemaList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+
+  repeated Schema items = 2;
+}
+
+// SchemaStatus defines the template version's schema.
+message SchemaStatus {
+  // Value is the current value of the schema.
+  optional k8s.io.apimachinery.pkg.runtime.RawExtension value = 1;
+
+  // Project is the project that the catalog belongs to.
+  optional string project = 2;
+
+  // Conditions holds the conditions for the schema.
+  repeated Condition conditions = 3;
+}
+
+// StatusDescriptor include conditions and it's summary.
+message StatusDescriptor {
+  optional ConditionSummary conditionSummary = 1;
+
+  // Conditions holds the conditions for the object.
+  repeated Condition conditions = 2;
+}
+
 // Template is the schema for the templates API.
 //
 // +genclient
@@ -191,9 +303,93 @@ message TemplateList {
 
 // TemplateSpec defines the desired state of Template.
 message TemplateSpec {
+  // TemplateFormat of the content.
+  //
+  // +k8s:validation:cel[0]:rule="oldSelf == self"
+  // +k8s:validation:cel[0]:message="immutable field"
+  optional string templateFormat = 1;
+
+  // Description of the template.
+  optional string description = 2;
+
+  // VCSRepository specifies the configuration for the VCS repository.
+  optional VCSRepository vcsRepository = 3;
 }
 
 // TemplateStatus defines the observed state of Template.
 message TemplateStatus {
+  // StatusDescriptor defines the status of the catalog.
+  optional StatusDescriptor statusDescriptor = 1;
+
+  // LastSyncTime record the last sync catalog time.
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time lastSyncTime = 2;
+
+  // The original name of the template.
+  optional string originalName = 3;
+
+  // URL of the template.
+  optional string url = 4;
+
+  // Project is the project that the catalog belongs to.
+  optional string project = 5;
+
+  // A URL to an SVG or PNG image to be used as an icon.
+  optional string icon = 6;
+
+  // Versions contains the versions for the template.
+  repeated TemplateVersion versions = 7;
+}
+
+// TemplateVersion defines the version of Template.
+message TemplateVersion {
+  // Version of the template.
+  optional string version = 1;
+
+  // URL of downloading the template version with ref and subpath.
+  optional string url = 2;
+
+  // TemplateSchemaName holds the template schema name for the template version.
+  optional string templateSchemaName = 3;
+
+  // OriginalUISchemaName holds the original UI schema name for the template version.
+  optional string originalUISchemaName = 4;
+
+  // UISchemaName holds the UI schema name for the template version.
+  optional string uiSchemaName = 5;
+
+  // Removed indicate the template version is removed.
+  optional bool removed = 6;
+}
+
+// VCSRepository specifies the vcs repository of the template.
+message VCSRepository {
+  // Platform of the vcs repository.
+  //
+  // +k8s:validation:enum=["GitHub","GitLab","Gitee"]
+  // +k8s:validation:cel[0]:rule="oldSelf == self"
+  // +k8s:validation:cel[0]:message="immutable field"
+  optional string platform = 1;
+
+  // URL of download the template from vsc repository, may include reference and subpath.
+  // e.g. https://github.com/walrus-catalog/terraform-static-redis.
+  //
+  // +k8s:validation:cel[0]:rule="oldSelf == self"
+  // +k8s:validation:cel[0]:message="immutable field"
+  optional string url = 2;
+}
+
+// VCSSource specifies the version control source configure.
+message VCSSource {
+  // Platform of the source.
+  //
+  // +k8s:validation:enum=["GitHub","GitLab","Gitee"]
+  // +k8s:validation:cel[0]:rule="oldSelf == self"
+  // +k8s:validation:cel[0]:message="immutable field"
+  optional string platform = 1;
+
+  // URL of the source address, a valid URL contains at least a protocol and host.
+  // +k8s:validation:cel[0]:rule="oldSelf == self"
+  // +k8s:validation:cel[0]:message="immutable field"
+  optional string url = 2;
 }
 

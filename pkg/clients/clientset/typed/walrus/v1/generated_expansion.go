@@ -21,6 +21,8 @@ type ResourceDefinitionExpansion interface{}
 
 type ResourceRunExpansion interface{}
 
+type SchemaExpansion interface{}
+
 type SettingExpansion interface{}
 
 type SubjectExpansion interface{}

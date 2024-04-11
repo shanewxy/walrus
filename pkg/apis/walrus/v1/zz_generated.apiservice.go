@@ -420,6 +420,38 @@ func (in *ResourceRun) CopyStatusTo(out runtime.Object) {
 	out.(*ResourceRun).Status = in.Status
 }
 
+var _ rest.Scoper = (*Schema)(nil)
+
+func (*Schema) NamespaceScoped() bool {
+	return true
+}
+
+var _ rest.KindProvider = (*Schema)(nil)
+
+func (*Schema) Kind() string {
+	return "Schema"
+}
+
+var _ rest.SingularNameProvider = (*Schema)(nil)
+
+func (*Schema) GetSingularName() string {
+	return "schema"
+}
+
+var _ rest.ShortNamesProvider = (*Schema)(nil)
+
+func (*Schema) ShortNames() []string {
+	return []string{}
+}
+
+var _ rest.CategoriesProvider = (*Schema)(nil)
+
+func (*Schema) Categories() []string {
+	return []string{
+		"walrus",
+	}
+}
+
 var _ rest.Scoper = (*Setting)(nil)
 
 func (*Setting) NamespaceScoped() bool {

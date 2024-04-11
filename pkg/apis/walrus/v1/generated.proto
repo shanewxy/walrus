@@ -297,6 +297,26 @@ message ResourceRunList {
   repeated github.com.seal_io.walrus.pkg.apis.walruscore.v1.ResourceRun items = 2;
 }
 
+// Schema is the schema for the schemas API.
+//
+// +genclient
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +k8s:apireg-gen:resource:scope="Namespaced",categories=["walrus"]
+message Schema {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+
+  optional github.com.seal_io.walrus.pkg.apis.walruscore.v1.SchemaStatus status = 2;
+}
+
+// SchemaList holds the list of Schema.
+//
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+message SchemaList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+
+  repeated github.com.seal_io.walrus.pkg.apis.walruscore.v1.Schema items = 2;
+}
+
 // Setting is the schema for the settings API.
 //
 // +genclient

@@ -11,6 +11,7 @@ package v1
 import (
 	v1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	ptr "k8s.io/utils/ptr"
 )
 
 func GetCustomResourceDefinitions() map[string]*v1.CustomResourceDefinition {
@@ -20,6 +21,7 @@ func GetCustomResourceDefinitions() map[string]*v1.CustomResourceDefinition {
 		"Resource":           crd_pkg_apis_walruscore_v1_Resource(),
 		"ResourceDefinition": crd_pkg_apis_walruscore_v1_ResourceDefinition(),
 		"ResourceRun":        crd_pkg_apis_walruscore_v1_ResourceRun(),
+		"Schema":             crd_pkg_apis_walruscore_v1_Schema(),
 		"Template":           crd_pkg_apis_walruscore_v1_Template(),
 	}
 }
@@ -51,6 +53,9 @@ func crd_pkg_apis_walruscore_v1_Catalog() *v1.CustomResourceDefinition {
 						OpenAPIV3Schema: &v1.JSONSchemaProps{
 							Description: "Catalog is the schema for the catalogs API.",
 							Type:        "object",
+							Required: []string{
+								"spec",
+							},
 							Properties: map[string]v1.JSONSchemaProps{
 								"apiVersion": {
 									Type: "string",
@@ -63,9 +68,175 @@ func crd_pkg_apis_walruscore_v1_Catalog() *v1.CustomResourceDefinition {
 								},
 								"spec": {
 									Type: "object",
+									Required: []string{
+										"templateFormat",
+										"vcsSource",
+									},
+									Properties: map[string]v1.JSONSchemaProps{
+										"builtin": {
+											Description: "Builtin indicate the catalog is builtin catalog.",
+											Type:        "boolean",
+											XValidations: []v1.ValidationRule{
+												{
+													Rule:    "oldSelf == self",
+													Message: "immutable field",
+												},
+											},
+										},
+										"description": {
+											Description: "Description of the catalog.",
+											Type:        "string",
+										},
+										"filters": {
+											Description: "Filters specifies the filtering rules for the catalog.",
+											Type:        "object",
+											Properties: map[string]v1.JSONSchemaProps{
+												"excludeExpression": {
+													Description: "ExcludeExpression specifies the regular expression used to match the names of excluded templates.",
+													Type:        "string",
+												},
+												"includeExpression": {
+													Description: "IncludeExpression specifies the regular expression used to match the names of included templates.",
+													Type:        "string",
+												},
+											},
+											Nullable: true,
+										},
+										"templateFormat": {
+											Description: "TemplateFormat of the catalog.",
+											Type:        "string",
+											XValidations: []v1.ValidationRule{
+												{
+													Rule:    "oldSelf == self",
+													Message: "immutable field",
+												},
+											},
+										},
+										"vcsSource": {
+											Description: "VCSSource specifies the vcs source configure, should update to optional after we support more storage source.",
+											Type:        "object",
+											Required: []string{
+												"platform",
+												"url",
+											},
+											Properties: map[string]v1.JSONSchemaProps{
+												"platform": {
+													Description: "Platform of the source.",
+													Type:        "string",
+													Enum: []v1.JSON{
+														{
+															Raw: []byte(`"GitHub"`),
+														},
+														{
+															Raw: []byte(`"GitLab"`),
+														},
+														{
+															Raw: []byte(`"Gitee"`),
+														},
+													},
+													XValidations: []v1.ValidationRule{
+														{
+															Rule:    "oldSelf == self",
+															Message: "immutable field",
+														},
+													},
+												},
+												"url": {
+													Description: "URL of the source address, a valid URL contains at least a protocol and host.",
+													Type:        "string",
+													XValidations: []v1.ValidationRule{
+														{
+															Rule:    "oldSelf == self",
+															Message: "immutable field",
+														},
+													},
+												},
+											},
+											Nullable: true,
+										},
+									},
 								},
 								"status": {
 									Type: "object",
+									Properties: map[string]v1.JSONSchemaProps{
+										"conditions": {
+											Description: "Conditions holds the conditions for the object.",
+											Type:        "array",
+											Items: &v1.JSONSchemaPropsOrArray{
+												Schema: &v1.JSONSchemaProps{
+													Type: "object",
+													Required: []string{
+														"type",
+														"status",
+														"lastTransitionTime",
+														"reason",
+														"message",
+													},
+													Properties: map[string]v1.JSONSchemaProps{
+														"lastTransitionTime": {
+															Description: "LastTransitionTime is the last time the condition transitioned from one status to another.",
+															Type:        "string",
+															Format:      "date-time",
+														},
+														"message": {
+															Description: "Message is a human-readable message indicating details about the transition.",
+															Type:        "string",
+														},
+														"reason": {
+															Description: "Reason contains a programmatic identifier indicating the reason for the condition's last transition.",
+															Type:        "string",
+														},
+														"status": {
+															Description: "Status of the condition, one of True, False, Unknown.",
+															Type:        "string",
+															Enum: []v1.JSON{
+																{
+																	Raw: []byte(`"True"`),
+																},
+																{
+																	Raw: []byte(`"False"`),
+																},
+																{
+																	Raw: []byte(`"Unknown"`),
+																},
+															},
+														},
+														"type": {
+															Description: "Type of condition name in CamelCase.",
+															Type:        "string",
+														},
+													},
+												},
+											},
+											Nullable: true,
+										},
+										"lastSyncTime": {
+											Description: "LastSyncTime record the last sync catalog time.",
+											Type:        "string",
+											Format:      "date-time",
+										},
+										"phase": {
+											Description: "Phase is the summary of conditions.",
+											Type:        "string",
+										},
+										"phaseMessage": {
+											Description: "PhaseMessage is the message of the phase.",
+											Type:        "string",
+										},
+										"project": {
+											Description: "Project is the project to which the catalog belongs.",
+											Type:        "string",
+										},
+										"templateCount": {
+											Description: "TemplateCount is the count of templates.",
+											Type:        "integer",
+											Format:      "int64",
+										},
+										"url": {
+											Description: "URL of the catalog.",
+											Type:        "string",
+										},
+									},
 								},
 							},
 						},
@@ -299,6 +470,120 @@ func crd_pkg_apis_walruscore_v1_ResourceRun() *v1.CustomResourceDefinition {
 	}
 }
 
+func crd_pkg_apis_walruscore_v1_Schema() *v1.CustomResourceDefinition {
+	return &v1.CustomResourceDefinition{
+		TypeMeta: metav1.TypeMeta{
+			APIVersion: "apiextensions.k8s.io/v1",
+			Kind:       "CustomResourceDefinition",
+		},
+		ObjectMeta: metav1.ObjectMeta{
+			Name: "schemas.walruscore.seal.io",
+		},
+		Spec: v1.CustomResourceDefinitionSpec{
+			Group: "walruscore.seal.io",
+			Names: v1.CustomResourceDefinitionNames{
+				Plural:   "schemas",
+				Singular: "schema",
+				Kind:     "Schema",
+				ListKind: "SchemaList",
+			},
+			Scope: "Namespaced",
+			Versions: []v1.CustomResourceDefinitionVersion{
+				{
+					Name:    "v1",
+					Served:  true,
+					Storage: true,
+					Schema: &v1.CustomResourceValidation{
+						OpenAPIV3Schema: &v1.JSONSchemaProps{
+							Description: "Schema API for the template's version.",
+							Type:        "object",
+							Properties: map[string]v1.JSONSchemaProps{
+								"apiVersion": {
+									Type: "string",
+								},
+								"kind": {
+									Type: "string",
+								},
+								"metadata": {
+									Type: "object",
+								},
+								"status": {
+									Type: "object",
+									Required: []string{
+										"value",
+									},
+									Properties: map[string]v1.JSONSchemaProps{
+										"conditions": {
+											Description: "Conditions holds the conditions for the schema.",
+											Type:        "array",
+											Items: &v1.JSONSchemaPropsOrArray{
+												Schema: &v1.JSONSchemaProps{
+													Type: "object",
+													Required: []string{
+														"type",
+														"status",
+														"lastTransitionTime",
+														"reason",
+														"message",
+													},
+													Properties: map[string]v1.JSONSchemaProps{
+														"lastTransitionTime": {
+															Description: "LastTransitionTime is the last time the condition transitioned from one status to another.",
+															Type:        "string",
+															Format:      "date-time",
+														},
+														"message": {
+															Description: "Message is a human-readable message indicating details about the transition.",
+															Type:        "string",
+														},
+														"reason": {
+															Description: "Reason contains a programmatic identifier indicating the reason for the condition's last transition.",
+															Type:        "string",
+														},
+														"status": {
+															Description: "Status of the condition, one of True, False, Unknown.",
+															Type:        "string",
+															Enum: []v1.JSON{
+																{
+																	Raw: []byte(`"True"`),
+																},
+																{
+																	Raw: []byte(`"False"`),
+																},
+																{
+																	Raw: []byte(`"Unknown"`),
+																},
+															},
+														},
+														"type": {
+															Description: "Type of condition name in CamelCase.",
+															Type:        "string",
+														},
+													},
+												},
+											},
+											Nullable: true,
+										},
+										"project": {
+											Description: "Project is the project that the catalog belongs to.",
+											Type:        "string",
+										},
+										"value": {
+											Description:            "Value is the current value of the schema.",
+											Type:                   "object",
+											XPreserveUnknownFields: ptr.To[bool](true),
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
 func crd_pkg_apis_walruscore_v1_Template() *v1.CustomResourceDefinition {
 	return &v1.CustomResourceDefinition{
 		TypeMeta: metav1.TypeMeta{
@@ -326,6 +611,9 @@ func crd_pkg_apis_walruscore_v1_Template() *v1.CustomResourceDefinition {
 						OpenAPIV3Schema: &v1.JSONSchemaProps{
 							Description: "Template is the schema for the templates API.",
 							Type:        "object",
+							Required: []string{
+								"spec",
+							},
 							Properties: map[string]v1.JSONSchemaProps{
 								"apiVersion": {
 									Type: "string",
@@ -338,9 +626,195 @@ func crd_pkg_apis_walruscore_v1_Template() *v1.CustomResourceDefinition {
 								},
 								"spec": {
 									Type: "object",
+									Required: []string{
+										"templateFormat",
+										"vcsRepository",
+									},
+									Properties: map[string]v1.JSONSchemaProps{
+										"description": {
+											Description: "Description of the template.",
+											Type:        "string",
+										},
+										"templateFormat": {
+											Description: "TemplateFormat of the content.",
+											Type:        "string",
+											XValidations: []v1.ValidationRule{
+												{
+													Rule:    "oldSelf == self",
+													Message: "immutable field",
+												},
+											},
+										},
+										"vcsRepository": {
+											Description: "VCSRepository specifies the configuration for the VCS repository.",
+											Type:        "object",
+											Required: []string{
+												"platform",
+												"url",
+											},
+											Properties: map[string]v1.JSONSchemaProps{
+												"platform": {
+													Description: "Platform of the vcs repository.",
+													Type:        "string",
+													Enum: []v1.JSON{
+														{
+															Raw: []byte(`"GitHub"`),
+														},
+														{
+															Raw: []byte(`"GitLab"`),
+														},
+														{
+															Raw: []byte(`"Gitee"`),
+														},
+													},
+													XValidations: []v1.ValidationRule{
+														{
+															Rule:    "oldSelf == self",
+															Message: "immutable field",
+														},
+													},
+												},
+												"url": {
+													Description: "URL of download the template from vsc repository, may include reference and subpath.\ne.g. https://github.com/walrus-catalog/terraform-static-redis.",
+													Type:        "string",
+													XValidations: []v1.ValidationRule{
+														{
+															Rule:    "oldSelf == self",
+															Message: "immutable field",
+														},
+													},
+												},
+											},
+											Nullable: true,
+										},
+									},
 								},
 								"status": {
 									Type: "object",
+									Properties: map[string]v1.JSONSchemaProps{
+										"conditions": {
+											Description: "Conditions holds the conditions for the object.",
+											Type:        "array",
+											Items: &v1.JSONSchemaPropsOrArray{
+												Schema: &v1.JSONSchemaProps{
+													Type: "object",
+													Required: []string{
+														"type",
+														"status",
+														"lastTransitionTime",
+														"reason",
+														"message",
+													},
+													Properties: map[string]v1.JSONSchemaProps{
+														"lastTransitionTime": {
+															Description: "LastTransitionTime is the last time the condition transitioned from one status to another.",
+															Type:        "string",
+															Format:      "date-time",
+														},
+														"message": {
+															Description: "Message is a human-readable message indicating details about the transition.",
+															Type:        "string",
+														},
+														"reason": {
+															Description: "Reason contains a programmatic identifier indicating the reason for the condition's last transition.",
+															Type:        "string",
+														},
+														"status": {
+															Description: "Status of the condition, one of True, False, Unknown.",
+															Type:        "string",
+															Enum: []v1.JSON{
+																{
+																	Raw: []byte(`"True"`),
+																},
+																{
+																	Raw: []byte(`"False"`),
+																},
+																{
+																	Raw: []byte(`"Unknown"`),
+																},
+															},
+														},
+														"type": {
+															Description: "Type of condition name in CamelCase.",
+															Type:        "string",
+														},
+													},
+												},
+											},
+											Nullable: true,
+										},
+										"icon": {
+											Description: "A URL to an SVG or PNG image to be used as an icon.",
+											Type:        "string",
+										},
+										"lastSyncTime": {
+											Description: "LastSyncTime record the last sync catalog time.",
+											Type:        "string",
+											Format:      "date-time",
+										},
+										"originalName": {
+											Description: "The original name of the template.",
+											Type:        "string",
+										},
+										"phase": {
+											Description: "Phase is the summary of conditions.",
+											Type:        "string",
+										},
+										"phaseMessage": {
+											Description: "PhaseMessage is the message of the phase.",
+											Type:        "string",
+										},
+										"project": {
+											Description: "Project is the project that the catalog belongs to.",
+											Type:        "string",
+										},
+										"url": {
+											Description: "URL of the template.",
+											Type:        "string",
+										},
+										"versions": {
+											Description: "Versions contains the versions for the template.",
+											Type:        "array",
+											Items: &v1.JSONSchemaPropsOrArray{
+												Schema: &v1.JSONSchemaProps{
+													Type: "object",
+													Required: []string{
+														"url",
+													},
+													Properties: map[string]v1.JSONSchemaProps{
+														"originalUISchemaName": {
+															Description: "OriginalUISchemaName holds the original UI schema name for the template version.",
+															Type:        "string",
+															Nullable:    true,
+														},
+														"removed": {
+															Description: "Removed indicate the template version is removed.",
+															Type:        "boolean",
+														},
+														"templateSchemaName": {
+															Description: "TemplateSchemaName holds the template schema name for the template version.",
+															Type:        "string",
+															Nullable:    true,
+														},
+														"uiSchemaName": {
+															Description: "UISchemaName holds the UI schema name for the template version.",
+															Type:        "string",
+															Nullable:    true,
+														},
+														"url": {
+															Description: "URL of downloading the template version with ref and subpath.",
+															Type:        "string",
+														},
+														"version": {
+															Description: "Version of the template.",
+															Type:        "string",
+														},
+													},
+												},
+											},
+											Nullable: true,
+										},
+									},
 								},
 							},
 						},

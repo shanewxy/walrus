@@ -45,6 +45,14 @@ type ResourceRunListerExpansion interface{}
 // ResourceRunNamespaceLister.
 type ResourceRunNamespaceListerExpansion interface{}
 
+// SchemaListerExpansion allows custom methods to be added to
+// SchemaLister.
+type SchemaListerExpansion interface{}
+
+// SchemaNamespaceListerExpansion allows custom methods to be added to
+// SchemaNamespaceLister.
+type SchemaNamespaceListerExpansion interface{}
+
 // TemplateListerExpansion allows custom methods to be added to
 // TemplateLister.
 type TemplateListerExpansion interface{}

@@ -4,6 +4,9 @@ API rule violation: list_type_missing,github.com/seal-io/walrus/pkg/apis/walrus/
 API rule violation: list_type_missing,github.com/seal-io/walrus/pkg/apis/walrus/v1,SubjectProviderLDAPGroupSearch,UserMatchers
 API rule violation: list_type_missing,github.com/seal-io/walrus/pkg/apis/walrus/v1,SubjectProviderMicrosoftConfig,Groups
 API rule violation: list_type_missing,github.com/seal-io/walrus/pkg/apis/walrus/v1,SubjectSpec,Groups
+API rule violation: list_type_missing,github.com/seal-io/walrus/pkg/apis/walruscore/v1,SchemaStatus,Conditions
+API rule violation: list_type_missing,github.com/seal-io/walrus/pkg/apis/walruscore/v1,StatusDescriptor,Conditions
+API rule violation: list_type_missing,github.com/seal-io/walrus/pkg/apis/walruscore/v1,TemplateStatus,Versions
 API rule violation: list_type_missing,k8s.io/apimachinery/pkg/apis/meta/v1,APIGroup,ServerAddressByClientCIDRs
 API rule violation: list_type_missing,k8s.io/apimachinery/pkg/apis/meta/v1,APIGroup,Versions
 API rule violation: list_type_missing,k8s.io/apimachinery/pkg/apis/meta/v1,APIGroupList,Groups

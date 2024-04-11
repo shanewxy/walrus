@@ -15,4 +15,6 @@ type ResourceDefinitionExpansion interface{}
 
 type ResourceRunExpansion interface{}
 
+type SchemaExpansion interface{}
+
 type TemplateExpansion interface{}

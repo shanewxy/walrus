@@ -35,6 +35,10 @@ func (c *FakeWalruscoreV1) ResourceRuns(namespace string) v1.ResourceRunInterfac
 	return &FakeResourceRuns{c, namespace}
 }
 
+func (c *FakeWalruscoreV1) Schemas(namespace string) v1.SchemaInterface {
+	return &FakeSchemas{c, namespace}
+}
+
 func (c *FakeWalruscoreV1) Templates(namespace string) v1.TemplateInterface {
 	return &FakeTemplates{c, namespace}
 }

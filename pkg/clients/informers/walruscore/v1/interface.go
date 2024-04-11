@@ -21,6 +21,8 @@ type Interface interface {
 	ResourceDefinitions() ResourceDefinitionInformer
 	// ResourceRuns returns a ResourceRunInformer.
 	ResourceRuns() ResourceRunInformer
+	// Schemas returns a SchemaInformer.
+	Schemas() SchemaInformer
 	// Templates returns a TemplateInformer.
 	Templates() TemplateInformer
 }
@@ -59,6 +61,11 @@ func (v *version) ResourceDefinitions() ResourceDefinitionInformer {
 // ResourceRuns returns a ResourceRunInformer.
 func (v *version) ResourceRuns() ResourceRunInformer {
 	return &resourceRunInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// Schemas returns a SchemaInformer.
+func (v *version) Schemas() SchemaInformer {
+	return &schemaInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }
 
 // Templates returns a TemplateInformer.

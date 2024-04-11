@@ -205,6 +205,8 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Walrus().V1().ResourceDefinitions().Informer()}, nil
 	case walrusv1.SchemeGroupVersion.WithResource("resourceruns"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Walrus().V1().ResourceRuns().Informer()}, nil
+	case walrusv1.SchemeGroupVersion.WithResource("schemas"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Walrus().V1().Schemas().Informer()}, nil
 	case walrusv1.SchemeGroupVersion.WithResource("settings"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Walrus().V1().Settings().Informer()}, nil
 	case walrusv1.SchemeGroupVersion.WithResource("subjects"):
@@ -227,6 +229,8 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Walruscore().V1().ResourceDefinitions().Informer()}, nil
 	case walruscorev1.SchemeGroupVersion.WithResource("resourceruns"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Walruscore().V1().ResourceRuns().Informer()}, nil
+	case walruscorev1.SchemeGroupVersion.WithResource("schemas"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Walruscore().V1().Schemas().Informer()}, nil
 	case walruscorev1.SchemeGroupVersion.WithResource("templates"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Walruscore().V1().Templates().Informer()}, nil
 

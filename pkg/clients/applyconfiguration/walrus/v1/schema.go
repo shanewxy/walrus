@@ -12,22 +12,21 @@ import (
 	v1 "k8s.io/client-go/applyconfigurations/meta/v1"
 )
 
-// TemplateApplyConfiguration represents an declarative configuration of the Template type for use
+// SchemaApplyConfiguration represents an declarative configuration of the Schema type for use
 // with apply.
-type TemplateApplyConfiguration struct {
+type SchemaApplyConfiguration struct {
 	v1.TypeMetaApplyConfiguration    `json:",inline"`
 	*v1.ObjectMetaApplyConfiguration `json:"metadata,omitempty"`
-	Spec                             *walruscorev1.TemplateSpecApplyConfiguration   `json:"spec,omitempty"`
-	Status                           *walruscorev1.TemplateStatusApplyConfiguration `json:"status,omitempty"`
+	Status                           *walruscorev1.SchemaStatusApplyConfiguration `json:"status,omitempty"`
 }
 
-// Template constructs an declarative configuration of the Template type for use with
+// Schema constructs an declarative configuration of the Schema type for use with
 // apply.
-func Template(name, namespace string) *TemplateApplyConfiguration {
-	b := &TemplateApplyConfiguration{}
+func Schema(name, namespace string) *SchemaApplyConfiguration {
+	b := &SchemaApplyConfiguration{}
 	b.WithName(name)
 	b.WithNamespace(namespace)
-	b.WithKind("Template")
+	b.WithKind("Schema")
 	b.WithAPIVersion("walrus.seal.io/v1")
 	return b
 }
@@ -35,7 +34,7 @@ func Template(name, namespace string) *TemplateApplyConfiguration {
 // WithKind sets the Kind field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Kind field is set to the value of the last call.
-func (b *TemplateApplyConfiguration) WithKind(value string) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithKind(value string) *SchemaApplyConfiguration {
 	b.Kind = &value
 	return b
 }
@@ -43,7 +42,7 @@ func (b *TemplateApplyConfiguration) WithKind(value string) *TemplateApplyConfig
 // WithAPIVersion sets the APIVersion field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the APIVersion field is set to the value of the last call.
-func (b *TemplateApplyConfiguration) WithAPIVersion(value string) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithAPIVersion(value string) *SchemaApplyConfiguration {
 	b.APIVersion = &value
 	return b
 }
@@ -51,7 +50,7 @@ func (b *TemplateApplyConfiguration) WithAPIVersion(value string) *TemplateApply
 // WithName sets the Name field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Name field is set to the value of the last call.
-func (b *TemplateApplyConfiguration) WithName(value string) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithName(value string) *SchemaApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.Name = &value
 	return b
@@ -60,7 +59,7 @@ func (b *TemplateApplyConfiguration) WithName(value string) *TemplateApplyConfig
 // WithGenerateName sets the GenerateName field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the GenerateName field is set to the value of the last call.
-func (b *TemplateApplyConfiguration) WithGenerateName(value string) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithGenerateName(value string) *SchemaApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.GenerateName = &value
 	return b
@@ -69,7 +68,7 @@ func (b *TemplateApplyConfiguration) WithGenerateName(value string) *TemplateApp
 // WithNamespace sets the Namespace field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Namespace field is set to the value of the last call.
-func (b *TemplateApplyConfiguration) WithNamespace(value string) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithNamespace(value string) *SchemaApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.Namespace = &value
 	return b
@@ -78,7 +77,7 @@ func (b *TemplateApplyConfiguration) WithNamespace(value string) *TemplateApplyC
 // WithUID sets the UID field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the UID field is set to the value of the last call.
-func (b *TemplateApplyConfiguration) WithUID(value types.UID) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithUID(value types.UID) *SchemaApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.UID = &value
 	return b
@@ -87,7 +86,7 @@ func (b *TemplateApplyConfiguration) WithUID(value types.UID) *TemplateApplyConf
 // WithResourceVersion sets the ResourceVersion field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the ResourceVersion field is set to the value of the last call.
-func (b *TemplateApplyConfiguration) WithResourceVersion(value string) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithResourceVersion(value string) *SchemaApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.ResourceVersion = &value
 	return b
@@ -96,7 +95,7 @@ func (b *TemplateApplyConfiguration) WithResourceVersion(value string) *Template
 // WithGeneration sets the Generation field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Generation field is set to the value of the last call.
-func (b *TemplateApplyConfiguration) WithGeneration(value int64) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithGeneration(value int64) *SchemaApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.Generation = &value
 	return b
@@ -105,7 +104,7 @@ func (b *TemplateApplyConfiguration) WithGeneration(value int64) *TemplateApplyC
 // WithCreationTimestamp sets the CreationTimestamp field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the CreationTimestamp field is set to the value of the last call.
-func (b *TemplateApplyConfiguration) WithCreationTimestamp(value metav1.Time) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithCreationTimestamp(value metav1.Time) *SchemaApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.CreationTimestamp = &value
 	return b
@@ -114,7 +113,7 @@ func (b *TemplateApplyConfiguration) WithCreationTimestamp(value metav1.Time) *T
 // WithDeletionTimestamp sets the DeletionTimestamp field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the DeletionTimestamp field is set to the value of the last call.
-func (b *TemplateApplyConfiguration) WithDeletionTimestamp(value metav1.Time) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithDeletionTimestamp(value metav1.Time) *SchemaApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.DeletionTimestamp = &value
 	return b
@@ -123,7 +122,7 @@ func (b *TemplateApplyConfiguration) WithDeletionTimestamp(value metav1.Time) *T
 // WithDeletionGracePeriodSeconds sets the DeletionGracePeriodSeconds field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the DeletionGracePeriodSeconds field is set to the value of the last call.
-func (b *TemplateApplyConfiguration) WithDeletionGracePeriodSeconds(value int64) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithDeletionGracePeriodSeconds(value int64) *SchemaApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.DeletionGracePeriodSeconds = &value
 	return b
@@ -133,7 +132,7 @@ func (b *TemplateApplyConfiguration) WithDeletionGracePeriodSeconds(value int64)
 // and returns the receiver, so that objects can be build by chaining "With" function invocations.
 // If called multiple times, the entries provided by each call will be put on the Labels field,
 // overwriting an existing map entries in Labels field with the same key.
-func (b *TemplateApplyConfiguration) WithLabels(entries map[string]string) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithLabels(entries map[string]string) *SchemaApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	if b.Labels == nil && len(entries) > 0 {
 		b.Labels = make(map[string]string, len(entries))
@@ -148,7 +147,7 @@ func (b *TemplateApplyConfiguration) WithLabels(entries map[string]string) *Temp
 // and returns the receiver, so that objects can be build by chaining "With" function invocations.
 // If called multiple times, the entries provided by each call will be put on the Annotations field,
 // overwriting an existing map entries in Annotations field with the same key.
-func (b *TemplateApplyConfiguration) WithAnnotations(entries map[string]string) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithAnnotations(entries map[string]string) *SchemaApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	if b.Annotations == nil && len(entries) > 0 {
 		b.Annotations = make(map[string]string, len(entries))
@@ -162,7 +161,7 @@ func (b *TemplateApplyConfiguration) WithAnnotations(entries map[string]string) 
 // WithOwnerReferences adds the given value to the OwnerReferences field in the declarative configuration
 // and returns the receiver, so that objects can be build by chaining "With" function invocations.
 // If called multiple times, values provided by each call will be appended to the OwnerReferences field.
-func (b *TemplateApplyConfiguration) WithOwnerReferences(values ...*v1.OwnerReferenceApplyConfiguration) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithOwnerReferences(values ...*v1.OwnerReferenceApplyConfiguration) *SchemaApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	for i := range values {
 		if values[i] == nil {
@@ -176,7 +175,7 @@ func (b *TemplateApplyConfiguration) WithOwnerReferences(values ...*v1.OwnerRefe
 // WithFinalizers adds the given value to the Finalizers field in the declarative configuration
 // and returns the receiver, so that objects can be build by chaining "With" function invocations.
 // If called multiple times, values provided by each call will be appended to the Finalizers field.
-func (b *TemplateApplyConfiguration) WithFinalizers(values ...string) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithFinalizers(values ...string) *SchemaApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	for i := range values {
 		b.Finalizers = append(b.Finalizers, values[i])
@@ -184,24 +183,16 @@ func (b *TemplateApplyConfiguration) WithFinalizers(values ...string) *TemplateA
 	return b
 }
 
-func (b *TemplateApplyConfiguration) ensureObjectMetaApplyConfigurationExists() {
+func (b *SchemaApplyConfiguration) ensureObjectMetaApplyConfigurationExists() {
 	if b.ObjectMetaApplyConfiguration == nil {
 		b.ObjectMetaApplyConfiguration = &v1.ObjectMetaApplyConfiguration{}
 	}
 }
 
-// WithSpec sets the Spec field in the declarative configuration to the given value
-// and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the Spec field is set to the value of the last call.
-func (b *TemplateApplyConfiguration) WithSpec(value *walruscorev1.TemplateSpecApplyConfiguration) *TemplateApplyConfiguration {
-	b.Spec = value
-	return b
-}
-
 // WithStatus sets the Status field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Status field is set to the value of the last call.
-func (b *TemplateApplyConfiguration) WithStatus(value *walruscorev1.TemplateStatusApplyConfiguration) *TemplateApplyConfiguration {
+func (b *SchemaApplyConfiguration) WithStatus(value *walruscorev1.SchemaStatusApplyConfiguration) *SchemaApplyConfiguration {
 	b.Status = value
 	return b
 }

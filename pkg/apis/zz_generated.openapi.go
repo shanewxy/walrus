@@ -45,6 +45,8 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceList":                              schema_pkg_apis_walrus_v1_ResourceList(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceRun":                               schema_pkg_apis_walrus_v1_ResourceRun(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceRunList":                           schema_pkg_apis_walrus_v1_ResourceRunList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Schema":                                    schema_pkg_apis_walrus_v1_Schema(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SchemaList":                                schema_pkg_apis_walrus_v1_SchemaList(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Setting":                                   schema_pkg_apis_walrus_v1_Setting(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SettingList":                               schema_pkg_apis_walrus_v1_SettingList(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SettingSpec":                               schema_pkg_apis_walrus_v1_SettingSpec(ref),
@@ -87,10 +89,13 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.CatalogList":                           schema_pkg_apis_walruscore_v1_CatalogList(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.CatalogSpec":                           schema_pkg_apis_walruscore_v1_CatalogSpec(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.CatalogStatus":                         schema_pkg_apis_walruscore_v1_CatalogStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition":                             schema_pkg_apis_walruscore_v1_Condition(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConditionSummary":                      schema_pkg_apis_walruscore_v1_ConditionSummary(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Connector":                             schema_pkg_apis_walruscore_v1_Connector(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorList":                         schema_pkg_apis_walruscore_v1_ConnectorList(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorSpec":                         schema_pkg_apis_walruscore_v1_ConnectorSpec(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorStatus":                       schema_pkg_apis_walruscore_v1_ConnectorStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Filters":                               schema_pkg_apis_walruscore_v1_Filters(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Resource":                              schema_pkg_apis_walruscore_v1_Resource(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinition":                    schema_pkg_apis_walruscore_v1_ResourceDefinition(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionList":                schema_pkg_apis_walruscore_v1_ResourceDefinitionList(ref),
@@ -103,10 +108,17 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStatus":                     schema_pkg_apis_walruscore_v1_ResourceRunStatus(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceSpec":                          schema_pkg_apis_walruscore_v1_ResourceSpec(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceStatus":                        schema_pkg_apis_walruscore_v1_ResourceStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Schema":                                schema_pkg_apis_walruscore_v1_Schema(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.SchemaList":                            schema_pkg_apis_walruscore_v1_SchemaList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.SchemaStatus":                          schema_pkg_apis_walruscore_v1_SchemaStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.StatusDescriptor":                      schema_pkg_apis_walruscore_v1_StatusDescriptor(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Template":                              schema_pkg_apis_walruscore_v1_Template(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.TemplateList":                          schema_pkg_apis_walruscore_v1_TemplateList(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.TemplateSpec":                          schema_pkg_apis_walruscore_v1_TemplateSpec(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.TemplateStatus":                        schema_pkg_apis_walruscore_v1_TemplateStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.TemplateVersion":                       schema_pkg_apis_walruscore_v1_TemplateVersion(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.VCSRepository":                         schema_pkg_apis_walruscore_v1_VCSRepository(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.VCSSource":                             schema_pkg_apis_walruscore_v1_VCSSource(ref),
 		"k8s.io/apimachinery/pkg/api/resource.Quantity":                                          schema_apimachinery_pkg_api_resource_Quantity(ref),
 		"k8s.io/apimachinery/pkg/api/resource.int64Amount":                                       schema_apimachinery_pkg_api_resource_int64Amount(ref),
 		"k8s.io/apimachinery/pkg/apis/meta/v1.APIGroup":                                          schema_pkg_apis_meta_v1_APIGroup(ref),
@@ -204,6 +216,7 @@ func schema_pkg_apis_walrus_v1_Catalog(ref common.ReferenceCallback) common.Open
 						},
 					},
 				},
+				Required: []string{"spec"},
 			},
 		},
 		Dependencies: []string{
@@ -1252,6 +1265,96 @@ func schema_pkg_apis_walrus_v1_ResourceRunList(ref common.ReferenceCallback) com
 		},
 		Dependencies: []string{
 			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRun", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_walrus_v1_Schema(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "Schema is the schema for the schemas API.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.SchemaStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.SchemaStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_pkg_apis_walrus_v1_SchemaList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "SchemaList holds the list of Schema.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.Schema"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Schema", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
@@ -2732,6 +2835,7 @@ func schema_pkg_apis_walrus_v1_Template(ref common.ReferenceCallback) common.Ope
 						},
 					},
 				},
+				Required: []string{"spec"},
 			},
 		},
 		Dependencies: []string{
@@ -2992,6 +3096,7 @@ func schema_pkg_apis_walruscore_v1_Catalog(ref common.ReferenceCallback) common.
 						},
 					},
 				},
+				Required: []string{"spec"},
 			},
 		},
 		Dependencies: []string{
@@ -3054,8 +3159,57 @@ func schema_pkg_apis_walruscore_v1_CatalogSpec(ref common.ReferenceCallback) com
 			SchemaProps: spec.SchemaProps{
 				Description: "CatalogSpec defines the desired state of Catalog.",
 				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"builtin": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-validations": []interface{}{map[string]interface{}{"message": "immutable field", "rule": "oldSelf == self"}},
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Builtin indicate the catalog is builtin catalog.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"templateFormat": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-validations": []interface{}{map[string]interface{}{"message": "immutable field", "rule": "oldSelf == self"}},
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "TemplateFormat of the catalog.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"description": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Description of the catalog.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"filters": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Filters specifies the filtering rules for the catalog.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.Filters"),
+						},
+					},
+					"vcsSource": {
+						SchemaProps: spec.SchemaProps{
+							Description: "VCSSource specifies the vcs source configure, should update to optional after we support more storage source.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.VCSSource"),
+						},
+					},
+				},
+				Required: []string{"templateFormat", "vcsSource"},
 			},
 		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Filters", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.VCSSource"},
 	}
 }
 
@@ -3065,6 +3219,147 @@ func schema_pkg_apis_walruscore_v1_CatalogStatus(ref common.ReferenceCallback) c
 			SchemaProps: spec.SchemaProps{
 				Description: "CatalogStatus defines the observed state of Catalog.",
 				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Phase is the summary of conditions.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"phaseMessage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PhaseMessage is the message of the phase.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions holds the conditions for the object.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+					"lastSyncTime": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LastSyncTime record the last sync catalog time.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"templateCount": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TemplateCount is the count of templates.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"url": {
+						SchemaProps: spec.SchemaProps{
+							Description: "URL of the catalog.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"project": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Project is the project to which the catalog belongs.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_Condition(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "Condition describes the state of a condition at a certain point.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Type of condition name in CamelCase.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Status of the condition, one of True, False, Unknown.\n\n\nPossible enum values:\n - `\"False\"` means a resource is not in the condition.\n - `\"True\"` means a resource is in the condition.\n - `\"Unknown\"` means a resource is in the condition or not.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"False", "True", "Unknown"},
+						},
+					},
+					"lastTransitionTime": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LastTransitionTime is the last time the condition transitioned from one status to another.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"reason": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Reason contains a programmatic identifier indicating the reason for the condition's last transition.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"message": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Message is a human-readable message indicating details about the transition.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"type", "status", "lastTransitionTime", "reason", "message"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ConditionSummary(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ConditionSummary is the summary of conditions.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Phase is the summary of conditions.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"phaseMessage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PhaseMessage is the message of the phase.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
 			},
 		},
 	}
@@ -3183,6 +3478,33 @@ func schema_pkg_apis_walruscore_v1_ConnectorStatus(ref common.ReferenceCallback)
 			SchemaProps: spec.SchemaProps{
 				Description: "ConnectorStatus defines the observed state of Connector.",
 				Type:        []string{"object"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_Filters(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "Filters specifies the filtering rules for filtering templates imported from the catalog.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"includeExpression": {
+						SchemaProps: spec.SchemaProps{
+							Description: "IncludeExpression specifies the regular expression used to match the names of included templates.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"excludeExpression": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ExcludeExpression specifies the regular expression used to match the names of excluded templates.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
 			},
 		},
 	}
@@ -3542,6 +3864,182 @@ func schema_pkg_apis_walruscore_v1_ResourceStatus(ref common.ReferenceCallback) 
 	}
 }
 
+func schema_pkg_apis_walruscore_v1_Schema(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "Schema API for the template's version.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.SchemaStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.SchemaStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_SchemaList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "SchemaList holds the list of Schema.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.Schema"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Schema", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_SchemaStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "SchemaStatus defines the template version's schema.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"value": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Value is the current value of the schema.",
+							Ref:         ref("k8s.io/apimachinery/pkg/runtime.RawExtension"),
+						},
+					},
+					"project": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Project is the project that the catalog belongs to.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions holds the conditions for the schema.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"value"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition", "k8s.io/apimachinery/pkg/runtime.RawExtension"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_StatusDescriptor(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "StatusDescriptor include conditions and it's summary.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Phase is the summary of conditions.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"phaseMessage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PhaseMessage is the message of the phase.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions holds the conditions for the object.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition"},
+	}
+}
+
 func schema_pkg_apis_walruscore_v1_Template(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -3582,6 +4080,7 @@ func schema_pkg_apis_walruscore_v1_Template(ref common.ReferenceCallback) common
 						},
 					},
 				},
+				Required: []string{"spec"},
 			},
 		},
 		Dependencies: []string{
@@ -3644,8 +4143,39 @@ func schema_pkg_apis_walruscore_v1_TemplateSpec(ref common.ReferenceCallback) co
 			SchemaProps: spec.SchemaProps{
 				Description: "TemplateSpec defines the desired state of Template.",
 				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"templateFormat": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-validations": []interface{}{map[string]interface{}{"message": "immutable field", "rule": "oldSelf == self"}},
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "TemplateFormat of the content.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"description": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Description of the template.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"vcsRepository": {
+						SchemaProps: spec.SchemaProps{
+							Description: "VCSRepository specifies the configuration for the VCS repository.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.VCSRepository"),
+						},
+					},
+				},
+				Required: []string{"templateFormat", "vcsRepository"},
 			},
 		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.VCSRepository"},
 	}
 }
 
@@ -3655,6 +4185,225 @@ func schema_pkg_apis_walruscore_v1_TemplateStatus(ref common.ReferenceCallback) 
 			SchemaProps: spec.SchemaProps{
 				Description: "TemplateStatus defines the observed state of Template.",
 				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Phase is the summary of conditions.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"phaseMessage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PhaseMessage is the message of the phase.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions holds the conditions for the object.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+					"lastSyncTime": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LastSyncTime record the last sync catalog time.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"originalName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "The original name of the template.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"url": {
+						SchemaProps: spec.SchemaProps{
+							Description: "URL of the template.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"project": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Project is the project that the catalog belongs to.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"icon": {
+						SchemaProps: spec.SchemaProps{
+							Description: "A URL to an SVG or PNG image to be used as an icon.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"versions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Versions contains the versions for the template.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.TemplateVersion"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.TemplateVersion", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_TemplateVersion(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "TemplateVersion defines the version of Template.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"version": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Version of the template.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"url": {
+						SchemaProps: spec.SchemaProps{
+							Description: "URL of downloading the template version with ref and subpath.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"templateSchemaName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TemplateSchemaName holds the template schema name for the template version.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"originalUISchemaName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "OriginalUISchemaName holds the original UI schema name for the template version.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"uiSchemaName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "UISchemaName holds the UI schema name for the template version.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"removed": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Removed indicate the template version is removed.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"url"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_VCSRepository(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "VCSRepository specifies the vcs repository of the template.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"platform": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-validations": []interface{}{map[string]interface{}{"message": "immutable field", "rule": "oldSelf == self"}},
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Platform of the vcs repository.\n\n\nPossible enum values:\n - `\"GitHub\"`\n - `\"GitLab\"`\n - `\"Gitee\"`",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"GitHub", "GitLab", "Gitee"},
+						},
+					},
+					"url": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-validations": []interface{}{map[string]interface{}{"message": "immutable field", "rule": "oldSelf == self"}},
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "URL of download the template from vsc repository, may include reference and subpath. e.g. https://github.com/walrus-catalog/terraform-static-redis.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"platform", "url"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_VCSSource(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "VCSSource specifies the version control source configure.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"platform": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-validations": []interface{}{map[string]interface{}{"message": "immutable field", "rule": "oldSelf == self"}},
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Platform of the source.\n\n\nPossible enum values:\n - `\"GitHub\"`\n - `\"GitLab\"`\n - `\"Gitee\"`",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"GitHub", "GitLab", "Gitee"},
+						},
+					},
+					"url": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-validations": []interface{}{map[string]interface{}{"message": "immutable field", "rule": "oldSelf == self"}},
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "URL of the source address, a valid URL contains at least a protocol and host.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"platform", "url"},
 			},
 		},
 	}

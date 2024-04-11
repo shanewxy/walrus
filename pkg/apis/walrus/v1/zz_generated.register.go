@@ -74,6 +74,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ResourceList{},
 		&ResourceRun{},
 		&ResourceRunList{},
+		&Schema{},
+		&SchemaList{},
 		&Setting{},
 		&SettingList{},
 		&Subject{},
