@@ -9,6 +9,8 @@ type CatalogExpansion interface{}
 
 type ConnectorExpansion interface{}
 
+type ConnectorBindingExpansion interface{}
+
 type EnvironmentExpansion interface{}
 
 type FileExampleExpansion interface{}

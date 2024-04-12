@@ -9,6 +9,8 @@ type CatalogExpansion interface{}
 
 type ConnectorExpansion interface{}
 
+type ConnectorBindingExpansion interface{}
+
 type ResourceExpansion interface{}
 
 type ResourceComponentsExpansion interface{}

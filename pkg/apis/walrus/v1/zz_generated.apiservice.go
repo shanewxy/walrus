@@ -132,6 +132,46 @@ func (in *Connector) CopyStatusTo(out runtime.Object) {
 	out.(*Connector).Status = in.Status
 }
 
+var _ rest.Scoper = (*ConnectorBinding)(nil)
+
+func (*ConnectorBinding) NamespaceScoped() bool {
+	return true
+}
+
+var _ rest.KindProvider = (*ConnectorBinding)(nil)
+
+func (*ConnectorBinding) Kind() string {
+	return "ConnectorBinding"
+}
+
+var _ rest.SingularNameProvider = (*ConnectorBinding)(nil)
+
+func (*ConnectorBinding) GetSingularName() string {
+	return "connectorbinding"
+}
+
+var _ rest.ShortNamesProvider = (*ConnectorBinding)(nil)
+
+func (*ConnectorBinding) ShortNames() []string {
+	return []string{
+		"cb",
+	}
+}
+
+var _ rest.CategoriesProvider = (*ConnectorBinding)(nil)
+
+func (*ConnectorBinding) Categories() []string {
+	return []string{
+		"walrus",
+	}
+}
+
+var _ WithStatusSubResource = (*ConnectorBinding)(nil)
+
+func (in *ConnectorBinding) CopyStatusTo(out runtime.Object) {
+	out.(*ConnectorBinding).Status = in.Status
+}
+
 var _ rest.Scoper = (*Environment)(nil)
 
 func (*Environment) NamespaceScoped() bool {

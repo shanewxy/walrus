@@ -124,6 +124,55 @@ message Connector {
   optional ConnectorStatus status = 3;
 }
 
+// ConnectorBinding is the schema for the connectorbindings API.
+//
+// +genclient
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +k8s:crd-gen:resource:scope="Namespaced",subResources=["status"]
+message ConnectorBinding {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+
+  optional ConnectorBindingSpec spec = 2;
+
+  optional ConnectorBindingStatus status = 3;
+}
+
+// ConnectorBindingList contains a list of ConnectorBinding.
+//
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+message ConnectorBindingList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+
+  repeated ConnectorBinding items = 2;
+}
+
+// ConnectorBindingSpec defines the desired state of ConnectorBinding.
+message ConnectorBindingSpec {
+  // Connector is the reference to the connector.
+  optional ConnectorReference connector = 1;
+}
+
+// ConnectorBindingStatus defines the observed state of ConnectorBinding.
+message ConnectorBindingStatus {
+  // Type is the type of the connector.
+  optional string Type = 1;
+
+  // Category is the category of the connector.
+  optional string Category = 2;
+}
+
+message ConnectorConfig {
+  optional string version = 1;
+
+  map<string, ConnectorConfigEntry> data = 2;
+}
+
+message ConnectorConfigEntry {
+  optional string value = 1;
+
+  optional bool visible = 2;
+}
+
 // ConnectorList holds the list of Connector.
 //
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -144,10 +193,36 @@ message ConnectorReference {
 
 // ConnectorSpec defines the desired state of Connector.
 message ConnectorSpec {
+  // ApplicableEnvironmentType is the environment type that the connector is applicable to.
+  //
+  // +k8s:validation:enum=["Development","Staging","Production"]
+  optional string applicableEnvironmentType = 1;
+
+  // Category is the category of the connector.
+  //
+  // +k8s:validation:enum=["Docker","Kubernetes","Custom","CloudProvider"]
+  optional string category = 2;
+
+  // Type is the type of the connector.
+  optional string type = 3;
+
+  // Config is the configuration of the connector.
+  optional ConnectorConfig config = 4;
+
+  // Description is the description of the connector.
+  optional string description = 5;
+
+  // SecretName is the auto-generated secret name for the connector configuration. Will be overridden if set.
+  optional string secretName = 6;
 }
 
 // ConnectorStatus defines the observed state of Connector.
 message ConnectorStatus {
+  // StatusDescriptor defines the status of the Connector.
+  optional StatusDescriptor statusDescriptor = 1;
+
+  // Project is the project that the connector belongs to.
+  optional string project = 2;
 }
 
 // Filters specifies the filtering rules for filtering templates imported from the catalog.

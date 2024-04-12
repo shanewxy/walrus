@@ -139,6 +139,8 @@ API rule violation: list_type_missing,k8s.io/apimachinery/pkg/apis/meta/v1,Updat
 API rule violation: names_match,github.com/seal-io/walrus/pkg/apis/walrus/v1,SubjectProviderExternalConfig,GitHub
 API rule violation: names_match,github.com/seal-io/walrus/pkg/apis/walrus/v1,SubjectProviderExternalConfig,GitLab
 API rule violation: names_match,github.com/seal-io/walrus/pkg/apis/walrus/v1,SubjectProviderExternalConfig,OAuth
+API rule violation: names_match,github.com/seal-io/walrus/pkg/apis/walruscore/v1,ConnectorBindingStatus,Category
+API rule violation: names_match,github.com/seal-io/walrus/pkg/apis/walruscore/v1,ConnectorBindingStatus,Type
 API rule violation: names_match,github.com/seal-io/walrus/pkg/apis/walruscore/v1,ResourceComponentsStatus,ResourceName
 API rule violation: names_match,github.com/seal-io/walrus/pkg/apis/walruscore/v1,ResourceComponentsStatus,TemplateVersion
 API rule violation: names_match,github.com/seal-io/walrus/pkg/apis/walruscore/v1,ResourceRunSpec,ResourceName

@@ -31,6 +31,7 @@ func GetValidatingWebhookConfiguration(n string, c v1.WebhookClientConfig) *v1.V
 		},
 		Webhooks: []v1.ValidatingWebhook{
 			vwh_walrus_pkg_webhooks_walruscore_CatalogWebhook(c),
+			vwh_walrus_pkg_webhooks_walruscore_ConnectorBindingWebhook(c),
 			vwh_walrus_pkg_webhooks_walruscore_ConnectorWebhook(c),
 			vwh_walrus_pkg_webhooks_walruscore_TemplateWebhook(c),
 		},
@@ -47,6 +48,8 @@ func GetMutatingWebhookConfiguration(n string, c v1.WebhookClientConfig) *v1.Mut
 			Name: n,
 		},
 		Webhooks: []v1.MutatingWebhook{
+			mwh_walrus_pkg_webhooks_walruscore_ConnectorBindingWebhook(c),
+			mwh_walrus_pkg_webhooks_walruscore_ConnectorWebhook(c),
 			mwh_walrus_pkg_webhooks_walruscore_ResourceDefinitionWebhook(c),
 		},
 	}
@@ -100,6 +103,101 @@ func vwh_walrus_pkg_webhooks_walruscore_CatalogWebhook(c v1.WebhookClientConfig)
 	}
 }
 
+func (*ConnectorBindingWebhook) ValidatePath() string {
+	return "/validate-walruscore-seal-io-v1-connectorbinding"
+}
+
+func vwh_walrus_pkg_webhooks_walruscore_ConnectorBindingWebhook(c v1.WebhookClientConfig) v1.ValidatingWebhook {
+	path := "/validate-walruscore-seal-io-v1-connectorbinding"
+
+	cc := c.DeepCopy()
+	if cc.Service != nil {
+		cc.Service.Path = &path
+	} else if c.URL != nil {
+		cc.URL = ptr.To(*c.URL + path)
+	}
+
+	return v1.ValidatingWebhook{
+		Name:         "validate.walruscore.seal.io.v1.connectorbinding",
+		ClientConfig: *cc,
+		Rules: []v1.RuleWithOperations{
+			{
+				Rule: v1.Rule{
+					APIGroups: []string{
+						"walruscore.seal.io",
+					},
+					APIVersions: []string{
+						"v1",
+					},
+					Resources: []string{
+						"connectorbindings",
+					},
+					Scope: ptr.To[v1.ScopeType]("Namespaced"),
+				},
+				Operations: []v1.OperationType{
+					"CREATE",
+					"UPDATE",
+					"DELETE",
+				},
+			},
+		},
+		FailurePolicy:  ptr.To[v1.FailurePolicyType]("Fail"),
+		MatchPolicy:    ptr.To[v1.MatchPolicyType]("Equivalent"),
+		SideEffects:    ptr.To[v1.SideEffectClass]("None"),
+		TimeoutSeconds: ptr.To[int32](10),
+		AdmissionReviewVersions: []string{
+			"v1",
+		},
+	}
+}
+
+func (*ConnectorBindingWebhook) DefaultPath() string {
+	return "/mutate-walruscore-seal-io-v1-connectorbinding"
+}
+
+func mwh_walrus_pkg_webhooks_walruscore_ConnectorBindingWebhook(c v1.WebhookClientConfig) v1.MutatingWebhook {
+	path := "/mutate-walruscore-seal-io-v1-connectorbinding"
+
+	cc := c.DeepCopy()
+	if cc.Service != nil {
+		cc.Service.Path = &path
+	} else if c.URL != nil {
+		cc.URL = ptr.To(*c.URL + path)
+	}
+
+	return v1.MutatingWebhook{
+		Name:         "mutate.walruscore.seal.io.v1.connectorbinding",
+		ClientConfig: *cc,
+		Rules: []v1.RuleWithOperations{
+			{
+				Rule: v1.Rule{
+					APIGroups: []string{
+						"walruscore.seal.io",
+					},
+					APIVersions: []string{
+						"v1",
+					},
+					Resources: []string{
+						"connectorbindings",
+					},
+					Scope: ptr.To[v1.ScopeType]("Namespaced"),
+				},
+				Operations: []v1.OperationType{
+					"CREATE",
+					"UPDATE",
+				},
+			},
+		},
+		FailurePolicy:  ptr.To[v1.FailurePolicyType]("Fail"),
+		MatchPolicy:    ptr.To[v1.MatchPolicyType]("Equivalent"),
+		SideEffects:    ptr.To[v1.SideEffectClass]("NoneOnDryRun"),
+		TimeoutSeconds: ptr.To[int32](10),
+		AdmissionReviewVersions: []string{
+			"v1",
+		},
+	}
+}
+
 func (*ConnectorWebhook) ValidatePath() string {
 	return "/validate-walruscore-seal-io-v1-connector"
 }
@@ -128,6 +226,7 @@ func vwh_walrus_pkg_webhooks_walruscore_ConnectorWebhook(c v1.WebhookClientConfi
 					},
 					Resources: []string{
 						"connectors",
+						"connectors/status",
 					},
 					Scope: ptr.To[v1.ScopeType]("Namespaced"),
 				},
@@ -141,6 +240,53 @@ func vwh_walrus_pkg_webhooks_walruscore_ConnectorWebhook(c v1.WebhookClientConfi
 		FailurePolicy:  ptr.To[v1.FailurePolicyType]("Fail"),
 		MatchPolicy:    ptr.To[v1.MatchPolicyType]("Equivalent"),
 		SideEffects:    ptr.To[v1.SideEffectClass]("None"),
+		TimeoutSeconds: ptr.To[int32](10),
+		AdmissionReviewVersions: []string{
+			"v1",
+		},
+	}
+}
+
+func (*ConnectorWebhook) DefaultPath() string {
+	return "/mutate-walruscore-seal-io-v1-connector"
+}
+
+func mwh_walrus_pkg_webhooks_walruscore_ConnectorWebhook(c v1.WebhookClientConfig) v1.MutatingWebhook {
+	path := "/mutate-walruscore-seal-io-v1-connector"
+
+	cc := c.DeepCopy()
+	if cc.Service != nil {
+		cc.Service.Path = &path
+	} else if c.URL != nil {
+		cc.URL = ptr.To(*c.URL + path)
+	}
+
+	return v1.MutatingWebhook{
+		Name:         "mutate.walruscore.seal.io.v1.connector",
+		ClientConfig: *cc,
+		Rules: []v1.RuleWithOperations{
+			{
+				Rule: v1.Rule{
+					APIGroups: []string{
+						"walruscore.seal.io",
+					},
+					APIVersions: []string{
+						"v1",
+					},
+					Resources: []string{
+						"connectors",
+					},
+					Scope: ptr.To[v1.ScopeType]("Namespaced"),
+				},
+				Operations: []v1.OperationType{
+					"CREATE",
+					"UPDATE",
+				},
+			},
+		},
+		FailurePolicy:  ptr.To[v1.FailurePolicyType]("Fail"),
+		MatchPolicy:    ptr.To[v1.MatchPolicyType]("Equivalent"),
+		SideEffects:    ptr.To[v1.SideEffectClass]("NoneOnDryRun"),
 		TimeoutSeconds: ptr.To[int32](10),
 		AdmissionReviewVersions: []string{
 			"v1",

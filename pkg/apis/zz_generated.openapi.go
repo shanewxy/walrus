@@ -24,6 +24,8 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Catalog":                                     schema_pkg_apis_walrus_v1_Catalog(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.CatalogList":                                 schema_pkg_apis_walrus_v1_CatalogList(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Connector":                                   schema_pkg_apis_walrus_v1_Connector(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ConnectorBinding":                            schema_pkg_apis_walrus_v1_ConnectorBinding(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ConnectorBindingList":                        schema_pkg_apis_walrus_v1_ConnectorBindingList(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ConnectorList":                               schema_pkg_apis_walrus_v1_ConnectorList(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Environment":                                 schema_pkg_apis_walrus_v1_Environment(ref),
 		"github.com/seal-io/walrus/pkg/apis/walrus/v1.EnvironmentList":                             schema_pkg_apis_walrus_v1_EnvironmentList(ref),
@@ -93,6 +95,12 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition":                               schema_pkg_apis_walruscore_v1_Condition(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConditionSummary":                        schema_pkg_apis_walruscore_v1_ConditionSummary(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Connector":                               schema_pkg_apis_walruscore_v1_Connector(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBinding":                        schema_pkg_apis_walruscore_v1_ConnectorBinding(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBindingList":                    schema_pkg_apis_walruscore_v1_ConnectorBindingList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBindingSpec":                    schema_pkg_apis_walruscore_v1_ConnectorBindingSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBindingStatus":                  schema_pkg_apis_walruscore_v1_ConnectorBindingStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorConfig":                         schema_pkg_apis_walruscore_v1_ConnectorConfig(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorConfigEntry":                    schema_pkg_apis_walruscore_v1_ConnectorConfigEntry(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorList":                           schema_pkg_apis_walruscore_v1_ConnectorList(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorReference":                      schema_pkg_apis_walruscore_v1_ConnectorReference(ref),
 		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorSpec":                           schema_pkg_apis_walruscore_v1_ConnectorSpec(ref),
@@ -576,10 +584,108 @@ func schema_pkg_apis_walrus_v1_Connector(ref common.ReferenceCallback) common.Op
 						},
 					},
 				},
+				Required: []string{"spec"},
 			},
 		},
 		Dependencies: []string{
 			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorSpec", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_pkg_apis_walrus_v1_ConnectorBinding(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ConnectorBinding is the schema for the connectorbindings API.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBindingSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBindingStatus"),
+						},
+					},
+				},
+				Required: []string{"spec"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBindingSpec", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBindingStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_pkg_apis_walrus_v1_ConnectorBindingList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ConnectorBindingList contains a list of ConnectorBinding.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBinding"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBinding", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
@@ -738,11 +844,11 @@ func schema_pkg_apis_walrus_v1_EnvironmentSpec(ref common.ReferenceCallback) com
 				Properties: map[string]spec.Schema{
 					"type": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Type is the type of the environment.\n\n\nPossible enum values:\n - `\"development\"` means the environment is for development.\n - `\"production\"` means the environment is for production.\n - `\"staging\"` means the environment is for staging.",
+							Description: "Type is the type of the environment.\n\n\nPossible enum values:\n - `\"Development\"` means the environment is for development.\n - `\"Production\"` means the environment is for production.\n - `\"Staging\"` means the environment is for staging.",
 							Default:     "",
 							Type:        []string{"string"},
 							Format:      "",
-							Enum:        []interface{}{"development", "production", "staging"},
+							Enum:        []interface{}{"Development", "Production", "Staging"},
 						},
 					},
 					"displayName": {
@@ -3677,10 +3783,225 @@ func schema_pkg_apis_walruscore_v1_Connector(ref common.ReferenceCallback) commo
 						},
 					},
 				},
+				Required: []string{"spec"},
 			},
 		},
 		Dependencies: []string{
 			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorSpec", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ConnectorBinding(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ConnectorBinding is the schema for the connectorbindings API.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBindingSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBindingStatus"),
+						},
+					},
+				},
+				Required: []string{"spec"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBindingSpec", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBindingStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ConnectorBindingList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ConnectorBindingList contains a list of ConnectorBinding.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBinding"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorBinding", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ConnectorBindingSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ConnectorBindingSpec defines the desired state of ConnectorBinding.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"connector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Connector is the reference to the connector.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorReference"),
+						},
+					},
+				},
+				Required: []string{"connector"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorReference"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ConnectorBindingStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ConnectorBindingStatus defines the observed state of ConnectorBinding.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"Type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Type is the type of the connector.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"Category": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Category is the category of the connector.\n\nPossible enum values:\n - `\"CloudProvider\"`\n - `\"Custom\"`\n - `\"Docker\"`\n - `\"Kubernetes\"`",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"CloudProvider", "Custom", "Docker", "Kubernetes"},
+						},
+					},
+				},
+				Required: []string{"Type", "Category"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ConnectorConfig(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"version": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"data": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorConfigEntry"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"version", "data"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorConfigEntry"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ConnectorConfigEntry(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"value": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"visible": {
+						SchemaProps: spec.SchemaProps{
+							Default: false,
+							Type:    []string{"boolean"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"value", "visible"},
+			},
+		},
 	}
 }
 
@@ -3769,8 +4090,59 @@ func schema_pkg_apis_walruscore_v1_ConnectorSpec(ref common.ReferenceCallback) c
 			SchemaProps: spec.SchemaProps{
 				Description: "ConnectorSpec defines the desired state of Connector.",
 				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"applicableEnvironmentType": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApplicableEnvironmentType is the environment type that the connector is applicable to.\n\n\nPossible enum values:\n - `\"Development\"` means the environment is for development.\n - `\"Production\"` means the environment is for production.\n - `\"Staging\"` means the environment is for staging.",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"Development", "Production", "Staging"},
+						},
+					},
+					"category": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Category is the category of the connector.\n\n\nPossible enum values:\n - `\"CloudProvider\"`\n - `\"Custom\"`\n - `\"Docker\"`\n - `\"Kubernetes\"`",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"CloudProvider", "Custom", "Docker", "Kubernetes"},
+						},
+					},
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Type is the type of the connector.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"config": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Config is the configuration of the connector.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorConfig"),
+						},
+					},
+					"description": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Description is the description of the connector.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"secretName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "SecretName is the auto-generated secret name for the connector configuration. Will be overridden if set.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"category", "type", "config"},
 			},
 		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorConfig"},
 	}
 }
 
@@ -3780,8 +4152,47 @@ func schema_pkg_apis_walruscore_v1_ConnectorStatus(ref common.ReferenceCallback)
 			SchemaProps: spec.SchemaProps{
 				Description: "ConnectorStatus defines the observed state of Connector.",
 				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Phase is the summary of conditions.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"phaseMessage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PhaseMessage is the message of the phase.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions holds the conditions for the object.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+					"project": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Project is the project that the connector belongs to.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
 			},
 		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition"},
 	}
 }
 

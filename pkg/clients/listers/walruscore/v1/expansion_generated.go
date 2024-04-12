@@ -21,6 +21,14 @@ type ConnectorListerExpansion interface{}
 // ConnectorNamespaceLister.
 type ConnectorNamespaceListerExpansion interface{}
 
+// ConnectorBindingListerExpansion allows custom methods to be added to
+// ConnectorBindingLister.
+type ConnectorBindingListerExpansion interface{}
+
+// ConnectorBindingNamespaceListerExpansion allows custom methods to be added to
+// ConnectorBindingNamespaceLister.
+type ConnectorBindingNamespaceListerExpansion interface{}
+
 // ResourceListerExpansion allows custom methods to be added to
 // ResourceLister.
 type ResourceListerExpansion interface{}

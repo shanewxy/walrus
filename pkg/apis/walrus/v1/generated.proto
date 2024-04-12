@@ -54,6 +54,28 @@ message Connector {
   optional github.com.seal_io.walrus.pkg.apis.walruscore.v1.ConnectorStatus status = 3;
 }
 
+// ConnectorBinding is the schema for the connectorbindings API.
+//
+// +genclient
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +k8s:apireg-gen:resource:scope="Namespaced",categories=["walrus"],shortName=["cb"],subResources=["status"]
+message ConnectorBinding {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+
+  optional github.com.seal_io.walrus.pkg.apis.walruscore.v1.ConnectorBindingSpec spec = 2;
+
+  optional github.com.seal_io.walrus.pkg.apis.walruscore.v1.ConnectorBindingStatus status = 3;
+}
+
+// ConnectorBindingList contains a list of ConnectorBinding.
+//
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+message ConnectorBindingList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+
+  repeated github.com.seal_io.walrus.pkg.apis.walruscore.v1.ConnectorBinding items = 2;
+}
+
 // ConnectorList holds the list of Connector.
 //
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -90,7 +112,7 @@ message EnvironmentList {
 message EnvironmentSpec {
   // Type is the type of the environment.
   //
-  // +k8s:validation:enum=["development","staging","production"]
+  // +k8s:validation:enum=["Development","Staging","Production"]
   optional string type = 1;
 
   // DisplayName is the display name of the environment.

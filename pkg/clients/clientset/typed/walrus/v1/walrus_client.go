@@ -17,6 +17,7 @@ type WalrusV1Interface interface {
 	RESTClient() rest.Interface
 	CatalogsGetter
 	ConnectorsGetter
+	ConnectorBindingsGetter
 	EnvironmentsGetter
 	FileExamplesGetter
 	ProjectsGetter
@@ -43,6 +44,10 @@ func (c *WalrusV1Client) Catalogs(namespace string) CatalogInterface {
 
 func (c *WalrusV1Client) Connectors(namespace string) ConnectorInterface {
 	return newConnectors(c, namespace)
+}
+
+func (c *WalrusV1Client) ConnectorBindings(namespace string) ConnectorBindingInterface {
+	return newConnectorBindings(c, namespace)
 }
 
 func (c *WalrusV1Client) Environments(namespace string) EnvironmentInterface {

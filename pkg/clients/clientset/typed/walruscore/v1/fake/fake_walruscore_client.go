@@ -23,6 +23,10 @@ func (c *FakeWalruscoreV1) Connectors(namespace string) v1.ConnectorInterface {
 	return &FakeConnectors{c, namespace}
 }
 
+func (c *FakeWalruscoreV1) ConnectorBindings(namespace string) v1.ConnectorBindingInterface {
+	return &FakeConnectorBindings{c, namespace}
+}
+
 func (c *FakeWalruscoreV1) Resources(namespace string) v1.ResourceInterface {
 	return &FakeResources{c, namespace}
 }

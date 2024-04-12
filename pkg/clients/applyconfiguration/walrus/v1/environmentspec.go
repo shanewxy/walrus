@@ -6,7 +6,7 @@
 package v1
 
 import (
-	v1 "github.com/seal-io/walrus/pkg/apis/walrus/v1"
+	v1 "github.com/seal-io/walrus/pkg/apis/walruscore/v1"
 )
 
 // EnvironmentSpecApplyConfiguration represents an declarative configuration of the EnvironmentSpec type for use

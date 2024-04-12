@@ -15,6 +15,8 @@ type Interface interface {
 	Catalogs() CatalogInformer
 	// Connectors returns a ConnectorInformer.
 	Connectors() ConnectorInformer
+	// ConnectorBindings returns a ConnectorBindingInformer.
+	ConnectorBindings() ConnectorBindingInformer
 	// Environments returns a EnvironmentInformer.
 	Environments() EnvironmentInformer
 	// Projects returns a ProjectInformer.
@@ -60,6 +62,11 @@ func (v *version) Catalogs() CatalogInformer {
 // Connectors returns a ConnectorInformer.
 func (v *version) Connectors() ConnectorInformer {
 	return &connectorInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// ConnectorBindings returns a ConnectorBindingInformer.
+func (v *version) ConnectorBindings() ConnectorBindingInformer {
+	return &connectorBindingInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }
 
 // Environments returns a EnvironmentInformer.

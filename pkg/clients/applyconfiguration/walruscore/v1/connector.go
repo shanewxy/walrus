@@ -6,7 +6,6 @@
 package v1
 
 import (
-	walruscorev1 "github.com/seal-io/walrus/pkg/apis/walruscore/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	v1 "k8s.io/client-go/applyconfigurations/meta/v1"
@@ -17,8 +16,8 @@ import (
 type ConnectorApplyConfiguration struct {
 	v1.TypeMetaApplyConfiguration    `json:",inline"`
 	*v1.ObjectMetaApplyConfiguration `json:"metadata,omitempty"`
-	Spec                             *walruscorev1.ConnectorSpec   `json:"spec,omitempty"`
-	Status                           *walruscorev1.ConnectorStatus `json:"status,omitempty"`
+	Spec                             *ConnectorSpecApplyConfiguration   `json:"spec,omitempty"`
+	Status                           *ConnectorStatusApplyConfiguration `json:"status,omitempty"`
 }
 
 // Connector constructs an declarative configuration of the Connector type for use with
@@ -193,15 +192,15 @@ func (b *ConnectorApplyConfiguration) ensureObjectMetaApplyConfigurationExists()
 // WithSpec sets the Spec field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Spec field is set to the value of the last call.
-func (b *ConnectorApplyConfiguration) WithSpec(value walruscorev1.ConnectorSpec) *ConnectorApplyConfiguration {
-	b.Spec = &value
+func (b *ConnectorApplyConfiguration) WithSpec(value *ConnectorSpecApplyConfiguration) *ConnectorApplyConfiguration {
+	b.Spec = value
 	return b
 }
 
 // WithStatus sets the Status field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Status field is set to the value of the last call.
-func (b *ConnectorApplyConfiguration) WithStatus(value walruscorev1.ConnectorStatus) *ConnectorApplyConfiguration {
-	b.Status = &value
+func (b *ConnectorApplyConfiguration) WithStatus(value *ConnectorStatusApplyConfiguration) *ConnectorApplyConfiguration {
+	b.Status = value
 	return b
 }

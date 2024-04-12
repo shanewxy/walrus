@@ -18,6 +18,7 @@ func GetCustomResourceDefinitions() map[string]*v1.CustomResourceDefinition {
 	return map[string]*v1.CustomResourceDefinition{
 		"Catalog":                        crd_pkg_apis_walruscore_v1_Catalog(),
 		"Connector":                      crd_pkg_apis_walruscore_v1_Connector(),
+		"ConnectorBinding":               crd_pkg_apis_walruscore_v1_ConnectorBinding(),
 		"Resource":                       crd_pkg_apis_walruscore_v1_Resource(),
 		"ResourceComponents":             crd_pkg_apis_walruscore_v1_ResourceComponents(),
 		"ResourceDefinition":             crd_pkg_apis_walruscore_v1_ResourceDefinition(),
@@ -282,6 +283,9 @@ func crd_pkg_apis_walruscore_v1_Connector() *v1.CustomResourceDefinition {
 						OpenAPIV3Schema: &v1.JSONSchemaProps{
 							Description: "Connector is the schema for the connectors API.",
 							Type:        "object",
+							Required: []string{
+								"spec",
+							},
 							Properties: map[string]v1.JSONSchemaProps{
 								"apiVersion": {
 									Type: "string",
@@ -294,9 +298,256 @@ func crd_pkg_apis_walruscore_v1_Connector() *v1.CustomResourceDefinition {
 								},
 								"spec": {
 									Type: "object",
+									Required: []string{
+										"category",
+										"type",
+										"config",
+									},
+									Properties: map[string]v1.JSONSchemaProps{
+										"applicableEnvironmentType": {
+											Description: "ApplicableEnvironmentType is the environment type that the connector is applicable to.",
+											Type:        "string",
+											Enum: []v1.JSON{
+												{
+													Raw: []byte(`"Development"`),
+												},
+												{
+													Raw: []byte(`"Staging"`),
+												},
+												{
+													Raw: []byte(`"Production"`),
+												},
+											},
+										},
+										"category": {
+											Description: "Category is the category of the connector.",
+											Type:        "string",
+											Enum: []v1.JSON{
+												{
+													Raw: []byte(`"Docker"`),
+												},
+												{
+													Raw: []byte(`"Kubernetes"`),
+												},
+												{
+													Raw: []byte(`"Custom"`),
+												},
+												{
+													Raw: []byte(`"CloudProvider"`),
+												},
+											},
+										},
+										"config": {
+											Description: "Config is the configuration of the connector.",
+											Type:        "object",
+											Required: []string{
+												"version",
+												"data",
+											},
+											Properties: map[string]v1.JSONSchemaProps{
+												"data": {
+													Type: "object",
+													AdditionalProperties: &v1.JSONSchemaPropsOrBool{
+														Allows: true,
+														Schema: &v1.JSONSchemaProps{
+															Type: "object",
+															Required: []string{
+																"value",
+																"visible",
+															},
+															Properties: map[string]v1.JSONSchemaProps{
+																"value": {
+																	Type: "string",
+																},
+																"visible": {
+																	Type: "boolean",
+																},
+															},
+														},
+													},
+													Nullable: true,
+												},
+												"version": {
+													Type: "string",
+												},
+											},
+										},
+										"description": {
+											Description: "Description is the description of the connector.",
+											Type:        "string",
+										},
+										"secretName": {
+											Description: "SecretName is the auto-generated secret name for the connector configuration. Will be overridden if set.",
+											Type:        "string",
+										},
+										"type": {
+											Description: "Type is the type of the connector.",
+											Type:        "string",
+										},
+									},
 								},
 								"status": {
 									Type: "object",
+									Properties: map[string]v1.JSONSchemaProps{
+										"conditions": {
+											Description: "Conditions holds the conditions for the object.",
+											Type:        "array",
+											Items: &v1.JSONSchemaPropsOrArray{
+												Schema: &v1.JSONSchemaProps{
+													Type: "object",
+													Required: []string{
+														"type",
+														"status",
+														"lastTransitionTime",
+														"reason",
+														"message",
+													},
+													Properties: map[string]v1.JSONSchemaProps{
+														"lastTransitionTime": {
+															Description: "LastTransitionTime is the last time the condition transitioned from one status to another.",
+															Type:        "string",
+															Format:      "date-time",
+														},
+														"message": {
+															Description: "Message is a human-readable message indicating details about the transition.",
+															Type:        "string",
+														},
+														"reason": {
+															Description: "Reason contains a programmatic identifier indicating the reason for the condition's last transition.",
+															Type:        "string",
+														},
+														"status": {
+															Description: "Status of the condition, one of True, False, Unknown.",
+															Type:        "string",
+															Enum: []v1.JSON{
+																{
+																	Raw: []byte(`"True"`),
+																},
+																{
+																	Raw: []byte(`"False"`),
+																},
+																{
+																	Raw: []byte(`"Unknown"`),
+																},
+															},
+														},
+														"type": {
+															Description: "Type of condition name in CamelCase.",
+															Type:        "string",
+														},
+													},
+												},
+											},
+											Nullable: true,
+										},
+										"phase": {
+											Description: "Phase is the summary of conditions.",
+											Type:        "string",
+										},
+										"phaseMessage": {
+											Description: "PhaseMessage is the message of the phase.",
+											Type:        "string",
+										},
+										"project": {
+											Description: "Project is the project that the connector belongs to.",
+											Type:        "string",
+										},
+									},
+								},
+							},
+						},
+					},
+					Subresources: &v1.CustomResourceSubresources{
+						Status: &v1.CustomResourceSubresourceStatus{},
+					},
+				},
+			},
+		},
+	}
+}
+
+func crd_pkg_apis_walruscore_v1_ConnectorBinding() *v1.CustomResourceDefinition {
+	return &v1.CustomResourceDefinition{
+		TypeMeta: metav1.TypeMeta{
+			APIVersion: "apiextensions.k8s.io/v1",
+			Kind:       "CustomResourceDefinition",
+		},
+		ObjectMeta: metav1.ObjectMeta{
+			Name: "connectorbindings.walruscore.seal.io",
+		},
+		Spec: v1.CustomResourceDefinitionSpec{
+			Group: "walruscore.seal.io",
+			Names: v1.CustomResourceDefinitionNames{
+				Plural:   "connectorbindings",
+				Singular: "connectorbinding",
+				Kind:     "ConnectorBinding",
+				ListKind: "ConnectorBindingList",
+			},
+			Scope: "Namespaced",
+			Versions: []v1.CustomResourceDefinitionVersion{
+				{
+					Name:    "v1",
+					Served:  true,
+					Storage: true,
+					Schema: &v1.CustomResourceValidation{
+						OpenAPIV3Schema: &v1.JSONSchemaProps{
+							Description: "ConnectorBinding is the schema for the connectorbindings API.",
+							Type:        "object",
+							Required: []string{
+								"spec",
+							},
+							Properties: map[string]v1.JSONSchemaProps{
+								"apiVersion": {
+									Type: "string",
+								},
+								"kind": {
+									Type: "string",
+								},
+								"metadata": {
+									Type: "object",
+								},
+								"spec": {
+									Type: "object",
+									Required: []string{
+										"connector",
+									},
+									Properties: map[string]v1.JSONSchemaProps{
+										"connector": {
+											Description: "Connector is the reference to the connector.",
+											Type:        "object",
+											Required: []string{
+												"name",
+												"namespace",
+											},
+											Properties: map[string]v1.JSONSchemaProps{
+												"name": {
+													Description: "Name is the name of the connector.",
+													Type:        "string",
+												},
+												"namespace": {
+													Description: "Namespace is the namespace of the connector.",
+													Type:        "string",
+												},
+											},
+										},
+									},
+								},
+								"status": {
+									Type: "object",
+									Required: []string{
+										"Type",
+										"Category",
+									},
+									Properties: map[string]v1.JSONSchemaProps{
+										"Category": {
+											Description: "Category is the category of the connector.",
+											Type:        "string",
+										},
+										"Type": {
+											Description: "Type is the type of the connector.",
+											Type:        "string",
+										},
+									},
 								},
 							},
 						},

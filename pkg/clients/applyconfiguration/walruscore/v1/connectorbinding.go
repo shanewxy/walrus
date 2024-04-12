@@ -6,36 +6,35 @@
 package v1
 
 import (
-	walruscorev1 "github.com/seal-io/walrus/pkg/clients/applyconfiguration/walruscore/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	v1 "k8s.io/client-go/applyconfigurations/meta/v1"
 )
 
-// ConnectorApplyConfiguration represents an declarative configuration of the Connector type for use
+// ConnectorBindingApplyConfiguration represents an declarative configuration of the ConnectorBinding type for use
 // with apply.
-type ConnectorApplyConfiguration struct {
+type ConnectorBindingApplyConfiguration struct {
 	v1.TypeMetaApplyConfiguration    `json:",inline"`
 	*v1.ObjectMetaApplyConfiguration `json:"metadata,omitempty"`
-	Spec                             *walruscorev1.ConnectorSpecApplyConfiguration   `json:"spec,omitempty"`
-	Status                           *walruscorev1.ConnectorStatusApplyConfiguration `json:"status,omitempty"`
+	Spec                             *ConnectorBindingSpecApplyConfiguration   `json:"spec,omitempty"`
+	Status                           *ConnectorBindingStatusApplyConfiguration `json:"status,omitempty"`
 }
 
-// Connector constructs an declarative configuration of the Connector type for use with
+// ConnectorBinding constructs an declarative configuration of the ConnectorBinding type for use with
 // apply.
-func Connector(name, namespace string) *ConnectorApplyConfiguration {
-	b := &ConnectorApplyConfiguration{}
+func ConnectorBinding(name, namespace string) *ConnectorBindingApplyConfiguration {
+	b := &ConnectorBindingApplyConfiguration{}
 	b.WithName(name)
 	b.WithNamespace(namespace)
-	b.WithKind("Connector")
-	b.WithAPIVersion("walrus.seal.io/v1")
+	b.WithKind("ConnectorBinding")
+	b.WithAPIVersion("walruscore.seal.io/v1")
 	return b
 }
 
 // WithKind sets the Kind field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Kind field is set to the value of the last call.
-func (b *ConnectorApplyConfiguration) WithKind(value string) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithKind(value string) *ConnectorBindingApplyConfiguration {
 	b.Kind = &value
 	return b
 }
@@ -43,7 +42,7 @@ func (b *ConnectorApplyConfiguration) WithKind(value string) *ConnectorApplyConf
 // WithAPIVersion sets the APIVersion field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the APIVersion field is set to the value of the last call.
-func (b *ConnectorApplyConfiguration) WithAPIVersion(value string) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithAPIVersion(value string) *ConnectorBindingApplyConfiguration {
 	b.APIVersion = &value
 	return b
 }
@@ -51,7 +50,7 @@ func (b *ConnectorApplyConfiguration) WithAPIVersion(value string) *ConnectorApp
 // WithName sets the Name field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Name field is set to the value of the last call.
-func (b *ConnectorApplyConfiguration) WithName(value string) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithName(value string) *ConnectorBindingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.Name = &value
 	return b
@@ -60,7 +59,7 @@ func (b *ConnectorApplyConfiguration) WithName(value string) *ConnectorApplyConf
 // WithGenerateName sets the GenerateName field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the GenerateName field is set to the value of the last call.
-func (b *ConnectorApplyConfiguration) WithGenerateName(value string) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithGenerateName(value string) *ConnectorBindingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.GenerateName = &value
 	return b
@@ -69,7 +68,7 @@ func (b *ConnectorApplyConfiguration) WithGenerateName(value string) *ConnectorA
 // WithNamespace sets the Namespace field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Namespace field is set to the value of the last call.
-func (b *ConnectorApplyConfiguration) WithNamespace(value string) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithNamespace(value string) *ConnectorBindingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.Namespace = &value
 	return b
@@ -78,7 +77,7 @@ func (b *ConnectorApplyConfiguration) WithNamespace(value string) *ConnectorAppl
 // WithUID sets the UID field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the UID field is set to the value of the last call.
-func (b *ConnectorApplyConfiguration) WithUID(value types.UID) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithUID(value types.UID) *ConnectorBindingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.UID = &value
 	return b
@@ -87,7 +86,7 @@ func (b *ConnectorApplyConfiguration) WithUID(value types.UID) *ConnectorApplyCo
 // WithResourceVersion sets the ResourceVersion field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the ResourceVersion field is set to the value of the last call.
-func (b *ConnectorApplyConfiguration) WithResourceVersion(value string) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithResourceVersion(value string) *ConnectorBindingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.ResourceVersion = &value
 	return b
@@ -96,7 +95,7 @@ func (b *ConnectorApplyConfiguration) WithResourceVersion(value string) *Connect
 // WithGeneration sets the Generation field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Generation field is set to the value of the last call.
-func (b *ConnectorApplyConfiguration) WithGeneration(value int64) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithGeneration(value int64) *ConnectorBindingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.Generation = &value
 	return b
@@ -105,7 +104,7 @@ func (b *ConnectorApplyConfiguration) WithGeneration(value int64) *ConnectorAppl
 // WithCreationTimestamp sets the CreationTimestamp field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the CreationTimestamp field is set to the value of the last call.
-func (b *ConnectorApplyConfiguration) WithCreationTimestamp(value metav1.Time) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithCreationTimestamp(value metav1.Time) *ConnectorBindingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.CreationTimestamp = &value
 	return b
@@ -114,7 +113,7 @@ func (b *ConnectorApplyConfiguration) WithCreationTimestamp(value metav1.Time) *
 // WithDeletionTimestamp sets the DeletionTimestamp field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the DeletionTimestamp field is set to the value of the last call.
-func (b *ConnectorApplyConfiguration) WithDeletionTimestamp(value metav1.Time) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithDeletionTimestamp(value metav1.Time) *ConnectorBindingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.DeletionTimestamp = &value
 	return b
@@ -123,7 +122,7 @@ func (b *ConnectorApplyConfiguration) WithDeletionTimestamp(value metav1.Time) *
 // WithDeletionGracePeriodSeconds sets the DeletionGracePeriodSeconds field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the DeletionGracePeriodSeconds field is set to the value of the last call.
-func (b *ConnectorApplyConfiguration) WithDeletionGracePeriodSeconds(value int64) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithDeletionGracePeriodSeconds(value int64) *ConnectorBindingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	b.DeletionGracePeriodSeconds = &value
 	return b
@@ -133,7 +132,7 @@ func (b *ConnectorApplyConfiguration) WithDeletionGracePeriodSeconds(value int64
 // and returns the receiver, so that objects can be build by chaining "With" function invocations.
 // If called multiple times, the entries provided by each call will be put on the Labels field,
 // overwriting an existing map entries in Labels field with the same key.
-func (b *ConnectorApplyConfiguration) WithLabels(entries map[string]string) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithLabels(entries map[string]string) *ConnectorBindingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	if b.Labels == nil && len(entries) > 0 {
 		b.Labels = make(map[string]string, len(entries))
@@ -148,7 +147,7 @@ func (b *ConnectorApplyConfiguration) WithLabels(entries map[string]string) *Con
 // and returns the receiver, so that objects can be build by chaining "With" function invocations.
 // If called multiple times, the entries provided by each call will be put on the Annotations field,
 // overwriting an existing map entries in Annotations field with the same key.
-func (b *ConnectorApplyConfiguration) WithAnnotations(entries map[string]string) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithAnnotations(entries map[string]string) *ConnectorBindingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	if b.Annotations == nil && len(entries) > 0 {
 		b.Annotations = make(map[string]string, len(entries))
@@ -162,7 +161,7 @@ func (b *ConnectorApplyConfiguration) WithAnnotations(entries map[string]string)
 // WithOwnerReferences adds the given value to the OwnerReferences field in the declarative configuration
 // and returns the receiver, so that objects can be build by chaining "With" function invocations.
 // If called multiple times, values provided by each call will be appended to the OwnerReferences field.
-func (b *ConnectorApplyConfiguration) WithOwnerReferences(values ...*v1.OwnerReferenceApplyConfiguration) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithOwnerReferences(values ...*v1.OwnerReferenceApplyConfiguration) *ConnectorBindingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	for i := range values {
 		if values[i] == nil {
@@ -176,7 +175,7 @@ func (b *ConnectorApplyConfiguration) WithOwnerReferences(values ...*v1.OwnerRef
 // WithFinalizers adds the given value to the Finalizers field in the declarative configuration
 // and returns the receiver, so that objects can be build by chaining "With" function invocations.
 // If called multiple times, values provided by each call will be appended to the Finalizers field.
-func (b *ConnectorApplyConfiguration) WithFinalizers(values ...string) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithFinalizers(values ...string) *ConnectorBindingApplyConfiguration {
 	b.ensureObjectMetaApplyConfigurationExists()
 	for i := range values {
 		b.Finalizers = append(b.Finalizers, values[i])
@@ -184,7 +183,7 @@ func (b *ConnectorApplyConfiguration) WithFinalizers(values ...string) *Connecto
 	return b
 }
 
-func (b *ConnectorApplyConfiguration) ensureObjectMetaApplyConfigurationExists() {
+func (b *ConnectorBindingApplyConfiguration) ensureObjectMetaApplyConfigurationExists() {
 	if b.ObjectMetaApplyConfiguration == nil {
 		b.ObjectMetaApplyConfiguration = &v1.ObjectMetaApplyConfiguration{}
 	}
@@ -193,7 +192,7 @@ func (b *ConnectorApplyConfiguration) ensureObjectMetaApplyConfigurationExists()
 // WithSpec sets the Spec field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Spec field is set to the value of the last call.
-func (b *ConnectorApplyConfiguration) WithSpec(value *walruscorev1.ConnectorSpecApplyConfiguration) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithSpec(value *ConnectorBindingSpecApplyConfiguration) *ConnectorBindingApplyConfiguration {
 	b.Spec = value
 	return b
 }
@@ -201,7 +200,7 @@ func (b *ConnectorApplyConfiguration) WithSpec(value *walruscorev1.ConnectorSpec
 // WithStatus sets the Status field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
 // If called multiple times, the Status field is set to the value of the last call.
-func (b *ConnectorApplyConfiguration) WithStatus(value *walruscorev1.ConnectorStatusApplyConfiguration) *ConnectorApplyConfiguration {
+func (b *ConnectorBindingApplyConfiguration) WithStatus(value *ConnectorBindingStatusApplyConfiguration) *ConnectorBindingApplyConfiguration {
 	b.Status = value
 	return b
 }

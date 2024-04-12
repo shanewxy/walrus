@@ -1200,6 +1200,8 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &applyconfigurationwalrusv1.CatalogApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("Connector"):
 		return &applyconfigurationwalrusv1.ConnectorApplyConfiguration{}
+	case walrusv1.SchemeGroupVersion.WithKind("ConnectorBinding"):
+		return &applyconfigurationwalrusv1.ConnectorBindingApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("Environment"):
 		return &applyconfigurationwalrusv1.EnvironmentApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("EnvironmentSpec"):
@@ -1288,8 +1290,22 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &applyconfigurationwalruscorev1.ConditionSummaryApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("Connector"):
 		return &applyconfigurationwalruscorev1.ConnectorApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ConnectorBinding"):
+		return &applyconfigurationwalruscorev1.ConnectorBindingApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ConnectorBindingSpec"):
+		return &applyconfigurationwalruscorev1.ConnectorBindingSpecApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ConnectorBindingStatus"):
+		return &applyconfigurationwalruscorev1.ConnectorBindingStatusApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ConnectorConfig"):
+		return &applyconfigurationwalruscorev1.ConnectorConfigApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ConnectorConfigEntry"):
+		return &applyconfigurationwalruscorev1.ConnectorConfigEntryApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("ConnectorReference"):
 		return &applyconfigurationwalruscorev1.ConnectorReferenceApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ConnectorSpec"):
+		return &applyconfigurationwalruscorev1.ConnectorSpecApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ConnectorStatus"):
+		return &applyconfigurationwalruscorev1.ConnectorStatusApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("Filters"):
 		return &applyconfigurationwalruscorev1.FiltersApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("Resource"):
