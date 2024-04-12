@@ -1,12 +1,13 @@
 package v1
 
 import (
-	"errors"
 	"reflect"
 
 	core "k8s.io/api/core/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+
+	walruscore "github.com/seal-io/walrus/pkg/apis/walruscore/v1"
 )
 
 // Environment is the schema for the environments API.
@@ -25,38 +26,12 @@ type Environment struct {
 
 var _ runtime.Object = (*Environment)(nil)
 
-// EnvironmentType describes the type of environment.
-// +enum
-type EnvironmentType string
-
-const (
-	// EnvironmentTypeDevelopment means the environment is for development.
-	EnvironmentTypeDevelopment EnvironmentType = "development"
-	// EnvironmentTypeStaging means the environment is for staging.
-	EnvironmentTypeStaging EnvironmentType = "staging"
-	// EnvironmentTypeProduction means the environment is for production.
-	EnvironmentTypeProduction EnvironmentType = "production"
-)
-
-func (in EnvironmentType) String() string {
-	return string(in)
-}
-
-func (in EnvironmentType) Validate() error {
-	switch in {
-	case EnvironmentTypeDevelopment, EnvironmentTypeStaging, EnvironmentTypeProduction:
-		return nil
-	default:
-		return errors.New("invalid environment type")
-	}
-}
-
 // EnvironmentSpec defines the desired state of Environment.
 type EnvironmentSpec struct {
 	// Type is the type of the environment.
 	//
-	// +k8s:validation:enum=["development","staging","production"]
-	Type EnvironmentType `json:"type"`
+	// +k8s:validation:enum=["Development","Staging","Production"]
+	Type walruscore.EnvironmentType `json:"type"`
 
 	// DisplayName is the display name of the environment.
 	DisplayName string `json:"displayName,omitempty"`
