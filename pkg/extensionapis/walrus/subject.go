@@ -29,6 +29,7 @@ import (
 	"github.com/seal-io/walrus/pkg/systemauthz"
 	"github.com/seal-io/walrus/pkg/systemkuberes"
 	"github.com/seal-io/walrus/pkg/systemmeta"
+	"github.com/seal-io/walrus/pkg/systemsetting"
 )
 
 // SubjectHandler handles v1.Subject objects.
@@ -396,9 +397,36 @@ func (h *SubjectHandler) OnUpdate(ctx context.Context, obj, oldObj runtime.Objec
 		if err != nil {
 			return nil, kerrors.NewInternalError(err)
 		}
+		if subj.Spec.Credential == nil {
+			// NB(thxCode): retrieve armor credential from the existing ServiceAccount.
+			aSa := &meta.PartialObjectMetadata{
+				TypeMeta: meta.TypeMeta{
+					APIVersion: core.SchemeGroupVersion.String(),
+					Kind:       "ServiceAccount",
+				},
+				ObjectMeta: meta.ObjectMeta{
+					Namespace: sa.Namespace,
+					Name:      sa.Name,
+				},
+			}
+			err = h.Client.Get(ctx, ctrlcli.ObjectKeyFromObject(aSa), aSa)
+			if err != nil {
+				return nil, kerrors.NewBadRequest("subject is not found")
+			}
+			armorCredential := systemmeta.DescribeResourceNote(aSa, "armorCredential")
+			if armorCredential != "" {
+				systemmeta.NoteResource(sa, "subjects", map[string]string{
+					"armorCredential": armorCredential,
+				})
+			}
+		}
 		err = h.Client.Update(ctx, sa, &opts)
 		if err != nil {
 			return nil, err
+		}
+		if subj.Name == systemkuberes.AdminSubjectName && subj.Spec.Credential != nil {
+			// NB(thxCode): update the bootstrap password provision if the bootstrap password has been changed.
+			_ = systemsetting.BootstrapPasswordProvision.Configure(ctx, "invalid")
 		}
 		subj = convertSubjectFromServiceAccount(sa)
 	}

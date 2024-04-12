@@ -24,6 +24,7 @@ import (
 	ctrlcli "sigs.k8s.io/controller-runtime/pkg/client"
 
 	walrus "github.com/seal-io/walrus/pkg/apis/walrus/v1"
+	applywalrus "github.com/seal-io/walrus/pkg/clients/applyconfiguration/walrus/v1"
 	"github.com/seal-io/walrus/pkg/clients/clientset"
 	"github.com/seal-io/walrus/pkg/kubeclientset"
 	"github.com/seal-io/walrus/pkg/kubeconfig"
@@ -391,22 +392,19 @@ func profile(w http.ResponseWriter, r *http.Request) {
 	_ = httpx.BindJSON(r, &req)
 
 	// Update profile.
-	subj := &walrus.Subject{
-		ObjectMeta: meta.ObjectMeta{
-			Namespace: subjNamespace,
-			Name:      subjName,
-		},
-	}
+	subjChanged := applywalrus.Subject(subjName, subjNamespace).
+		WithSpec(applywalrus.SubjectSpec())
 	if req.DisplayName != nil {
-		subj.Spec.DisplayName = *req.DisplayName
+		subjChanged.Spec.WithDisplayName(*req.DisplayName)
 	}
 	if req.Email != nil {
-		subj.Spec.Email = *req.Email
+		subjChanged.Spec.WithEmail(*req.Email)
 	}
 	if req.Password != nil {
-		subj.Spec.Credential = req.Password
+		subjChanged.Spec.WithCredential(*req.Password)
 	}
-	subj, err = kubeclientset.Apply(r.Context(), cli.WalrusV1().Subjects(subjNamespace), subj)
+	subj, err := cli.WalrusV1().Subjects(subjNamespace).
+		Apply(r.Context(), subjChanged, meta.ApplyOptions{FieldManager: "identify"})
 	if err != nil {
 		ui.ResponseError(w, fmt.Errorf("update profile: %w", err))
 		return
