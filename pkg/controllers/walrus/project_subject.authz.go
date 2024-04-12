@@ -223,7 +223,12 @@ func (r *ProjectSubjectAuthzReconciler) SetupController(ctx context.Context, opt
 		).
 		Watches(
 			// Requeue when creating an Environment.
-			&walrus.Environment{},
+			&meta.PartialObjectMetadata{
+				TypeMeta: meta.TypeMeta{
+					APIVersion: walrus.SchemeGroupVersion.String(),
+					Kind:       "Environment",
+				},
+			},
 			ctrlhandler.EnqueueRequestsFromMapFunc(r.findObjectsWhenEnvironmentCreating),
 			ctrlbuilder.WithPredicates(envFilter),
 		).

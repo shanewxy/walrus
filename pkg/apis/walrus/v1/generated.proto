@@ -720,7 +720,7 @@ message SubjectProviderSpec {
   // Type is the type of the subject provider,
   // which is immutable.
   //
-  // +k8s:validation:enum=["Internal","LDAP","oidc","oauth","github","gitlab","bitbucket","gitea","google","microsoft"]
+  // +k8s:validation:enum=["Internal","LDAP","OIDC","OAuth","GitHub","GitLab","Bitbucket","Gitea","Google","Microsoft"]
   optional string type = 1;
 
   // DisplayName is the display name of the subject provider.
@@ -876,16 +876,15 @@ message VariableSpec {
 
 // VariableStatus defines the observed state of Variable.
 message VariableStatus {
-  // Project is the project that the variable belongs to.
-  optional string project = 1;
-
-  // Environment is the environment that the variable belongs to.
-  optional string environment = 2;
+  // Scope is the scope of the variable.
+  //
+  // +k8s:validation:enum=["System","Project","Environment"]
+  optional string scope = 1;
 
   // Value is the current value of the setting,
   // it is provided as a read-only output field.
   //
   // "(sensitive)" returns if the variable is sensitive.
-  optional string value = 3;
+  optional string value = 2;
 }
 

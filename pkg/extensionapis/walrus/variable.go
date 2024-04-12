@@ -2,6 +2,7 @@ package walrus
 
 import (
 	"context"
+	"fmt"
 	"sort"
 	"strconv"
 	"strings"
@@ -9,7 +10,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/seal-io/utils/pools/gopool"
-	"github.com/seal-io/utils/stringx"
 	"golang.org/x/exp/maps"
 	core "k8s.io/api/core/v1"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"
@@ -22,6 +22,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/apiserver/pkg/registry/rest"
+	"k8s.io/utils/ptr"
 	ctrlcli "sigs.k8s.io/controller-runtime/pkg/client"
 
 	walrus "github.com/seal-io/walrus/pkg/apis/walrus/v1"
@@ -79,17 +80,10 @@ func (h *VariableHandler) SetupHandler(
 			},
 			extensionapi.JSONPathTableColumnDefinition{
 				TableColumnDefinition: meta.TableColumnDefinition{
-					Name: "Environment",
+					Name: "Scope",
 					Type: "string",
 				},
-				JSONPath: ".status.environment",
-			},
-			extensionapi.JSONPathTableColumnDefinition{
-				TableColumnDefinition: meta.TableColumnDefinition{
-					Name: "Project",
-					Type: "string",
-				},
-				JSONPath: ".status.project",
+				JSONPath: ".status.scope",
 			})
 		if err != nil {
 			return
@@ -128,43 +122,23 @@ func (h *VariableHandler) Destroy() {}
 func (h *VariableHandler) OnCreate(ctx context.Context, obj runtime.Object, opts ctrlcli.CreateOptions) (runtime.Object, error) {
 	// Validate.
 	vra := obj.(*walrus.Variable)
-	if vra.Spec.Value == nil {
-		errs := field.ErrorList{
-			field.Required(field.NewPath("spec.value"), "variable value is required"),
-		}
-		return nil, kerrors.NewInvalid(walrus.SchemeKind("variables"), vra.Name, errs)
-	}
-
-	// Check affiliation.
-	var project, environment string
-	if vra.Namespace != systemkuberes.SystemNamespaceName {
-		owner := &core.Namespace{
-			ObjectMeta: meta.ObjectMeta{
-				Name: vra.Namespace,
-			},
-		}
-		_ = h.Client.Get(ctx, ctrlcli.ObjectKeyFromObject(owner), owner)
-		resType := systemmeta.DescribeResourceType(owner)
-		switch resType {
-		default:
-			errs := field.ErrorList{
-				field.Invalid(
-					field.NewPath("metadata.namespace"), vra.Namespace, "namespace is not a project or environment"),
+	{
+		var errs field.ErrorList
+		if vra.Spec.Value == nil {
+			errs = field.ErrorList{
+				field.Required(field.NewPath("spec.value"), "variable value is required"),
 			}
+		}
+		ns, err := systemmeta.ReflectNamespace(ctx, h.Client, vra.Namespace)
+		if err != nil {
+			errs = field.ErrorList{
+				field.Invalid(field.NewPath("metadata.namespace"), vra.Namespace, err.Error()),
+			}
+		} else {
+			vra.Status.Scope = walrus.VariableScope(ns.Kind())
+		}
+		if len(errs) > 0 {
 			return nil, kerrors.NewInvalid(walrus.SchemeKind("variables"), vra.Name, errs)
-		case "projects":
-			project = owner.Name
-		case "environments":
-			environment = owner.Name
-			proj := kubemeta.GetOwnerRefOfNoCopy(owner, walrus.SchemeGroupVersionKind("Project"))
-			if proj == nil {
-				errs := field.ErrorList{
-					field.Invalid(
-						field.NewPath("metadata.namespace"), vra.Namespace, "environment is not belong to any project"),
-				}
-				return nil, kerrors.NewInvalid(walrus.SchemeKind("variables"), vra.Name, errs)
-			}
-			project = proj.Name
 		}
 	}
 
@@ -180,8 +154,7 @@ func (h *VariableHandler) OnCreate(ctx context.Context, obj runtime.Object, opts
 	}
 	eResType := "variables"
 	eNotes := map[string]string{
-		"project":               project,
-		"environment":           environment,
+		"scope":                 string(vra.Status.Scope),
 		vra.Name + "-uid":       uuid.NewString(),
 		vra.Name + "-create-at": time.Now().Format(time.RFC3339),
 		vra.Name + "-sensitive": strconv.FormatBool(vra.Spec.Sensitive),
@@ -251,14 +224,83 @@ func (h *VariableHandler) OnList(ctx context.Context, opts ctrlcli.ListOptions) 
 		return &walrus.VariableList{}, nil
 	}
 
-	// Convert.
-	vList := convertVariableListFromSecret(sec, opts)
+	scp := systemmeta.DescribeResourceNote(sec, "scope")
+	if scp == "" {
+		return &walrus.VariableList{}, nil
+	}
+	ns, err := systemmeta.ReflectNamespace(ctx, h.Client, sec.Namespace)
+	if err != nil {
+		return &walrus.VariableList{}, kerrors.NewInternalError(err)
+	}
+
+	secList := &core.SecretList{
+		Items: []core.Secret{*sec},
+	}
+	switch ns.Kind() {
+	case systemmeta.NamespaceKindEnvironment:
+		projSec := &core.Secret{
+			ObjectMeta: meta.ObjectMeta{
+				Namespace: ns.OwnerName(),
+				Name:      systemkuberes.VariablesDelegatedSecretName,
+			},
+		}
+		err = h.APIReader.Get(ctx, ctrlcli.ObjectKeyFromObject(projSec), projSec)
+		if err != nil {
+			if !kerrors.IsNotFound(err) {
+				return nil, kerrors.NewInternalError(fmt.Errorf("get project variables: %w", err))
+			}
+		}
+		ns, err = ns.RetrieveOwner(ctx)
+		if err != nil {
+			return nil, kerrors.NewInternalError(fmt.Errorf("get project owner: %w", err))
+		}
+		secList.Items = append(secList.Items, *projSec)
+		fallthrough
+	case systemmeta.NamespaceKindProject:
+		systemSec := &core.Secret{
+			ObjectMeta: meta.ObjectMeta{
+				Namespace: ns.OwnerName(),
+				Name:      systemkuberes.VariablesDelegatedSecretName,
+			},
+		}
+		err = h.APIReader.Get(ctx, ctrlcli.ObjectKeyFromObject(systemSec), systemSec)
+		if err != nil {
+			if !kerrors.IsNotFound(err) {
+				return nil, kerrors.NewInternalError(fmt.Errorf("get system variables: %w", err))
+			}
+		}
+		secList.Items = append(secList.Items, *systemSec)
+	}
+
+	// Merge.
+	vList := mergeVariableListFromSecretList(secList, opts)
 	return vList, nil
 }
 
 func (h *VariableHandler) OnWatch(ctx context.Context, opts ctrlcli.ListOptions) (watch.Interface, error) {
+	namespaceFilter := sets.New[string]()
+	if opts.Namespace != "" {
+		ns, err := systemmeta.ReflectNamespace(ctx, h.Client, opts.Namespace)
+		if err != nil {
+			return nil, kerrors.NewInternalError(err)
+		}
+		namespaceFilter.Insert(opts.Namespace)
+		switch ns.Kind() {
+		case systemmeta.NamespaceKindEnvironment:
+			namespaceFilter.Insert(ns.OwnerName())
+			ns, err = ns.RetrieveOwner(ctx)
+			if err != nil {
+				return nil, kerrors.NewInternalError(fmt.Errorf("get project owner: %w", err))
+			}
+			fallthrough
+		case systemmeta.NamespaceKindProject:
+			namespaceFilter.Insert(ns.OwnerName())
+		}
+	}
+
 	// Index.
-	vraIndexer := map[string]walrus.Variable{} // [pn/en/vn] -> vra
+	vraIndexer := map[string]walrus.Variable{}         // [vnamespace/vname] -> vra
+	vraReverseIndexer := map[string]sets.Set[string]{} // [vname] -> [vnamespace, ...]
 	{
 		listObj, err := h.OnList(ctx, opts)
 		if err != nil {
@@ -266,15 +308,19 @@ func (h *VariableHandler) OnWatch(ctx context.Context, opts ctrlcli.ListOptions)
 		}
 		vList := listObj.(*walrus.VariableList)
 		for i := range vList.Items {
-			vraL1IndexKey := stringx.Join("/", vList.Items[i].Status.Project, vList.Items[i].Status.Environment)
-			vraIndexKey := stringx.Join("/", vraL1IndexKey, vList.Items[i].Name)
+			vraIndexKey := kubemeta.GetNamespacedNameKey(&vList.Items[i])
 			vraIndexer[vraIndexKey] = vList.Items[i]
+			if _, ok := vraReverseIndexer[vList.Items[i].Name]; !ok {
+				vraReverseIndexer[vList.Items[i].Name] = sets.New[string]()
+			}
+			vraReverseIndexer[vList.Items[i].Name].Insert(vList.Items[i].Namespace)
 		}
 	}
 
 	// Watch.
-	uw, err := h.Client.(ctrlcli.WithWatch).Watch(ctx, new(core.SecretList),
-		convertSecretListOptsFromVariableListOpts(opts))
+	wopts := convertSecretListOptsFromVariableListOpts(opts)
+	wopts.Namespace = ""
+	uw, err := h.Client.(ctrlcli.WithWatch).Watch(ctx, new(core.SecretList), wopts)
 	if err != nil {
 		return nil, err
 	}
@@ -319,8 +365,12 @@ func (h *VariableHandler) OnWatch(ctx context.Context, opts ctrlcli.ListOptions)
 					continue
 				}
 
-				notes := systemmeta.DescribeResourceNotes(sec, []string{"project", "environment"})
-				vraL1IndexKey := stringx.Join("/", notes["project"], notes["environment"])
+				// Disallow if not matched.
+				if opts.Namespace != "" && !namespaceFilter.Has(sec.Namespace) {
+					continue
+				}
+
+				vraL1IndexKey := sec.Namespace + "/"
 				vraIndexKeySet := sets.New[string]()
 
 				// Send.
@@ -337,32 +387,51 @@ func (h *VariableHandler) OnWatch(ctx context.Context, opts ctrlcli.ListOptions)
 						continue
 					}
 
-					vraIndexKey := stringx.Join("/", vra.Status.Project, vra.Status.Environment, vra.Name)
+					vraIndexKey := kubemeta.GetNamespacedNameKey(vra)
 					vraIndexKeySet.Insert(vraIndexKey)
 
-					// Ignore if the same as previous.
 					prevVra, ok := vraIndexer[vraIndexKey]
 					switch {
 					default:
-						// ignore
+						// Ignore if the same as previous.
 						continue
 					case !ok:
-						// insert
+						// Add or update if not exist.
 						vraIndexer[vraIndexKey] = *vra
+						if vraReverseIndexer[vra.Name] == nil {
+							vraReverseIndexer[vra.Name] = sets.New[string]()
+							vraReverseIndexer[vra.Name].Insert(vra.Namespace)
+							e2 := e.DeepCopy()
+							e2.Object = vra
+							e2.Type = watch.Added
+							c <- *e2
+							continue
+						}
+						vraReverseIndexer[vra.Name].Insert(vra.Namespace)
+						if getHighestPriorityVariableNamespace(vraReverseIndexer[vra.Name]) != vra.Namespace {
+							continue
+						}
+						e2 := e.DeepCopy()
+						e2.Object = vra
+						e2.Type = watch.Modified
+						c <- *e2
 					case !vra.Equal(&prevVra):
-						// update
+						// Update if changed.
 						vraIndexer[vraIndexKey] = *vra
+						if opts.Namespace != "" && vra.Namespace != opts.Namespace {
+							continue
+						}
+						e2 := e.DeepCopy()
+						e2.Object = vra
+						e2.Type = watch.Modified
+						c <- *e2
 					}
-
-					// Dispatch.
-					e2 := e.DeepCopy()
-					e2.Object = vra
-					c <- *e2
 				}
 
-				// GC.
+				// Clean up and get notified.
+				var notifiedVras []walrus.Variable
 				for vraIndexKey := range vraIndexer {
-					if !strings.HasPrefix(vraIndexKey, vraL1IndexKey+"/") {
+					if !strings.HasPrefix(vraIndexKey, vraL1IndexKey) {
 						continue
 					}
 					switch {
@@ -372,8 +441,15 @@ func (h *VariableHandler) OnWatch(ctx context.Context, opts ctrlcli.ListOptions)
 					case !vraIndexKeySet.Has(vraIndexKey):
 					}
 
+					// Delete if not exist.
 					vra := vraIndexer[vraIndexKey]
 					delete(vraIndexer, vraIndexKey)
+					if vraReverseIndexer[vra.Name] != nil {
+						vraReverseIndexer[vra.Name].Delete(vra.Namespace)
+						if vraReverseIndexer[vra.Name].Len() == 0 {
+							vraReverseIndexer[vra.Name] = nil
+						}
+					}
 
 					// Ignore if not be selected by `kubectl get --field-selector=metadata.namespace=...,metadata.name=...`.
 					if fs := opts.FieldSelector; fs != nil &&
@@ -381,10 +457,33 @@ func (h *VariableHandler) OnWatch(ctx context.Context, opts ctrlcli.ListOptions)
 						continue
 					}
 
-					// Dispatch a delete event.
+					vra.ResourceVersion = sec.ResourceVersion
+					vra.Generation = sec.Generation
+					notifiedVras = append(notifiedVras, vra)
+				}
+				if len(notifiedVras) == 0 {
+					continue
+				}
+
+				// Dispatch notified event.
+				for i := range notifiedVras {
 					e2 := e.DeepCopy()
-					e2.Type = watch.Deleted
-					e2.Object = &vra
+					vra := &notifiedVras[i]
+					if opts.Namespace != "" && vraReverseIndexer[vra.Name] != nil {
+						ns := getHighestPriorityVariableNamespace(vraReverseIndexer[vra.Name])
+						if ns == opts.Namespace {
+							continue
+						}
+						vra = ptr.To(vraIndexer[ns+"/"+vra.Name])
+						e2.Type = watch.Modified
+					} else {
+						vra.DeletionTimestamp = ptr.To(meta.NewTime(time.Now()))
+						vra.DeletionGracePeriodSeconds = ptr.To[int64](0)
+						e2.Type = watch.Deleted
+					}
+					vra.ResourceVersion = sec.ResourceVersion
+					vra.Generation = sec.Generation
+					e2.Object = vra
 					c <- *e2
 				}
 			}
@@ -558,10 +657,9 @@ func convertVariableFromSecret(sec *core.Secret, name string) *walrus.Variable {
 			Sensitive: sensitive,
 		},
 		Status: walrus.VariableStatus{
-			Project:     notes["project"],
-			Environment: notes["environment"],
-			Value:       string(value),
-			Value_:      string(value_),
+			Scope:  walrus.VariableScope(notes["scope"]),
+			Value:  string(value),
+			Value_: string(value_),
 		},
 	}
 
@@ -620,16 +718,54 @@ func convertVariableListFromSecret(sec *core.Secret, opts ctrlcli.ListOptions) *
 				Sensitive: sensitive,
 			},
 			Status: walrus.VariableStatus{
-				Project:     notes["project"],
-				Environment: notes["environment"],
-				Value:       string(value),
-				Value_:      string(value_),
+				Scope:  walrus.VariableScope(notes["scope"]),
+				Value:  string(value),
+				Value_: string(value_),
 			},
 		}
 
 		kubemeta.OverwriteLastAppliedAnnotation(vra)
 		vList.Items = append(vList.Items, *vra)
 	}
+
+	return vList
+}
+
+func mergeVariableListFromSecretList(secList *core.SecretList, opts ctrlcli.ListOptions) *walrus.VariableList {
+	var vList *walrus.VariableList
+	{
+		vListCount := 0
+		for i := range secList.Items {
+			vListCount += len(secList.Items[i].Data)
+		}
+		vList = &walrus.VariableList{
+			Items: make([]walrus.Variable, 0, vListCount),
+		}
+	}
+
+	names := sets.New[string]()
+	for i := range secList.Items {
+		svList := convertVariableListFromSecret(&secList.Items[i], opts)
+		if svList == nil {
+			continue
+		}
+		for j := range svList.Items {
+			if names.Has(svList.Items[j].Name) {
+				continue
+			}
+			names.Insert(svList.Items[j].Name)
+			vList.Items = append(vList.Items, svList.Items[j])
+		}
+	}
+
+	// Sort by scope and name.
+	sort.SliceStable(vList.Items, func(i, j int) bool {
+		l, r := vList.Items[i].Status.Scope, vList.Items[j].Status.Scope
+		if l != r {
+			return l.Priority() < r.Priority()
+		}
+		return vList.Items[i].Name < vList.Items[j].Name
+	})
 
 	return vList
 }
@@ -642,8 +778,15 @@ func convertVariableListFromSecretList(secList *core.SecretList, opts ctrlcli.Li
 			(len(l) == len(r) && l < r)
 	})
 
-	vList := &walrus.VariableList{
-		Items: make([]walrus.Variable, 0, len(secList.Items)),
+	var vList *walrus.VariableList
+	{
+		vListCount := 0
+		for i := range secList.Items {
+			vListCount += len(secList.Items[i].Data)
+		}
+		vList = &walrus.VariableList{
+			Items: make([]walrus.Variable, 0, vListCount),
+		}
 	}
 
 	for i := range secList.Items {
@@ -655,4 +798,19 @@ func convertVariableListFromSecretList(secList *core.SecretList, opts ctrlcli.Li
 	}
 
 	return vList
+}
+
+func getHighestPriorityVariableNamespace(nsSet sets.Set[string]) string {
+	nss := nsSet.UnsortedList()
+	switch len(nss) {
+	case 0:
+		return ""
+	case 1:
+		return nss[0]
+	}
+	sort.Sort(sort.Reverse(sort.StringSlice(nss)))
+	if nss[0] == systemkuberes.SystemNamespaceName {
+		return nss[1]
+	}
+	return nss[0]
 }

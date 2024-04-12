@@ -3006,13 +3006,11 @@ func schema_pkg_apis_walrus_v1_VariableSpec(ref common.ReferenceCallback) common
 					"sensitive": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Sensitive indicates whether the variable is sensitive.",
-							Default:     false,
 							Type:        []string{"boolean"},
 							Format:      "",
 						},
 					},
 				},
-				Required: []string{"sensitive"},
 			},
 		},
 	}
@@ -3025,20 +3023,13 @@ func schema_pkg_apis_walrus_v1_VariableStatus(ref common.ReferenceCallback) comm
 				Description: "VariableStatus defines the observed state of Variable.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
-					"project": {
+					"scope": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Project is the project that the variable belongs to.",
+							Description: "Scope is the scope of the variable.\n\n\nPossible enum values:\n - `\"Environment\"` represents the environment scope.\n - `\"Project\"` represents the project scope.\n - `\"System\"` represents the system scope.",
 							Default:     "",
 							Type:        []string{"string"},
 							Format:      "",
-						},
-					},
-					"environment": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Environment is the environment that the variable belongs to.",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
+							Enum:        []interface{}{"Environment", "Project", "System"},
 						},
 					},
 					"value": {
@@ -3050,7 +3041,7 @@ func schema_pkg_apis_walrus_v1_VariableStatus(ref common.ReferenceCallback) comm
 						},
 					},
 				},
-				Required: []string{"project", "environment", "value"},
+				Required: []string{"scope", "value"},
 			},
 		},
 	}

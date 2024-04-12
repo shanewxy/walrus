@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"errors"
 	"reflect"
 
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -30,16 +31,51 @@ type VariableSpec struct {
 	Value *string `json:"value,omitempty"`
 
 	// Sensitive indicates whether the variable is sensitive.
-	Sensitive bool `json:"sensitive"`
+	Sensitive bool `json:"sensitive,omitempty"`
+}
+
+// VariableScope defines the scope of the variable.
+// +enum
+type VariableScope string
+
+const (
+	// VariableScopeSystem represents the system scope.
+	VariableScopeSystem VariableScope = "System"
+	// VariableScopeProject represents the project scope.
+	VariableScopeProject VariableScope = "Project"
+	// VariableScopeEnvironment represents the environment scope.
+	VariableScopeEnvironment VariableScope = "Environment"
+)
+
+func (in VariableScope) String() string {
+	return string(in)
+}
+
+func (in VariableScope) Validate() error {
+	switch in {
+	case VariableScopeSystem, VariableScopeProject, VariableScopeEnvironment:
+		return nil
+	default:
+		return errors.New("invalid variable scope")
+	}
+}
+
+func (in VariableScope) Priority() int {
+	switch in {
+	case VariableScopeProject:
+		return 1
+	case VariableScopeEnvironment:
+		return 2
+	}
+	return 0
 }
 
 // VariableStatus defines the observed state of Variable.
 type VariableStatus struct {
-	// Project is the project that the variable belongs to.
-	Project string `json:"project"`
-
-	// Environment is the environment that the variable belongs to.
-	Environment string `json:"environment"`
+	// Scope is the scope of the variable.
+	//
+	// +k8s:validation:enum=["System","Project","Environment"]
+	Scope VariableScope `json:"scope"`
 
 	// Value is the current value of the setting,
 	// it is provided as a read-only output field.
@@ -55,6 +91,7 @@ type VariableStatus struct {
 
 func (in *Variable) Equal(in2 *Variable) bool {
 	return reflect.DeepEqual(in.Spec, in2.Spec) &&
+		in.Status.Scope == in2.Status.Scope &&
 		in.Status.Value_ == in2.Status.Value_
 }
 

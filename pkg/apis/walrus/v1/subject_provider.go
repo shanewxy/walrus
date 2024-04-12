@@ -105,7 +105,7 @@ type SubjectProviderSpec struct {
 	// Type is the type of the subject provider,
 	// which is immutable.
 	//
-	// +k8s:validation:enum=["Internal","LDAP","oidc","oauth","github","gitlab","bitbucket","gitea","google","microsoft"]
+	// +k8s:validation:enum=["Internal","LDAP","OIDC","OAuth","GitHub","GitLab","Bitbucket","Gitea","Google","Microsoft"]
 	Type SubjectProviderType `json:"type"`
 
 	// DisplayName is the display name of the subject provider.

@@ -5,12 +5,15 @@
 
 package v1
 
+import (
+	v1 "github.com/seal-io/walrus/pkg/apis/walrus/v1"
+)
+
 // VariableStatusApplyConfiguration represents an declarative configuration of the VariableStatus type for use
 // with apply.
 type VariableStatusApplyConfiguration struct {
-	Project     *string `json:"project,omitempty"`
-	Environment *string `json:"environment,omitempty"`
-	Value       *string `json:"value,omitempty"`
+	Scope *v1.VariableScope `json:"scope,omitempty"`
+	Value *string           `json:"value,omitempty"`
 }
 
 // VariableStatusApplyConfiguration constructs an declarative configuration of the VariableStatus type for use with
@@ -19,19 +22,11 @@ func VariableStatus() *VariableStatusApplyConfiguration {
 	return &VariableStatusApplyConfiguration{}
 }
 
-// WithProject sets the Project field in the declarative configuration to the given value
+// WithScope sets the Scope field in the declarative configuration to the given value
 // and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the Project field is set to the value of the last call.
-func (b *VariableStatusApplyConfiguration) WithProject(value string) *VariableStatusApplyConfiguration {
-	b.Project = &value
-	return b
-}
-
-// WithEnvironment sets the Environment field in the declarative configuration to the given value
-// and returns the receiver, so that objects can be built by chaining "With" function invocations.
-// If called multiple times, the Environment field is set to the value of the last call.
-func (b *VariableStatusApplyConfiguration) WithEnvironment(value string) *VariableStatusApplyConfiguration {
-	b.Environment = &value
+// If called multiple times, the Scope field is set to the value of the last call.
+func (b *VariableStatusApplyConfiguration) WithScope(value v1.VariableScope) *VariableStatusApplyConfiguration {
+	b.Scope = &value
 	return b
 }
 
