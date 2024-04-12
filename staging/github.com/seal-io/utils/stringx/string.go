@@ -67,7 +67,7 @@ func TrimAllSpace(s string) string {
 	var b strings.Builder
 	b.Grow(len(s))
 	for _, r := range s {
-		if !IsSpace(r) {
+		if IsSpace(r) {
 			continue
 		}
 		b.WriteRune(r)

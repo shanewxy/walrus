@@ -257,10 +257,10 @@ func (o *Options) Complete(ctx context.Context) (*Config, error) {
 				"/mutate-*", "/validate-*", // Webhooks
 				"/livez", "/readyz", "/metrics", "/debug/*", // Measure
 				"/openapi", "/openapi/*", // OpenAPI
-				"/clis/*",     // CLI binaries
-				"/loopback/*", // Loopback
-				"/identify/*", // Identify
-				"/swagger/*",  // Swagger
+				"/clis/*",                // CLI binaries
+				"/loopback/*",            // Loopback
+				"/identify/*",            // Identify
+				"/swagger", "/swagger/*", // Swagger
 			},
 		}
 	}

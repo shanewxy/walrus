@@ -19,7 +19,7 @@ func index() http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case "/", "/index.html":
+		case "", "/", "/index.html":
 			_, _ = fmt.Fprint(w, indexPage)
 		default:
 			srv.ServeHTTP(w, r)
