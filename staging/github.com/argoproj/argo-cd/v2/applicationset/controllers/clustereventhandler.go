@@ -19,24 +19,24 @@ import (
 // clusterSecretEventHandler is used when watching Secrets to check if they are ArgoCD Cluster Secrets, and if so
 // requeue any related ApplicationSets.
 type clusterSecretEventHandler struct {
-	//handler.EnqueueRequestForOwner
+	// handler.EnqueueRequestForOwner
 	Log    log.FieldLogger
 	Client client.Client
 }
 
-func (h *clusterSecretEventHandler) Create(e event.CreateEvent, q workqueue.RateLimitingInterface) {
+func (h *clusterSecretEventHandler) Create(_ context.Context, e event.CreateEvent, q workqueue.RateLimitingInterface) {
 	h.queueRelatedAppGenerators(q, e.Object)
 }
 
-func (h *clusterSecretEventHandler) Update(e event.UpdateEvent, q workqueue.RateLimitingInterface) {
+func (h *clusterSecretEventHandler) Update(_ context.Context, e event.UpdateEvent, q workqueue.RateLimitingInterface) {
 	h.queueRelatedAppGenerators(q, e.ObjectNew)
 }
 
-func (h *clusterSecretEventHandler) Delete(e event.DeleteEvent, q workqueue.RateLimitingInterface) {
+func (h *clusterSecretEventHandler) Delete(_ context.Context, e event.DeleteEvent, q workqueue.RateLimitingInterface) {
 	h.queueRelatedAppGenerators(q, e.Object)
 }
 
-func (h *clusterSecretEventHandler) Generic(e event.GenericEvent, q workqueue.RateLimitingInterface) {
+func (h *clusterSecretEventHandler) Generic(_ context.Context, e event.GenericEvent, q workqueue.RateLimitingInterface) {
 	h.queueRelatedAppGenerators(q, e.Object)
 }
 

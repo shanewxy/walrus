@@ -13,7 +13,7 @@ type Broadcaster struct {
 }
 
 // OnAdd provides a mock function with given fields: _a0
-func (_m *Broadcaster) OnAdd(_a0 interface{}) {
+func (_m *Broadcaster) OnAdd(_a0 interface{}, isInInitialList bool) {
 	_m.Called(_a0)
 }
 

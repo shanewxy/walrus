@@ -30,6 +30,10 @@ import (
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 	"k8s.io/client-go/tools/clientcmd"
+	"sigs.k8s.io/controller-runtime/pkg/metrics/server"
+	ctrlwebhook "sigs.k8s.io/controller-runtime/pkg/webhook"
+	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/cache"
 
 	"github.com/argoproj/argo-cd/v2/applicationset/services"
 	appv1alpha1 "github.com/argoproj/argo-cd/v2/pkg/apis/application/v1alpha1"
@@ -114,14 +118,24 @@ func NewCommand() *cobra.Command {
 			}
 
 			mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
-				Scheme:                 scheme,
-				MetricsBindAddress:     metricsAddr,
-				Namespace:              watchedNamespace,
+				Scheme: scheme,
+				Cache: cache.Options{
+					DefaultNamespaces: map[string]cache.Config{
+						watchedNamespace: {},
+					},
+				},
+				Metrics: server.Options{
+					BindAddress: metricsAddr,
+				},
+				Client: client.Options{
+					DryRun: &dryRun,
+				},
+				WebhookServer: ctrlwebhook.NewServer(ctrlwebhook.Options{
+					Port: 9443,
+				}),
 				HealthProbeBindAddress: probeBindAddr,
-				Port:                   9443,
 				LeaderElection:         enableLeaderElection,
 				LeaderElectionID:       "58ac56fa.applicationsets.argoproj.io",
-				DryRunClient:           dryRun,
 			})
 
 			if err != nil {
