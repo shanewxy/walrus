@@ -25,6 +25,7 @@ import (
 	"k8s.io/gengo/generator"
 	"k8s.io/gengo/namer"
 	"k8s.io/gengo/types"
+	"path"
 )
 
 // groupInterfaceGenerator generates the per-group interface file.
@@ -69,7 +70,11 @@ func (g *groupInterfaceGenerator) GenerateType(c *generator.Context, t *types.Ty
 
 	versions := make([]versionData, 0, len(g.groupVersions.Versions))
 	for _, version := range g.groupVersions.Versions {
-		gv := clientgentypes.GroupVersion{Group: g.groupVersions.Group, Version: version.Version}
+		gv := clientgentypes.GroupVersion{
+			Group:   g.groupVersions.Group,
+			Version: version.Version,
+			Package: path.Base(path.Dir(version.Package)),
+		}
 		versionPackage := filepath.Join(g.outputPackage, strings.ToLower(gv.Version.NonEmpty()))
 		iface := c.Universe.Type(types.Name{Package: versionPackage, Name: "Interface"})
 		versions = append(versions, versionData{

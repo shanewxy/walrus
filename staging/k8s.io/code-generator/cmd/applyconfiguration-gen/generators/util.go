@@ -19,6 +19,7 @@ package generators
 import (
 	"io"
 	"sort"
+	stdpath "path"
 	"strings"
 
 	clientgentypes "k8s.io/code-generator/cmd/client-gen/types"
@@ -65,13 +66,17 @@ type group struct {
 	GroupGoName string
 	Name        string
 	Versions    []*version
+	Package     string
 }
 
 type groupSort []group
 
 func (g groupSort) Len() int { return len(g) }
 func (g groupSort) Less(i, j int) bool {
-	return strings.ToLower(g[i].Name) < strings.ToLower(g[j].Name)
+	if g[i].Name != g[j].Name {
+		return strings.ToLower(g[i].Name) < strings.ToLower(g[j].Name)
+	}
+	return g[i].Package < g[j].Package
 }
 func (g groupSort) Swap(i, j int) { g[i], g[j] = g[j], g[i] }
 
@@ -109,13 +114,18 @@ func (g *utilGenerator) GenerateType(c *generator.Context, _ *types.Type, w io.W
 	schemeGVs := make(map[*version]*types.Type)
 
 	for groupPackageName, groupVersions := range g.groupVersions {
-		group := group{
+		gp := group{
 			GroupGoName: g.groupGoNames[groupPackageName],
 			Name:        groupVersions.Group.NonEmpty(),
 			Versions:    []*version{},
+			Package:     stdpath.Base(stdpath.Dir(groupVersions.Versions[0].Package)),
 		}
 		for _, v := range groupVersions.Versions {
-			gv := clientgentypes.GroupVersion{Group: groupVersions.Group, Version: v.Version}
+			gv := clientgentypes.GroupVersion{
+				Group:   groupVersions.Group,
+				Version: v.Version,
+				Package: stdpath.Base(stdpath.Dir(v.Package)),
+			}
 			version := &version{
 				Name:      v.Version.NonEmpty(),
 				GoName:    namer.IC(v.Version.NonEmpty()),
@@ -125,10 +135,10 @@ func (g *utilGenerator) GenerateType(c *generator.Context, _ *types.Type, w io.W
 				Package: g.typesForGroupVersion[gv][0].Type.Name.Package,
 				Name:    "SchemeGroupVersion",
 			})
-			group.Versions = append(group.Versions, version)
+			gp.Versions = append(gp.Versions, version)
 		}
-		sort.Sort(versionSort(group.Versions))
-		groups = append(groups, group)
+		sort.Sort(versionSort(gp.Versions))
+		groups = append(groups, gp)
 	}
 	sort.Sort(groupSort(groups))
 

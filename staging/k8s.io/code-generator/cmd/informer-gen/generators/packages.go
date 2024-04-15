@@ -135,11 +135,13 @@ func Packages(context *generator.Context, arguments *args.GeneratorArgs) generat
 				klog.Fatalf("error constructing internal group version for package %q", p.Path)
 			}
 			gv.Group = clientgentypes.Group(p.Path[lastSlash+1:])
+			gv.Package = p.Path[lastSlash+1:]
 			targetGroupVersions = internalGroupVersions
 		} else {
 			parts := strings.Split(p.Path, "/")
 			gv.Group = clientgentypes.Group(parts[len(parts)-2])
 			gv.Version = clientgentypes.Version(parts[len(parts)-1])
+			gv.Package = parts[len(parts)-2]
 			targetGroupVersions = externalGroupVersions
 		}
 		groupPackageName := gv.Group.NonEmpty()
@@ -157,6 +159,9 @@ func Packages(context *generator.Context, arguments *args.GeneratorArgs) generat
 		groupGoNames[groupPackageName] = namer.IC(strings.Split(gv.Group.NonEmpty(), ".")[0])
 		if override := types.ExtractCommentTags("+", p.Comments)["groupGoName"]; override != nil {
 			groupGoNames[groupPackageName] = namer.IC(override[0])
+		}
+		if gv.Group.PackageName() != gv.Package {
+			groupGoNames[groupPackageName] = groupGoNames[groupPackageName] + gv.Package
 		}
 
 		var typesToGenerate []*types.Type

@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	stdpath "path"
 	"path/filepath"
 	"strings"
 
@@ -61,19 +62,27 @@ func (g *GenScheme) Imports(c *generator.Context) (imports []string) {
 	imports = append(imports, g.ImportTracker.ImportLines()...)
 	for _, group := range g.Groups {
 		for _, version := range group.Versions {
-			packagePath := g.InputPackages[clientgentypes.GroupVersion{Group: group.Group, Version: version.Version}]
-			groupAlias := strings.ToLower(g.GroupGoNames[clientgentypes.GroupVersion{Group: group.Group, Version: version.Version}])
+			gv := clientgentypes.GroupVersion{
+				Group:   group.Group,
+				Version: version.Version,
+				Package: stdpath.Base(stdpath.Dir(version.Package)),
+			}
+			packagePath := g.InputPackages[gv]
+			groupAlias := g.GroupGoNames[gv]
 			if g.CreateRegistry {
 				// import the install package for internal clientsets instead of the type package with register.go
 				if version.Version != "" {
 					packagePath = filepath.Dir(packagePath)
 				}
 				packagePath = filepath.Join(packagePath, "install")
-
-				imports = append(imports, fmt.Sprintf("%s \"%s\"", groupAlias, path.Vendorless(packagePath)))
+				imports = append(imports, fmt.Sprintf("%s \"%s\"", strings.ToLower(groupAlias), path.Vendorless(packagePath)))
 				break
 			} else {
-				imports = append(imports, fmt.Sprintf("%s%s \"%s\"", groupAlias, strings.ToLower(version.Version.NonEmpty()), path.Vendorless(packagePath)))
+				groupAlias += version.Version.NonEmpty()
+				if gv.Group.PackageName() != gv.Package {
+					groupAlias += gv.Package
+				}
+				imports = append(imports, fmt.Sprintf("%s \"%s\"", strings.ToLower(groupAlias), path.Vendorless(packagePath)))
 			}
 		}
 	}

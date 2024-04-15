@@ -259,6 +259,7 @@ func groupVersion(p *types.Package) (gv clientgentypes.GroupVersion) {
 	parts := strings.Split(p.Path, "/")
 	gv.Group = clientgentypes.Group(parts[len(parts)-2])
 	gv.Version = clientgentypes.Version(parts[len(parts)-1])
+	gv.Package = string(gv.Group)
 
 	// If there's a comment of the form "// +groupName=somegroup" or
 	// "// +groupName=somegroup.foo.bar.io", use the first field (somegroup) as the name of the

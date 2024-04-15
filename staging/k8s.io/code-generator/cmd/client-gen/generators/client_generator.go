@@ -18,6 +18,7 @@ limitations under the License.
 package generators
 
 import (
+	stdpath "path"
 	"path/filepath"
 	"strings"
 
@@ -277,6 +278,7 @@ func applyGroupOverrides(universe types.Universe, customArgs *clientgenargs.Cust
 			newGV := clientgentypes.GroupVersion{
 				Group:   clientgentypes.Group(override[0]),
 				Version: gv.Version,
+				Package: gv.Package,
 			}
 			changes[gv] = newGV
 		}
@@ -288,6 +290,7 @@ func applyGroupOverrides(universe types.Universe, customArgs *clientgenargs.Cust
 		gv := clientgentypes.GroupVersion{
 			Group:   gvs.Group,
 			Version: gvs.Versions[0].Version, // we only need a version, and the first will do
+			Package: stdpath.Base(stdpath.Dir(gvs.Versions[0].Package)),
 		}
 		if newGV, ok := changes[gv]; ok {
 			// There's an override, so use it.
@@ -379,7 +382,11 @@ func Packages(context *generator.Context, arguments *args.GeneratorArgs) generat
 	gvPackages := customArgs.GroupVersionPackages()
 	for _, group := range customArgs.Groups {
 		for _, version := range group.Versions {
-			gv := clientgentypes.GroupVersion{Group: group.Group, Version: version.Version}
+			gv := clientgentypes.GroupVersion{
+				Group:   group.Group,
+				Version: version.Version,
+				Package: stdpath.Base(stdpath.Dir(version.Package)),
+			}
 			types := gvToTypes[gv]
 			inputPath := gvPackages[gv]
 			packageList = append(packageList, packageForGroup(gv, orderer.OrderTypes(types), clientsetPackage, group.PackageName, groupGoNames[gv], customArgs.ClientsetAPIPath, arguments.OutputBase, inputPath, customArgs.ApplyConfigurationPackage, boilerplate))

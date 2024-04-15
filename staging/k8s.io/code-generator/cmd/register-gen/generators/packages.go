@@ -79,6 +79,7 @@ func Packages(context *generator.Context, arguments *args.GeneratorArgs) generat
 			}
 			gv.Group = clientgentypes.Group(pathParts[len(pathParts)-2])
 			gv.Version = clientgentypes.Version(pathParts[len(pathParts)-1])
+			gv.Package = string(gv.Group)
 
 			// if there is a comment of the form "// +groupName=somegroup" or "// +groupName=somegroup.foo.bar.io",
 			// extract the fully qualified API group name from it and overwrite the group inferred from the package path

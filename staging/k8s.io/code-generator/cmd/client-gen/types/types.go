@@ -65,6 +65,7 @@ type PackageVersion struct {
 type GroupVersion struct {
 	Group   Group
 	Version Version
+	Package string // NB(thxCode): fight against with the same group/version but different packages, like ArgoWorkflows and ArgoCD.
 }
 
 func (gv GroupVersion) ToAPIVersion() string {
@@ -88,6 +89,7 @@ type GroupVersionInfo struct {
 	Version              Version
 	PackageAlias         string
 	GroupGoName          string
+	SafeGroupGoName      string
 	LowerCaseGroupGoName string
 }
 

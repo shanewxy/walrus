@@ -117,7 +117,12 @@ func (ca *CustomArgs) GroupVersionPackages() map[types.GroupVersion]string {
 	res := map[types.GroupVersion]string{}
 	for _, pkg := range ca.Groups {
 		for _, v := range pkg.Versions {
-			res[types.GroupVersion{Group: pkg.Group, Version: v.Version}] = v.Package
+			gv := types.GroupVersion{
+				Group:   pkg.Group,
+				Version: v.Version,
+				Package: path.Base(path.Dir(v.Package)),
+			}
+			res[gv] = v.Package
 		}
 	}
 	return res

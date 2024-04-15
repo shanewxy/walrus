@@ -23,6 +23,7 @@ import (
 	"strings"
 
 	"k8s.io/gengo/namer"
+	stdpath "path"
 )
 
 // ToGroupVersion turns "group/version" string into a GroupVersion struct. It reports error
@@ -36,10 +37,12 @@ func ToGroupVersion(gv string) (GroupVersion, error) {
 
 	switch strings.Count(gv, "/") {
 	case 0:
-		return GroupVersion{Group(gv), ""}, nil
+		g := Group(gv)
+		return GroupVersion{Group(gv), "", g.PackageName()}, nil
 	case 1:
 		i := strings.Index(gv, "/")
-		return GroupVersion{Group(gv[:i]), Version(gv[i+1:])}, nil
+		g := Group(gv[:i])
+		return GroupVersion{Group(gv[:i]), Version(gv[i+1:]), g.PackageName()}, nil
 	default:
 		return GroupVersion{}, fmt.Errorf("unexpected GroupVersion string: %v", gv)
 	}
@@ -89,13 +92,25 @@ func ToGroupVersionInfo(groups []GroupVersions, groupGoNames map[GroupVersion]st
 	var groupVersionPackages []GroupVersionInfo
 	for _, group := range groups {
 		for _, version := range group.Versions {
-			groupGoName := groupGoNames[GroupVersion{Group: group.Group, Version: version.Version}]
+			gv := GroupVersion{
+				Group:   group.Group,
+				Version: version.Version,
+				Package: stdpath.Base(stdpath.Dir(version.Package)),
+			}
+			groupGoName := groupGoNames[gv]
+			safeGroupGoName := groupGoName
+			packageAlias := strings.ToLower(groupGoName + version.Version.NonEmpty())
+			if gv.Group.PackageName() != gv.Package {
+				packageAlias += gv.Package
+				safeGroupGoName += gv.Package
+			}
 			groupVersionPackages = append(groupVersionPackages, GroupVersionInfo{
 				Group:                Group(namer.IC(group.Group.NonEmpty())),
 				Version:              Version(namer.IC(version.Version.String())),
-				PackageAlias:         strings.ToLower(groupGoName + version.Version.NonEmpty()),
+				PackageAlias:         packageAlias,
 				GroupGoName:          groupGoName,
-				LowerCaseGroupGoName: namer.IL(groupGoName),
+				SafeGroupGoName:      safeGroupGoName,
+				LowerCaseGroupGoName: namer.IL(safeGroupGoName),
 			})
 		}
 	}
@@ -106,7 +121,12 @@ func ToGroupInstallPackages(groups []GroupVersions, groupGoNames map[GroupVersio
 	var groupInstallPackages []GroupInstallPackage
 	for _, group := range groups {
 		defaultVersion := defaultVersion(group.Versions)
-		groupGoName := groupGoNames[GroupVersion{Group: group.Group, Version: defaultVersion}]
+		gv := GroupVersion{
+			Group:   group.Group,
+			Version: defaultVersion,
+			Package: stdpath.Base(stdpath.Dir(group.Versions[0].Package)),
+		}
+		groupGoName := groupGoNames[gv]
 		groupInstallPackages = append(groupInstallPackages, GroupInstallPackage{
 			Group:               Group(namer.IC(group.Group.NonEmpty())),
 			InstallPackageAlias: strings.ToLower(groupGoName),
@@ -116,6 +136,6 @@ func ToGroupInstallPackages(groups []GroupVersions, groupGoNames map[GroupVersio
 }
 
 // NormalizeGroupVersion calls normalizes the GroupVersion.
-//func NormalizeGroupVersion(gv GroupVersion) GroupVersion {
+// func NormalizeGroupVersion(gv GroupVersion) GroupVersion {
 //	return GroupVersion{Group: gv.Group.NonEmpty(), Version: gv.Version, NonEmptyVersion: normalization.Version(gv.Version)}
-//}
+// }

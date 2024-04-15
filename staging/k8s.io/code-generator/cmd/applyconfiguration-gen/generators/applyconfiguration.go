@@ -158,11 +158,14 @@ func (g *applyConfigurationGenerator) generateWithFuncs(t *types.Type, typeParam
 			}
 			if memberParams.Member.Embedded {
 				g.generateWithFuncs(member.Type, typeParams, sw, &memberParams)
-				if !jsonTags.inline {
+				if jsonTags.inline {
+					continue
+				}
+				if memberType.Elem != nil {
 					// non-inlined embeds are nillable and need a "ensure exists" utility function
 					sw.Do(ensureEmbedExists, memberParams)
+					continue
 				}
-				continue
 			}
 
 			// For slices where the items are generated apply configuration types, accept varargs of

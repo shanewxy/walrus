@@ -19,6 +19,7 @@ package fake
 import (
 	"fmt"
 	"io"
+	stdpath "path"
 	"path/filepath"
 	"strings"
 
@@ -63,9 +64,17 @@ func (g *genClientset) Imports(c *generator.Context) (imports []string) {
 			groupClientPackage := filepath.Join(g.fakeClientsetPackage, "typed", strings.ToLower(group.PackageName), strings.ToLower(version.NonEmpty()))
 			fakeGroupClientPackage := filepath.Join(groupClientPackage, "fake")
 
-			groupAlias := strings.ToLower(g.groupGoNames[clientgentypes.GroupVersion{Group: group.Group, Version: version.Version}])
-			imports = append(imports, fmt.Sprintf("%s%s \"%s\"", groupAlias, strings.ToLower(version.NonEmpty()), groupClientPackage))
-			imports = append(imports, fmt.Sprintf("fake%s%s \"%s\"", groupAlias, strings.ToLower(version.NonEmpty()), fakeGroupClientPackage))
+			gv := clientgentypes.GroupVersion{
+				Group:   group.Group,
+				Version: version.Version,
+				Package: stdpath.Base(stdpath.Dir(version.Package)),
+			}
+			groupAlias := g.groupGoNames[gv] + version.NonEmpty()
+			if gv.Group.PackageName() != gv.Package {
+				groupAlias += gv.Package
+			}
+			imports = append(imports, fmt.Sprintf("%s \"%s\"", strings.ToLower(groupAlias), groupClientPackage))
+			imports = append(imports, fmt.Sprintf("fake%s \"%s\"", strings.ToLower(groupAlias), fakeGroupClientPackage))
 		}
 	}
 	// the package that has the clientset Interface
@@ -94,11 +103,12 @@ func (g *genClientset) GenerateType(c *generator.Context, t *types.Type, w io.Wr
 
 	for _, group := range allGroups {
 		m := map[string]interface{}{
-			"group":        group.Group,
-			"version":      group.Version,
-			"PackageAlias": group.PackageAlias,
-			"GroupGoName":  group.GroupGoName,
-			"Version":      namer.IC(group.Version.String()),
+			"group":           group.Group,
+			"version":         group.Version,
+			"PackageAlias":    group.PackageAlias,
+			"GroupGoName":     group.GroupGoName,
+			"SafeGroupGoName": group.SafeGroupGoName,
+			"Version":         namer.IC(group.Version.String()),
 		}
 
 		sw.Do(clientsetInterfaceImplTemplate, m)
@@ -164,7 +174,7 @@ var (
 
 var clientsetInterfaceImplTemplate = `
 // $.GroupGoName$$.Version$ retrieves the $.GroupGoName$$.Version$Client
-func (c *Clientset) $.GroupGoName$$.Version$() $.PackageAlias$.$.GroupGoName$$.Version$Interface {
+func (c *Clientset) $.SafeGroupGoName$$.Version$() $.PackageAlias$.$.GroupGoName$$.Version$Interface {
 	return &fake$.PackageAlias$.Fake$.GroupGoName$$.Version${Fake: &c.Fake}
 }
 `
