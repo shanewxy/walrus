@@ -49,13 +49,13 @@ func NewFilteredWorkflowEventBindingInformer(client clientset.Interface, namespa
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.ArgoprojV1alpha1().WorkflowEventBindings(namespace).List(context.TODO(), options)
+				return client.ArgoprojworkflowV1alpha1().WorkflowEventBindings(namespace).List(context.TODO(), options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.ArgoprojV1alpha1().WorkflowEventBindings(namespace).Watch(context.TODO(), options)
+				return client.ArgoprojworkflowV1alpha1().WorkflowEventBindings(namespace).Watch(context.TODO(), options)
 			},
 		},
 		&workflowv1alpha1.WorkflowEventBinding{},

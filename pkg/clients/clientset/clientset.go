@@ -13,6 +13,7 @@ import (
 	admissionregistrationv1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/admissionregistration/v1"
 	apiextensionsv1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/apiextensions/v1"
 	apiregistrationv1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/apiregistration/v1"
+	argoprojv1alpha1application "github.com/seal-io/walrus/pkg/clients/clientset/typed/application/v1alpha1"
 	appsv1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/apps/v1"
 	authenticationv1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/authentication/v1"
 	authorizationv1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/authorization/v1"
@@ -29,7 +30,7 @@ import (
 	storagev1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/storage/v1"
 	walrusv1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/walrus/v1"
 	walruscorev1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/walruscore/v1"
-	argoprojv1alpha1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/workflow/v1alpha1"
+	argoprojv1alpha1workflow "github.com/seal-io/walrus/pkg/clients/clientset/typed/workflow/v1alpha1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
@@ -57,33 +58,35 @@ type Interface interface {
 	StorageV1() storagev1.StorageV1Interface
 	ApiextensionsV1() apiextensionsv1.ApiextensionsV1Interface
 	ApiregistrationV1() apiregistrationv1.ApiregistrationV1Interface
-	ArgoprojV1alpha1() argoprojv1alpha1.ArgoprojV1alpha1Interface
+	ArgoprojworkflowV1alpha1() argoprojv1alpha1workflow.ArgoprojV1alpha1Interface
+	ArgoprojapplicationV1alpha1() argoprojv1alpha1application.ArgoprojV1alpha1Interface
 }
 
 // Clientset contains the clients for groups.
 type Clientset struct {
 	*discovery.DiscoveryClient
-	walruscoreV1            *walruscorev1.WalruscoreV1Client
-	walrusV1                *walrusv1.WalrusV1Client
-	admissionV1             *admissionv1.AdmissionV1Client
-	admissionregistrationV1 *admissionregistrationv1.AdmissionregistrationV1Client
-	appsV1                  *appsv1.AppsV1Client
-	authenticationV1        *authenticationv1.AuthenticationV1Client
-	authorizationV1         *authorizationv1.AuthorizationV1Client
-	autoscalingV1           *autoscalingv1.AutoscalingV1Client
-	autoscalingV2           *autoscalingv2.AutoscalingV2Client
-	batchV1                 *batchv1.BatchV1Client
-	certificatesV1          *certificatesv1.CertificatesV1Client
-	coordinationV1          *coordinationv1.CoordinationV1Client
-	coreV1                  *corev1.CoreV1Client
-	discoveryV1             *discoveryv1.DiscoveryV1Client
-	eventsV1                *eventsv1.EventsV1Client
-	rbacV1                  *rbacv1.RbacV1Client
-	schedulingV1            *schedulingv1.SchedulingV1Client
-	storageV1               *storagev1.StorageV1Client
-	apiextensionsV1         *apiextensionsv1.ApiextensionsV1Client
-	apiregistrationV1       *apiregistrationv1.ApiregistrationV1Client
-	argoprojV1alpha1        *argoprojv1alpha1.ArgoprojV1alpha1Client
+	walruscoreV1                *walruscorev1.WalruscoreV1Client
+	walrusV1                    *walrusv1.WalrusV1Client
+	admissionV1                 *admissionv1.AdmissionV1Client
+	admissionregistrationV1     *admissionregistrationv1.AdmissionregistrationV1Client
+	appsV1                      *appsv1.AppsV1Client
+	authenticationV1            *authenticationv1.AuthenticationV1Client
+	authorizationV1             *authorizationv1.AuthorizationV1Client
+	autoscalingV1               *autoscalingv1.AutoscalingV1Client
+	autoscalingV2               *autoscalingv2.AutoscalingV2Client
+	batchV1                     *batchv1.BatchV1Client
+	certificatesV1              *certificatesv1.CertificatesV1Client
+	coordinationV1              *coordinationv1.CoordinationV1Client
+	coreV1                      *corev1.CoreV1Client
+	discoveryV1                 *discoveryv1.DiscoveryV1Client
+	eventsV1                    *eventsv1.EventsV1Client
+	rbacV1                      *rbacv1.RbacV1Client
+	schedulingV1                *schedulingv1.SchedulingV1Client
+	storageV1                   *storagev1.StorageV1Client
+	apiextensionsV1             *apiextensionsv1.ApiextensionsV1Client
+	apiregistrationV1           *apiregistrationv1.ApiregistrationV1Client
+	argoprojworkflowV1alpha1    *argoprojv1alpha1workflow.ArgoprojV1alpha1Client
+	argoprojapplicationV1alpha1 *argoprojv1alpha1application.ArgoprojV1alpha1Client
 }
 
 // WalruscoreV1 retrieves the WalruscoreV1Client
@@ -187,8 +190,13 @@ func (c *Clientset) ApiregistrationV1() apiregistrationv1.ApiregistrationV1Inter
 }
 
 // ArgoprojV1alpha1 retrieves the ArgoprojV1alpha1Client
-func (c *Clientset) ArgoprojV1alpha1() argoprojv1alpha1.ArgoprojV1alpha1Interface {
-	return c.argoprojV1alpha1
+func (c *Clientset) ArgoprojworkflowV1alpha1() argoprojv1alpha1workflow.ArgoprojV1alpha1Interface {
+	return c.argoprojworkflowV1alpha1
+}
+
+// ArgoprojV1alpha1 retrieves the ArgoprojV1alpha1Client
+func (c *Clientset) ArgoprojapplicationV1alpha1() argoprojv1alpha1application.ArgoprojV1alpha1Interface {
+	return c.argoprojapplicationV1alpha1
 }
 
 // Discovery retrieves the DiscoveryClient
@@ -315,7 +323,11 @@ func NewForConfigAndClient(c *rest.Config, httpClient *http.Client) (*Clientset,
 	if err != nil {
 		return nil, err
 	}
-	cs.argoprojV1alpha1, err = argoprojv1alpha1.NewForConfigAndClient(&configShallowCopy, httpClient)
+	cs.argoprojworkflowV1alpha1, err = argoprojv1alpha1workflow.NewForConfigAndClient(&configShallowCopy, httpClient)
+	if err != nil {
+		return nil, err
+	}
+	cs.argoprojapplicationV1alpha1, err = argoprojv1alpha1application.NewForConfigAndClient(&configShallowCopy, httpClient)
 	if err != nil {
 		return nil, err
 	}
@@ -360,7 +372,8 @@ func New(c rest.Interface) *Clientset {
 	cs.storageV1 = storagev1.New(c)
 	cs.apiextensionsV1 = apiextensionsv1.New(c)
 	cs.apiregistrationV1 = apiregistrationv1.New(c)
-	cs.argoprojV1alpha1 = argoprojv1alpha1.New(c)
+	cs.argoprojworkflowV1alpha1 = argoprojv1alpha1workflow.New(c)
+	cs.argoprojapplicationV1alpha1 = argoprojv1alpha1application.New(c)
 
 	cs.DiscoveryClient = discovery.NewDiscoveryClient(c)
 	return &cs

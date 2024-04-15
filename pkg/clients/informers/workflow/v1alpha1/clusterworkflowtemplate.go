@@ -48,13 +48,13 @@ func NewFilteredClusterWorkflowTemplateInformer(client clientset.Interface, resy
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.ArgoprojV1alpha1().ClusterWorkflowTemplates().List(context.TODO(), options)
+				return client.ArgoprojworkflowV1alpha1().ClusterWorkflowTemplates().List(context.TODO(), options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.ArgoprojV1alpha1().ClusterWorkflowTemplates().Watch(context.TODO(), options)
+				return client.ArgoprojworkflowV1alpha1().ClusterWorkflowTemplates().Watch(context.TODO(), options)
 			},
 		},
 		&workflowv1alpha1.ClusterWorkflowTemplate{},

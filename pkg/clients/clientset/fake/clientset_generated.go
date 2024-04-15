@@ -15,6 +15,8 @@ import (
 	fakeapiextensionsv1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/apiextensions/v1/fake"
 	apiregistrationv1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/apiregistration/v1"
 	fakeapiregistrationv1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/apiregistration/v1/fake"
+	argoprojv1alpha1application "github.com/seal-io/walrus/pkg/clients/clientset/typed/application/v1alpha1"
+	fakeargoprojv1alpha1application "github.com/seal-io/walrus/pkg/clients/clientset/typed/application/v1alpha1/fake"
 	appsv1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/apps/v1"
 	fakeappsv1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/apps/v1/fake"
 	authenticationv1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/authentication/v1"
@@ -47,8 +49,8 @@ import (
 	fakewalrusv1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/walrus/v1/fake"
 	walruscorev1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/walruscore/v1"
 	fakewalruscorev1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/walruscore/v1/fake"
-	argoprojv1alpha1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/workflow/v1alpha1"
-	fakeargoprojv1alpha1 "github.com/seal-io/walrus/pkg/clients/clientset/typed/workflow/v1alpha1/fake"
+	argoprojv1alpha1workflow "github.com/seal-io/walrus/pkg/clients/clientset/typed/workflow/v1alpha1"
+	fakeargoprojv1alpha1workflow "github.com/seal-io/walrus/pkg/clients/clientset/typed/workflow/v1alpha1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
@@ -207,6 +209,11 @@ func (c *Clientset) ApiregistrationV1() apiregistrationv1.ApiregistrationV1Inter
 }
 
 // ArgoprojV1alpha1 retrieves the ArgoprojV1alpha1Client
-func (c *Clientset) ArgoprojV1alpha1() argoprojv1alpha1.ArgoprojV1alpha1Interface {
-	return &fakeargoprojv1alpha1.FakeArgoprojV1alpha1{Fake: &c.Fake}
+func (c *Clientset) ArgoprojworkflowV1alpha1() argoprojv1alpha1workflow.ArgoprojV1alpha1Interface {
+	return &fakeargoprojv1alpha1workflow.FakeArgoprojV1alpha1{Fake: &c.Fake}
+}
+
+// ArgoprojV1alpha1 retrieves the ArgoprojV1alpha1Client
+func (c *Clientset) ArgoprojapplicationV1alpha1() argoprojv1alpha1application.ArgoprojV1alpha1Interface {
+	return &fakeargoprojv1alpha1application.FakeArgoprojV1alpha1{Fake: &c.Fake}
 }

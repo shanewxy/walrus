@@ -6,7 +6,8 @@
 package scheme
 
 import (
-	argoprojv1alpha1 "github.com/argoproj/argo-workflows/v3/pkg/apis/workflow/v1alpha1"
+	argoprojv1alpha1application "github.com/argoproj/argo-cd/v2/pkg/apis/application/v1alpha1"
+	argoprojv1alpha1workflow "github.com/argoproj/argo-workflows/v3/pkg/apis/workflow/v1alpha1"
 	walrusv1 "github.com/seal-io/walrus/pkg/apis/walrus/v1"
 	walruscorev1 "github.com/seal-io/walrus/pkg/apis/walruscore/v1"
 	admissionv1 "k8s.io/api/admission/v1"
@@ -58,7 +59,8 @@ var localSchemeBuilder = runtime.SchemeBuilder{
 	storagev1.AddToScheme,
 	apiextensionsv1.AddToScheme,
 	apiregistrationv1.AddToScheme,
-	argoprojv1alpha1.AddToScheme,
+	argoprojv1alpha1workflow.AddToScheme,
+	argoprojv1alpha1application.AddToScheme,
 }
 
 // AddToScheme adds all types of this clientset into the given scheme. This allows composition

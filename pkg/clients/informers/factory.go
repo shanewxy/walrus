@@ -14,6 +14,7 @@ import (
 	admissionregistration "github.com/seal-io/walrus/pkg/clients/informers/admissionregistration"
 	apiextensions "github.com/seal-io/walrus/pkg/clients/informers/apiextensions"
 	apiregistration "github.com/seal-io/walrus/pkg/clients/informers/apiregistration"
+	application "github.com/seal-io/walrus/pkg/clients/informers/application"
 	apps "github.com/seal-io/walrus/pkg/clients/informers/apps"
 	autoscaling "github.com/seal-io/walrus/pkg/clients/informers/autoscaling"
 	batch "github.com/seal-io/walrus/pkg/clients/informers/batch"
@@ -259,6 +260,7 @@ type SharedInformerFactory interface {
 	Admissionregistration() admissionregistration.Interface
 	Apiextensions() apiextensions.Interface
 	Apiregistration() apiregistration.Interface
+	Argoprojapplication() application.Interface
 	Apps() apps.Interface
 	Autoscaling() autoscaling.Interface
 	Batch() batch.Interface
@@ -272,7 +274,7 @@ type SharedInformerFactory interface {
 	Storage() storage.Interface
 	Walrus() walrus.Interface
 	Walruscore() walruscore.Interface
-	Argoproj() workflow.Interface
+	Argoprojworkflow() workflow.Interface
 }
 
 func (f *sharedInformerFactory) Admissionregistration() admissionregistration.Interface {
@@ -285,6 +287,10 @@ func (f *sharedInformerFactory) Apiextensions() apiextensions.Interface {
 
 func (f *sharedInformerFactory) Apiregistration() apiregistration.Interface {
 	return apiregistration.New(f, f.namespace, f.tweakListOptions)
+}
+
+func (f *sharedInformerFactory) Argoprojapplication() application.Interface {
+	return application.New(f, f.namespace, f.tweakListOptions)
 }
 
 func (f *sharedInformerFactory) Apps() apps.Interface {
@@ -339,6 +345,6 @@ func (f *sharedInformerFactory) Walruscore() walruscore.Interface {
 	return walruscore.New(f, f.namespace, f.tweakListOptions)
 }
 
-func (f *sharedInformerFactory) Argoproj() workflow.Interface {
+func (f *sharedInformerFactory) Argoprojworkflow() workflow.Interface {
 	return workflow.New(f, f.namespace, f.tweakListOptions)
 }
