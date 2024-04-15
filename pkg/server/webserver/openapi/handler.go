@@ -138,18 +138,19 @@ func decoratePaths(spec *openspec3.OpenAPI) {
 			_, pRes, _ = strings.Cut(path, "/namespaces/{namespace}/")
 			pRes, _, _ = strings.Cut(pRes, "/")
 		}
-		decoratePathsOperation(pathV.Get, pResM, pRes)
-		decoratePathsOperation(pathV.Put, pResM, pRes)
-		decoratePathsOperation(pathV.Post, pResM, pRes)
-		decoratePathsOperation(pathV.Delete, pResM, pRes)
-		decoratePathsOperation(pathV.Options, pResM, pRes)
-		decoratePathsOperation(pathV.Head, pResM, pRes)
-		decoratePathsOperation(pathV.Patch, pResM, pRes)
-		decoratePathsOperation(pathV.Trace, pResM, pRes)
+		decoratePathOperation(pathV.Get, pResM, pRes)
+		decoratePathOperation(pathV.Put, pResM, pRes)
+		decoratePathOperation(pathV.Post, pResM, pRes)
+		decoratePathOperation(pathV.Delete, pResM, pRes)
+		decoratePathOperation(pathV.Options, pResM, pRes)
+		decoratePathOperation(pathV.Head, pResM, pRes)
+		decoratePathOperation(pathV.Patch, pResM, pRes)
+		decoratePathOperation(pathV.Trace, pResM, pRes)
+		decoratePathParameters(pathV.Parameters)
 	}
 }
 
-func decoratePathsOperation(spec *openspec3.Operation, pResM map[string]string, pRes string) {
+func decoratePathOperation(spec *openspec3.Operation, pResM map[string]string, pRes string) {
 	if spec == nil {
 		return
 	}
@@ -159,22 +160,67 @@ func decoratePathsOperation(spec *openspec3.Operation, pResM map[string]string, 
 		{"BearerAuth": {}},
 	}
 
+	// Replace request body.
+	if spec.RequestBody != nil && spec.RequestBody.Content != nil {
+		if v, ok := spec.RequestBody.Content["*/*"]; ok {
+			spec.RequestBody.Content["application/json"] = v
+			delete(spec.RequestBody.Content, "*/*")
+		}
+	}
+
+	// Parameters.
+	decoratePathParameters(spec.Parameters)
+
 	// Retag operations.
 	if kind := pResM[pRes]; kind != "" {
 		spec.Tags = []string{kind}
 		return
 	}
-	v := spec.Extensions["x-kubernetes-group-version-kind"]
-	if v != nil {
-		kind := v.(map[string]any)["kind"].(string)
-		res := strings.ToLower(stringx.Pluralize(kind))
-		if res == pRes {
-			pResM[pRes] = kind
-			spec.Tags = []string{kind}
-			return
+	{
+		var gvk _GroupVersionKind
+		if spec.Extensions["x-kubernetes-group-version-kind"] != nil {
+			_ = spec.Extensions.GetObject("x-kubernetes-group-version-kind", &gvk)
+			if gvk.Validate() {
+				kind := gvk.Kind
+				res := strings.ToLower(stringx.Pluralize(kind))
+				if res == pRes {
+					pResM[pRes] = kind
+					spec.Tags = []string{kind}
+					return
+				}
+			}
 		}
 	}
 	spec.Tags = []string{stringx.Capitalize(pRes)}
+}
+
+func decoratePathParameters(params []*openspec3.Parameter) {
+	for i := range params {
+		if params[i] == nil || params[i].Schema == nil {
+			continue
+		}
+		param := params[i]
+		switch param.Name {
+		default:
+			continue
+		case "fieldManager":
+			param.Schema.Default = "walrus-swagger-ui"
+		case "fieldValidation":
+			param.Schema.Default = "Ignore"
+			param.Schema.Enum = []any{
+				"Ignore",
+				"Warn",
+				"Strict",
+			}
+		case "propagationPolicy":
+			param.Schema.Default = "Background"
+			param.Schema.Enum = []any{
+				"Background",
+				"Foreground",
+				"Orphan",
+			}
+		}
+	}
 }
 
 func decorateComponents(spec *openspec3.OpenAPI) {
@@ -182,7 +228,39 @@ func decorateComponents(spec *openspec3.OpenAPI) {
 		spec.Components = &openspec3.Components{}
 	}
 
+	decorateComponentsSchemas(spec.Components)
 	decorateComponentsSecuritySchemes(spec.Components)
+}
+
+func decorateComponentsSchemas(spec *openspec3.Components) {
+	if spec.Schemas == nil {
+		spec.Schemas = map[string]*openvalidatespec.Schema{}
+	}
+
+	for loc := range spec.Schemas {
+		if !strings.HasPrefix(loc, "com.github.seal-io.walrus.") {
+			continue
+		}
+		spec := spec.Schemas[loc]
+		var gvkl _GroupVersionKindList
+		{
+			if spec.Extensions["x-kubernetes-group-version-kind"] == nil {
+				continue
+			}
+			_ = spec.Extensions.GetObject("x-kubernetes-group-version-kind", &gvkl)
+			if !gvkl.Validate() {
+				continue
+			}
+		}
+		if s, ok := spec.Properties["apiVersion"]; ok {
+			s.Default = gvkl[0].APIVersion()
+			spec.Properties["apiVersion"] = s
+		}
+		if s, ok := spec.Properties["kind"]; ok {
+			s.Default = gvkl[0].Kind
+			spec.Properties["kind"] = s
+		}
+	}
 }
 
 func decorateComponentsSecuritySchemes(spec *openspec3.Components) {
@@ -198,4 +276,27 @@ func decorateComponentsSecuritySchemes(spec *openspec3.Components) {
 			Description: "Bearer Authentication, the token must be a valid Walrus token.",
 		},
 	}
+}
+
+type _GroupVersionKind struct {
+	Group   string `json:"group"`
+	Version string `json:"version"`
+	Kind    string `json:"kind"`
+}
+
+func (gvk _GroupVersionKind) APIVersion() string {
+	if gvk.Group == "" || gvk.Group == "core" {
+		return gvk.Version
+	}
+	return gvk.Group + "/" + gvk.Version
+}
+
+func (gvk _GroupVersionKind) Validate() bool {
+	return gvk.Group != "" && gvk.Version != "" && gvk.Kind != ""
+}
+
+type _GroupVersionKindList []_GroupVersionKind
+
+func (gvkl _GroupVersionKindList) Validate() bool {
+	return len(gvkl) == 1 && gvkl[0].Validate()
 }
