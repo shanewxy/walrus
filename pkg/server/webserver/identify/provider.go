@@ -323,7 +323,7 @@ func convertSubjectFromExternalIdentity(ctx context.Context, provider string, id
 		},
 		Spec: walrus.SubjectSpec{
 			Provider:    provider,
-			Role:        walrus.SubjectRoleViewer,
+			Role:        walrus.SubjectRoleUser,
 			DisplayName: displayName,
 			Description: "Login from provider",
 			Email:       id.Email,

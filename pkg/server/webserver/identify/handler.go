@@ -357,6 +357,14 @@ type (
 		Email       *string `json:"email,omitempty"`
 		Password    *string `json:"password,omitempty"`
 	}
+	responseProfile struct {
+		Name        string   `json:"name"`
+		Provider    string   `json:"provider"`
+		Role        string   `json:"role"`
+		DisplayName string   `json:"displayName,omitempty"`
+		Email       string   `json:"email,omitempty"`
+		Groups      []string `json:"groups,omitempty"`
+	}
 )
 
 // profile is a handler to get/update profile.
@@ -382,7 +390,14 @@ func profile(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		resp := subj.Spec
+		resp := responseProfile{
+			Name:        subj.Name,
+			Provider:    subj.Spec.Provider,
+			Role:        subj.Spec.Role.String(),
+			DisplayName: subj.Spec.DisplayName,
+			Email:       subj.Spec.Email,
+			Groups:      subj.Spec.Groups,
+		}
 		httpx.JSON(w, http.StatusOK, resp)
 		return
 	}
@@ -410,7 +425,14 @@ func profile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp := subj.Spec
+	resp := responseProfile{
+		Name:        subj.Name,
+		Provider:    subj.Spec.Provider,
+		Role:        subj.Spec.Role.String(),
+		DisplayName: subj.Spec.DisplayName,
+		Email:       subj.Spec.Email,
+		Groups:      subj.Spec.Groups,
+	}
 	httpx.JSON(w, http.StatusOK, resp)
 }
 

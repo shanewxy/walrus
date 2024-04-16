@@ -159,7 +159,7 @@ func (r *ProjectSubjectAuthzReconciler) Reconcile(ctx context.Context, req ctrl.
 			RoleRef:  rb.RoleRef,
 			Subjects: rb.Subjects,
 		}
-		if env.Spec.Type == walrus.EnvironmentTypeProduction && subj.Spec.Role == walrus.SubjectRoleViewer {
+		if env.Spec.Type == walrus.EnvironmentTypeProduction && subj.Spec.Role == walrus.SubjectRoleUser {
 			eRb.RoleRef.Name = systemauthz.ConvertClusterRoleNameFromProjectRole(walrus.ProjectRoleViewer)
 		}
 		systemmeta.NoteResource(eRb, "rolebindings", map[string]string{

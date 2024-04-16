@@ -2637,11 +2637,11 @@ func schema_pkg_apis_walrus_v1_SubjectSpec(ref common.ReferenceCallback) common.
 					},
 					"role": {
 						SchemaProps: spec.SchemaProps{
-							Description: "Role is the role of the subject.\n\n\nPossible enum values:\n - `\"Admin\"` is the subject role for subject admin.\n - `\"Manager\"` is the subject role for subject manager.\n - `\"Viewer\"` is the subject role for subject viewer.",
+							Description: "Role is the role of the subject.\n\n\nPossible enum values:\n - `\"Admin\"` is the subject role for subject admin.\n - `\"Manager\"` is the subject role for subject manager.\n - `\"User\"` is the subject role for subject user.",
 							Default:     "",
 							Type:        []string{"string"},
 							Format:      "",
-							Enum:        []interface{}{"Admin", "Manager", "Viewer"},
+							Enum:        []interface{}{"Admin", "Manager", "User"},
 						},
 					},
 					"displayName": {

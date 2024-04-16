@@ -756,7 +756,7 @@ message SubjectSpec {
 
   // Role is the role of the subject.
   //
-  // +k8s:validation:enum=["Viewer","Manager","Admin"]
+  // +k8s:validation:enum=["User","Manager","Admin"]
   optional string role = 2;
 
   // DisplayName is the display name of the subject.

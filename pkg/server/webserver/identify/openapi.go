@@ -250,7 +250,51 @@ func decorateProfilePath(spec *openspec3.Paths, prefix string) {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "#/components/schemas/com.github.seal-io.walrus.pkg.apis.walrus.v1.SubjectSpec"
+                            "type": "object",
+                            "properties": {
+                                "description": {
+                                    "description": "Description is the description of the subject.",
+                                    "type": "string"
+                                },
+                                "displayName": {
+                                    "description": "DisplayName is the display name of the subject.",
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "description": "Email is the email of the subject.",
+                                    "type": "string",
+                                    "default": ""
+                                },
+                                "groups": {
+                                    "description": "Groups is the groups that the subject belongs to.",
+                                    "type": "array",
+                                    "uniqueItems": true,
+                                    "items": {
+                                        "type": "string",
+                                        "default": ""
+                                    }
+                                },
+                                "name": {
+                                    "description": "Name of the subject.",
+                                    "type": "string",
+                                    "default": ""
+                                },
+                                "provider": {
+                                    "description": "Provider is the name of subject provider who provides this subject, which is immutable.",
+                                    "type": "string",
+                                    "default": ""
+                                },
+                                "role": {
+                                    "description": "Role is the role of the subject.",
+                                    "type": "string",
+                                    "default": "",
+                                    "enum": [
+                                        "Admin",
+                                        "Manager",
+                                        "User"
+                                    ]
+                                }
+                            }
                         }
                     }
                 }
@@ -294,7 +338,51 @@ func decorateProfilePath(spec *openspec3.Paths, prefix string) {
                 "content": {
                     "application/json": {
                         "schema": {
-                            "$ref": "#/components/schemas/com.github.seal-io.walrus.pkg.apis.walrus.v1.SubjectSpec"
+                            "type": "object",
+                            "properties": {
+                                "description": {
+                                    "description": "Description is the description of the subject.",
+                                    "type": "string"
+                                },
+                                "displayName": {
+                                    "description": "DisplayName is the display name of the subject.",
+                                    "type": "string"
+                                },
+                                "email": {
+                                    "description": "Email is the email of the subject.",
+                                    "type": "string",
+                                    "default": ""
+                                },
+                                "groups": {
+                                    "description": "Groups is the groups that the subject belongs to.",
+                                    "type": "array",
+                                    "uniqueItems": true,
+                                    "items": {
+                                        "type": "string",
+                                        "default": ""
+                                    }
+                                },
+                                "name": {
+                                    "description": "Name of the subject.",
+                                    "type": "string",
+                                    "default": ""
+                                },
+                                "provider": {
+                                    "description": "Provider is the name of subject provider who provides this subject, which is immutable.",
+                                    "type": "string",
+                                    "default": ""
+                                },
+                                "role": {
+                                    "description": "Role is the role of the subject.",
+                                    "type": "string",
+                                    "default": "",
+                                    "enum": [
+                                        "Admin",
+                                        "Manager",
+                                        "User"
+                                    ]
+                                }
+                            }
                         }
                     }
                 }

@@ -45,8 +45,8 @@ func (in *SubjectReference) ToNamespacedName() types.NamespacedName {
 type SubjectRole string
 
 const (
-	// SubjectRoleViewer is the subject role for subject viewer.
-	SubjectRoleViewer SubjectRole = "Viewer"
+	// SubjectRoleUser is the subject role for subject user.
+	SubjectRoleUser SubjectRole = "User"
 	// SubjectRoleManager is the subject role for subject manager.
 	SubjectRoleManager SubjectRole = "Manager"
 	// SubjectRoleAdmin is the subject role for subject admin.
@@ -59,7 +59,7 @@ func (in SubjectRole) String() string {
 
 func (in SubjectRole) Validate() error {
 	switch in {
-	case SubjectRoleViewer, SubjectRoleManager, SubjectRoleAdmin:
+	case SubjectRoleUser, SubjectRoleManager, SubjectRoleAdmin:
 		return nil
 	default:
 		return errors.New("invalid subject role")
@@ -74,7 +74,7 @@ type SubjectSpec struct {
 
 	// Role is the role of the subject.
 	//
-	// +k8s:validation:enum=["Viewer","Manager","Admin"]
+	// +k8s:validation:enum=["User","Manager","Admin"]
 	Role SubjectRole `json:"role"`
 
 	// DisplayName is the display name of the subject.
