@@ -66,17 +66,13 @@ type group struct {
 	GroupGoName string
 	Name        string
 	Versions    []*version
-	Package     string
 }
 
 type groupSort []group
 
 func (g groupSort) Len() int { return len(g) }
 func (g groupSort) Less(i, j int) bool {
-	if g[i].Name != g[j].Name {
-		return strings.ToLower(g[i].Name) < strings.ToLower(g[j].Name)
-	}
-	return g[i].Package < g[j].Package
+	return strings.ToLower(g[i].Name) < strings.ToLower(g[j].Name)
 }
 func (g groupSort) Swap(i, j int) { g[i], g[j] = g[j], g[i] }
 
@@ -84,13 +80,17 @@ type version struct {
 	Name      string
 	GoName    string
 	Resources []applyConfig
+	Package   string
 }
 
 type versionSort []*version
 
 func (v versionSort) Len() int { return len(v) }
 func (v versionSort) Less(i, j int) bool {
-	return strings.ToLower(v[i].Name) < strings.ToLower(v[j].Name)
+	if v[i].Name != v[j].Name {
+		return strings.ToLower(v[i].Name) < strings.ToLower(v[j].Name)
+	}
+	return v[i].Package < v[j].Package
 }
 func (v versionSort) Swap(i, j int) { v[i], v[j] = v[j], v[i] }
 
@@ -118,7 +118,6 @@ func (g *utilGenerator) GenerateType(c *generator.Context, _ *types.Type, w io.W
 			GroupGoName: g.groupGoNames[groupPackageName],
 			Name:        groupVersions.Group.NonEmpty(),
 			Versions:    []*version{},
-			Package:     stdpath.Base(stdpath.Dir(groupVersions.Versions[0].Package)),
 		}
 		for _, v := range groupVersions.Versions {
 			gv := clientgentypes.GroupVersion{
@@ -130,6 +129,7 @@ func (g *utilGenerator) GenerateType(c *generator.Context, _ *types.Type, w io.W
 				Name:      v.Version.NonEmpty(),
 				GoName:    namer.IC(v.Version.NonEmpty()),
 				Resources: g.typesForGroupVersion[gv],
+				Package:   gv.Package,
 			}
 			schemeGVs[version] = c.Universe.Variable(types.Name{
 				Package: g.typesForGroupVersion[gv][0].Type.Name.Package,

@@ -70,17 +70,13 @@ type group struct {
 	GroupGoName string
 	Name        string
 	Versions    []*version
-	Package     string
 }
 
 type groupSort []group
 
 func (g groupSort) Len() int { return len(g) }
 func (g groupSort) Less(i, j int) bool {
-	if g[i].Name != g[j].Name {
-		return strings.ToLower(g[i].Name) < strings.ToLower(g[j].Name)
-	}
-	return g[i].Package < g[j].Package
+	return strings.ToLower(g[i].Name) < strings.ToLower(g[j].Name)
 }
 func (g groupSort) Swap(i, j int) { g[i], g[j] = g[j], g[i] }
 
@@ -110,7 +106,6 @@ func (g *genericGenerator) GenerateType(c *generator.Context, t *types.Type, w i
 			GroupGoName: g.groupGoNames[groupPackageName],
 			Name:        groupVersions.Group.NonEmpty(),
 			Versions:    []*version{},
-			Package:     stdpath.Base(stdpath.Dir(groupVersions.Versions[0].Package)),
 		}
 		for _, v := range groupVersions.Versions {
 			gv := clientgentypes.GroupVersion{

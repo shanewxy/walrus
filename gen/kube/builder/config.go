@@ -27,22 +27,72 @@ type Config struct {
 	// defaults to "walrus.seal.io".
 	Domain string
 
-	// APIs specifies the paths to execute deepcopy-gen, crd-gen, openapi-gen .etc.
+	// APIs specifies the package paths of internal APIs to execute the following generations.
+	//
+	//  - deepcopy-gen
+	//  - register-gen
+	//  - go-to-protobuf
+	//  - crd-gen
+	//  - openapi-gen
+	//  - applyconfiguration-gen
+	//  - client-gen
+	//  - lister-gen
+	//  - informer-gen
+	//
 	APIs []string
 
-	// ExtensionAPIs specifies the paths to execute apireg-gen .etc.
+	// ExtensionAPIs specifies the package paths of internal APIs to execute the following generations.
+	//
+	//  - deepcopy-gen
+	//  - register-gen
+	//  - go-to-protobuf
+	//  - apireg-gen
+	//  - openapi-gen
+	//  - applyconfiguration-gen
+	//  - client-gen
+	//  - lister-gen
+	//  - informer-gen
+	//
 	ExtensionAPIs []string
 
-	// Webhooks specifies the paths to execute webhook-gen .etc.
-	Webhooks []string
+	// MachineryAPIs specifies the package paths of the machinery apis to vendored,
+	// which joins the following generators.
+	//
+	//  - go-to-protobuf (for imports)
+	//  - openapi-gen
+	//
+	MachineryAPIs []string
 
-	// ExternalAPIs specifies the external apis to integrate.
+	// ExternalAPIs specifies the package paths of the external apis to integrate,
+	// which joins the following generators.
+	//
+	//  - applyconfiguration-gen
+	//  - client-gen
+	//  - lister-gen
+	//  - informer-gen
+	//
 	ExternalAPIs []string
 
-	// PluralExceptions specifies the plural form exceptions.
+	// Webhooks specifies the package paths to execute the following generations.
+	//
+	//  - webhook-gen
+	//
+	Webhooks []string
+
+	// PluralExceptions specifies the plural form exceptions,
+	// which joins the following generators.
+	//
+	//  - client-gen
+	//  - lister-gen
+	//  - informer-ge
+	//
 	PluralExceptions map[string]string
 
-	// ProtoImports specifies the proto package for imports.
+	// ProtoImports specifies the paths to load the proto import packages,
+	// which joins the following generators.
+	//
+	//  - go-to-protobuf
+	//
 	ProtoImports []string
 }
 

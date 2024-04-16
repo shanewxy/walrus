@@ -37,15 +37,35 @@ func generate() error {
 		ProjectDir: pwd,
 		Project:    "github.com/seal-io/walrus",
 		Header:     stringx.FromBytes(ptr.To(bytes.TrimSpace(header))),
+		/*
+			Specify the package paths of the CRD APIs.
+		*/
 		APIs: []string{
 			"github.com/seal-io/walrus/pkg/apis/walruscore/v1",
 		},
+		/*
+			Specify the package paths of the Extension APIs.
+		*/
 		ExtensionAPIs: []string{
 			"github.com/seal-io/walrus/pkg/apis/walrus/v1",
 		},
-		Webhooks: []string{
-			"github.com/seal-io/walrus/pkg/webhooks/walruscore",
+		/*
+			Specify the package paths of the 3rd-party packages which APIs and ExtensionAPIs rely on.
+		*/
+		MachineryAPIs: []string{
+			"k8s.io/apimachinery/pkg/api/resource",
+			"k8s.io/apimachinery/pkg/types",
+			"k8s.io/apimachinery/pkg/version",
+			"k8s.io/apimachinery/pkg/util/intstr",
+			"k8s.io/apimachinery/pkg/runtime",
+			"k8s.io/apimachinery/pkg/runtime/schema",
+			"k8s.io/apimachinery/pkg/apis/meta/v1",
+			"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured",
+			"k8s.io/api/core/v1",
 		},
+		/*
+			Specify the package paths of the External APIs which embed into the clientset.
+		*/
 		ExternalAPIs: []string{
 			"k8s.io/api/admission/v1",
 			"k8s.io/api/admissionregistration/v1",
@@ -68,9 +88,21 @@ func generate() error {
 			"github.com/argoproj/argo-workflows/v3/pkg/apis/workflow/v1alpha1",
 			"github.com/argoproj/argo-cd/v2/pkg/apis/application/v1alpha1",
 		},
+		/*
+			Specify the package paths of the Admission webhooks.
+		*/
+		Webhooks: []string{
+			"github.com/seal-io/walrus/pkg/webhooks/walruscore",
+		},
+		/*
+			Specify the exceptions to the plural form.
+		*/
 		PluralExceptions: map[string]string{
 			"Endpoints": "Endpoints",
 		},
+		/*
+			The physical location to provide the protobuf files for proto generation.
+		*/
 		ProtoImports: []string{
 			// NB(thxCode): the go-to-protobuf under code-generator relies on a deprecated project,
 			// https://github.com/gogo/protobuf.
