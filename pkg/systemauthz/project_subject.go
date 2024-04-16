@@ -172,9 +172,9 @@ func GrantProjectSubjectRoleFor(ctx context.Context, cli ctrlcli.Client, proj *w
 		},
 		Subjects: []rbac.Subject{
 			{
-				APIGroup: rbac.GroupName,
-				Kind:     rbac.ServiceAccountKind,
-				Name:     ConvertServiceAccountNameFromSubjectName(subjRef.Name),
+				Kind:      rbac.ServiceAccountKind,
+				Namespace: subjRef.Namespace,
+				Name:      ConvertServiceAccountNameFromSubjectName(subjRef.Name),
 			},
 			{
 				APIGroup: rbac.GroupName,
