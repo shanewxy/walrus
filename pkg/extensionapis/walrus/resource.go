@@ -19,6 +19,8 @@ import (
 type ResourceHandler struct {
 	extensionapi.ObjectInfo
 	extensionapi.CurdOperations
+
+	client ctrlcli.Client
 }
 
 func (h *ResourceHandler) SetupHandler(
@@ -34,6 +36,8 @@ func (h *ResourceHandler) SetupHandler(
 		*walrus.Resource, *walrus.ResourceList, *walruscore.Resource, *walruscore.ResourceList,
 	](nil, h, opts.Manager.GetClient().(ctrlcli.WithWatch))
 
+	// Set client.
+	h.client = opts.Manager.GetClient()
 	return
 }
 

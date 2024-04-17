@@ -22,12 +22,48 @@ var _ runtime.Object = (*Resource)(nil)
 
 // ResourceSpec defines the desired state of Resource.
 type ResourceSpec struct {
-	// TODO: your spec here
+	// Attributes to configure the template.
+	Attributes runtime.RawExtension `json:"attributes,omitempty"`
+
+	// TemplateVersion template version to which the resource belongs.
+	TemplateVersion *TempalteVersionReference `json:"templateVersionReference,omitempty"`
+
+	// Type is a resource definition type.
+	Type string `json:"type,omitempty"`
+
+	// Draft indicates whether the resource is a draft.
+	Draft bool `json:"draft,omitempty"`
+
+	// Stop indicates whether to stop the resource.
+	Stop bool `json:"stop,omitempty"`
 }
 
 // ResourceStatus defines the observed state of Resource.
 type ResourceStatus struct {
-	// TODO: your status here
+	// StatusDescriptor defines the status of the resource.
+	StatusDescriptor `json:",inline"`
+
+	// Project is the project to which the resource belongs.
+	Project string `json:"project"`
+
+	// ComputedAttributes generated from attributes and schemas.
+	ComputedAttributes runtime.RawExtension `json:"computedAttributes"`
+
+	// Dependencies of the resource.
+	Dependencies []string `json:"dependencies,omitempty"`
+
+	// ResourceHook is a reference to a resource hook.
+	// For one resource, the resource hook is unique.
+	ResourceHook *ResourceHookReference `json:"resourceHook"`
+
+	// ResourceDefinition is a reference to a resource definition.
+	ResourceDefinition *ResourceDefinitionReference `json:"resourceDefinition,omitempty"`
+
+	// ResourceDefinitionMatchingRule is a reference to a resource definition matching rule.
+	ResourceDefinitionMatchingRule *ResourceDefinitionMatchingRuleReference `json:"resourceDefinitionMatchingRule,omitempty"`
+
+	// Endpoints of the resource.
+	Endpoints []string `json:"endpoints,omitempty"`
 }
 
 // ResourceList holds the list of Resource.

@@ -18,6 +18,11 @@ type ResourceDefinition struct {
 	Status ResourceDefinitionStatus `json:"status,omitempty"`
 }
 
+type ResourceDefinitionReference struct {
+	Namespace string `json:"namespace"`
+	Name      string `json:"name"`
+}
+
 var _ runtime.Object = (*ResourceDefinition)(nil)
 
 // ResourceDefinitionSpec defines the desired state of ResourceDefinition.

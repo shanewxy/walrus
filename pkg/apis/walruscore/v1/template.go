@@ -108,3 +108,9 @@ type TemplateVersion struct {
 	// Removed indicate the template version is removed.
 	Removed bool `json:"removed,omitempty"`
 }
+
+type TempalteVersionReference struct {
+	Namespace string `json:"namespace"`
+	Name      string `json:"name"`
+	Version   string `json:"version"`
+}

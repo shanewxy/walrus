@@ -41,3 +41,12 @@ type ConnectorList struct {
 }
 
 var _ runtime.Object = (*ConnectorList)(nil)
+
+// ConnectorReference is a reference to a connector.
+type ConnectorReference struct {
+	// Name is the name of the connector.
+	Name string `json:"name"`
+
+	// Namespace is the namespace of the connector.
+	Namespace string `json:"namespace"`
+}

@@ -98,7 +98,8 @@ func generate() error {
 			Specify the exceptions to the plural form.
 		*/
 		PluralExceptions: map[string]string{
-			"Endpoints": "Endpoints",
+			"Endpoints":          "Endpoints",
+			"ResourceComponents": "ResourceComponents",
 		},
 		/*
 			The physical location to provide the protobuf files for proto generation.
