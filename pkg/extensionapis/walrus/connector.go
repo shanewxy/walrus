@@ -3,6 +3,7 @@ package walrus
 import (
 	"context"
 
+	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apiserver/pkg/registry/rest"
@@ -25,16 +26,66 @@ func (h *ConnectorHandler) SetupHandler(
 	ctx context.Context,
 	opts extensionapi.SetupOptions,
 ) (gvr schema.GroupVersionResource, srs map[string]rest.Storage, err error) {
+	// Configure field indexer.
+	fi := opts.Manager.GetFieldIndexer()
+	err = fi.IndexField(ctx, &walruscore.Connector{}, "metadata.name",
+		func(obj ctrlcli.Object) []string {
+			if obj == nil {
+				return nil
+			}
+			return []string{obj.GetName()}
+		})
+	if err != nil {
+		return schema.GroupVersionResource{}, nil, err
+	}
+
 	// Declare GVR.
 	gvr = walrus.SchemeGroupVersionResource("connectors")
+
+	// Create table convertor to pretty the kubectl's output.
+	var tc rest.TableConvertor
+	{
+		tc, err = extensionapi.NewJSONPathTableConvertor(
+			extensionapi.JSONPathTableColumnDefinition{
+				TableColumnDefinition: meta.TableColumnDefinition{
+					Name: "Category",
+					Type: "string",
+				},
+				JSONPath: ".spec.category",
+			},
+			extensionapi.JSONPathTableColumnDefinition{
+				TableColumnDefinition: meta.TableColumnDefinition{
+					Name: "Type",
+					Type: "string",
+				},
+				JSONPath: ".spec.type",
+			},
+			extensionapi.JSONPathTableColumnDefinition{
+				TableColumnDefinition: meta.TableColumnDefinition{
+					Name: "Applicable Environment Type",
+					Type: "string",
+				},
+				JSONPath: ".spec.applicableEnvironmentType",
+			},
+			extensionapi.JSONPathTableColumnDefinition{
+				TableColumnDefinition: meta.TableColumnDefinition{
+					Name: "Project",
+					Type: "string",
+				},
+				JSONPath: ".status.project",
+			})
+		if err != nil {
+			return gvr, nil, err
+		}
+	}
 
 	// As storage.
 	h.ObjectInfo = &walrus.Connector{}
 	h.CurdOperations = extensionapi.WithCurdProxy[
 		*walrus.Connector, *walrus.ConnectorList, *walruscore.Connector, *walruscore.ConnectorList,
-	](nil, h, opts.Manager.GetClient().(ctrlcli.WithWatch), opts.Manager.GetAPIReader())
+	](tc, h, opts.Manager.GetClient().(ctrlcli.WithWatch), opts.Manager.GetAPIReader())
 
-	return
+	return gvr, nil, nil
 }
 
 var (

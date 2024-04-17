@@ -23,6 +23,7 @@ import (
 	ctrlcli "sigs.k8s.io/controller-runtime/pkg/client"
 
 	walrus "github.com/seal-io/walrus/pkg/apis/walrus/v1"
+	walruscore "github.com/seal-io/walrus/pkg/apis/walruscore/v1"
 	"github.com/seal-io/walrus/pkg/extensionapi"
 	"github.com/seal-io/walrus/pkg/kubemeta"
 	"github.com/seal-io/walrus/pkg/systemkuberes"
@@ -410,7 +411,7 @@ func convertEnvironmentFromNamespace(ns *core.Namespace) *walrus.Environment {
 	env := &walrus.Environment{
 		ObjectMeta: ns.ObjectMeta,
 		Spec: walrus.EnvironmentSpec{
-			Type:        walrus.EnvironmentType(notes["type"]),
+			Type:        walruscore.EnvironmentType(notes["type"]),
 			DisplayName: notes["displayName"],
 			Description: notes["description"],
 		},

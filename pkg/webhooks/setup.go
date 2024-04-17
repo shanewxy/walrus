@@ -24,6 +24,7 @@ var (
 	setupers = []webhook.Setup{
 		new(walruscore.CatalogWebhook),
 		new(walruscore.ConnectorWebhook),
+		new(walruscore.ConnectorBindingWebhook),
 		new(walruscore.ResourceDefinitionWebhook),
 		new(walruscore.TemplateWebhook),
 	}

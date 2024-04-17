@@ -21,6 +21,7 @@ import (
 var setupers = []extensionapi.Setup{
 	new(walrus.CatalogHandler),
 	new(walrus.ConnectorHandler),
+	new(walrus.ConnectorBindingHandler),
 	new(walrus.EnvironmentHandler),
 	new(walrus.FileExampleHandler),
 	new(walrus.ProjectHandler),

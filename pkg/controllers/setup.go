@@ -18,6 +18,7 @@ var setupers = []controller.Setup{
 	new(walrus.SubjectAuthzReconciler),
 	new(walruscore.CatalogReconciler),
 	new(walruscore.ConnectorReconciler),
+	new(walruscore.ConnectorBindingReconciler),
 	new(walruscore.ResourceReconciler),
 	new(walruscore.ResourceDefinitionReconciler),
 	new(walruscore.TemplateReconciler),

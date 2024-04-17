@@ -20,6 +20,7 @@ import (
 	ctrlreconcile "sigs.k8s.io/controller-runtime/pkg/reconcile"
 
 	walrus "github.com/seal-io/walrus/pkg/apis/walrus/v1"
+	walruscore "github.com/seal-io/walrus/pkg/apis/walruscore/v1"
 	"github.com/seal-io/walrus/pkg/controller"
 	"github.com/seal-io/walrus/pkg/kubeclientset"
 	"github.com/seal-io/walrus/pkg/kubemeta"
@@ -159,7 +160,7 @@ func (r *ProjectSubjectAuthzReconciler) Reconcile(ctx context.Context, req ctrl.
 			RoleRef:  rb.RoleRef,
 			Subjects: rb.Subjects,
 		}
-		if env.Spec.Type == walrus.EnvironmentTypeProduction && subj.Spec.Role == walrus.SubjectRoleUser {
+		if env.Spec.Type == walruscore.EnvironmentTypeProduction && subj.Spec.Role == walrus.SubjectRoleUser {
 			eRb.RoleRef.Name = systemauthz.ConvertClusterRoleNameFromProjectRole(walrus.ProjectRoleViewer)
 		}
 		systemmeta.NoteResource(eRb, "rolebindings", map[string]string{
