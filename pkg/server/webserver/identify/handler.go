@@ -373,6 +373,10 @@ type (
 func profile(w http.ResponseWriter, r *http.Request) {
 	// Get kube config.
 	subjNamespace, subjName, cliCfg := GetSubjectKubeConfig(r)
+	if cliCfg == nil {
+		ui.ResponseErrorWithCode(w, http.StatusUnauthorized, errors.New("unauthorized"))
+		return
+	}
 
 	// Get kube client.
 	cli, err := clientset.NewForConfig(cliCfg)
@@ -448,6 +452,10 @@ type (
 func token(w http.ResponseWriter, r *http.Request) {
 	// Get kube config.
 	subjNamespace, subjName, cliCfg := GetSubjectKubeConfig(r)
+	if cliCfg == nil {
+		ui.ResponseErrorWithCode(w, http.StatusUnauthorized, errors.New("unauthorized"))
+		return
+	}
 
 	// Get kube client.
 	cli, err := clientset.NewForConfig(cliCfg)
@@ -492,6 +500,10 @@ type (
 func rules(w http.ResponseWriter, r *http.Request) {
 	// Get kube config.
 	_, _, cliCfg := GetSubjectKubeConfig(r)
+	if cliCfg == nil {
+		ui.ResponseErrorWithCode(w, http.StatusUnauthorized, errors.New("unauthorized"))
+		return
+	}
 
 	// Get kube client.
 	cli, err := clientset.NewForConfig(cliCfg)
@@ -644,6 +656,8 @@ func loginSubject(w http.ResponseWriter, r *http.Request, subj *walrus.Subject, 
 }
 
 // GetSubjectKubeConfig returns subject-specified Kubernetes rest config and subject names according to the request.
+//
+// GetSubjectKubeConfig returns nil rest config if the request is not authorized.
 func GetSubjectKubeConfig(r *http.Request) (subjNamespace, subjName string, cliCfg *rest.Config) {
 	loopbackCliCfg := system.LoopbackKubeClientConfig.Get()
 
@@ -684,8 +698,8 @@ func GetSubjectKubeConfig(r *http.Request) (subjNamespace, subjName string, cliC
 			clientcmdapi.AuthInfo{
 				Impersonate: systemauthz.ConvertImpersonateUserFromSubjectName(subjNamespace, subjName),
 			})
-	} else {
-		cliCfg = kubeconfig.UnauthorizeRestConfig(loopbackCliCfg)
+		return subjNamespace, subjName, cliCfg
 	}
-	return subjNamespace, subjName, cliCfg
+
+	return "", "", nil
 }

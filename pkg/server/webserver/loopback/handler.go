@@ -26,6 +26,10 @@ func index() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Get kube config.
 		_, _, cliCfg := identify.GetSubjectKubeConfig(r)
+		if cliCfg == nil {
+			ui.ResponseErrorWithCode(w, http.StatusUnauthorized, fmt.Errorf("unauthorized"))
+			return
+		}
 
 		// Get kube target.
 		var target *url.URL
