@@ -21,381 +21,421 @@ import (
 
 func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenAPIDefinition {
 	return map[string]common.OpenAPIDefinition{
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Catalog":                                   schema_pkg_apis_walrus_v1_Catalog(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.CatalogList":                               schema_pkg_apis_walrus_v1_CatalogList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Connector":                                 schema_pkg_apis_walrus_v1_Connector(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ConnectorList":                             schema_pkg_apis_walrus_v1_ConnectorList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Environment":                               schema_pkg_apis_walrus_v1_Environment(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.EnvironmentList":                           schema_pkg_apis_walrus_v1_EnvironmentList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.EnvironmentSpec":                           schema_pkg_apis_walrus_v1_EnvironmentSpec(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.EnvironmentStatus":                         schema_pkg_apis_walrus_v1_EnvironmentStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.FileExample":                               schema_pkg_apis_walrus_v1_FileExample(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.FileExampleList":                           schema_pkg_apis_walrus_v1_FileExampleList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.FileExampleStatus":                         schema_pkg_apis_walrus_v1_FileExampleStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Project":                                   schema_pkg_apis_walrus_v1_Project(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ProjectList":                               schema_pkg_apis_walrus_v1_ProjectList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ProjectSpec":                               schema_pkg_apis_walrus_v1_ProjectSpec(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ProjectStatus":                             schema_pkg_apis_walrus_v1_ProjectStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ProjectSubject":                            schema_pkg_apis_walrus_v1_ProjectSubject(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ProjectSubjects":                           schema_pkg_apis_walrus_v1_ProjectSubjects(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Resource":                                  schema_pkg_apis_walrus_v1_Resource(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceComponent":                         schema_pkg_apis_walrus_v1_ResourceComponent(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceComponents":                        schema_pkg_apis_walrus_v1_ResourceComponents(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceDefinition":                        schema_pkg_apis_walrus_v1_ResourceDefinition(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceDefinitionList":                    schema_pkg_apis_walrus_v1_ResourceDefinitionList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceList":                              schema_pkg_apis_walrus_v1_ResourceList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceRun":                               schema_pkg_apis_walrus_v1_ResourceRun(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceRunList":                           schema_pkg_apis_walrus_v1_ResourceRunList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Schema":                                    schema_pkg_apis_walrus_v1_Schema(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SchemaList":                                schema_pkg_apis_walrus_v1_SchemaList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Setting":                                   schema_pkg_apis_walrus_v1_Setting(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SettingList":                               schema_pkg_apis_walrus_v1_SettingList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SettingSpec":                               schema_pkg_apis_walrus_v1_SettingSpec(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SettingStatus":                             schema_pkg_apis_walrus_v1_SettingStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Subject":                                   schema_pkg_apis_walrus_v1_Subject(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectList":                               schema_pkg_apis_walrus_v1_SubjectList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectLogin":                              schema_pkg_apis_walrus_v1_SubjectLogin(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectLoginSpec":                          schema_pkg_apis_walrus_v1_SubjectLoginSpec(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectLoginStatus":                        schema_pkg_apis_walrus_v1_SubjectLoginStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProvider":                           schema_pkg_apis_walrus_v1_SubjectProvider(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderBitbucketConfig":            schema_pkg_apis_walrus_v1_SubjectProviderBitbucketConfig(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderExternalConfig":             schema_pkg_apis_walrus_v1_SubjectProviderExternalConfig(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGitHubConfig":               schema_pkg_apis_walrus_v1_SubjectProviderGitHubConfig(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGitLabConfig":               schema_pkg_apis_walrus_v1_SubjectProviderGitLabConfig(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGiteaConfig":                schema_pkg_apis_walrus_v1_SubjectProviderGiteaConfig(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGoogleConfig":               schema_pkg_apis_walrus_v1_SubjectProviderGoogleConfig(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPConfig":                 schema_pkg_apis_walrus_v1_SubjectProviderLDAPConfig(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPGroupSearch":            schema_pkg_apis_walrus_v1_SubjectProviderLDAPGroupSearch(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPUserSearch":             schema_pkg_apis_walrus_v1_SubjectProviderLDAPUserSearch(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLdapGroupSearchUserMatcher": schema_pkg_apis_walrus_v1_SubjectProviderLdapGroupSearchUserMatcher(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderList":                       schema_pkg_apis_walrus_v1_SubjectProviderList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderMicrosoftConfig":            schema_pkg_apis_walrus_v1_SubjectProviderMicrosoftConfig(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOAuthClaimMapping":          schema_pkg_apis_walrus_v1_SubjectProviderOAuthClaimMapping(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOAuthConfig":                schema_pkg_apis_walrus_v1_SubjectProviderOAuthConfig(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOIDCConfig":                 schema_pkg_apis_walrus_v1_SubjectProviderOIDCConfig(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderSpec":                       schema_pkg_apis_walrus_v1_SubjectProviderSpec(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderStatus":                     schema_pkg_apis_walrus_v1_SubjectProviderStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectReference":                          schema_pkg_apis_walrus_v1_SubjectReference(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectSpec":                               schema_pkg_apis_walrus_v1_SubjectSpec(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectToken":                              schema_pkg_apis_walrus_v1_SubjectToken(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectTokenSpec":                          schema_pkg_apis_walrus_v1_SubjectTokenSpec(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectTokenStatus":                        schema_pkg_apis_walrus_v1_SubjectTokenStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Template":                                  schema_pkg_apis_walrus_v1_Template(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.TemplateList":                              schema_pkg_apis_walrus_v1_TemplateList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Variable":                                  schema_pkg_apis_walrus_v1_Variable(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.VariableList":                              schema_pkg_apis_walrus_v1_VariableList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.VariableSpec":                              schema_pkg_apis_walrus_v1_VariableSpec(ref),
-		"github.com/seal-io/walrus/pkg/apis/walrus/v1.VariableStatus":                            schema_pkg_apis_walrus_v1_VariableStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Catalog":                               schema_pkg_apis_walruscore_v1_Catalog(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.CatalogList":                           schema_pkg_apis_walruscore_v1_CatalogList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.CatalogSpec":                           schema_pkg_apis_walruscore_v1_CatalogSpec(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.CatalogStatus":                         schema_pkg_apis_walruscore_v1_CatalogStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition":                             schema_pkg_apis_walruscore_v1_Condition(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConditionSummary":                      schema_pkg_apis_walruscore_v1_ConditionSummary(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Connector":                             schema_pkg_apis_walruscore_v1_Connector(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorList":                         schema_pkg_apis_walruscore_v1_ConnectorList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorSpec":                         schema_pkg_apis_walruscore_v1_ConnectorSpec(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorStatus":                       schema_pkg_apis_walruscore_v1_ConnectorStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Filters":                               schema_pkg_apis_walruscore_v1_Filters(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Resource":                              schema_pkg_apis_walruscore_v1_Resource(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinition":                    schema_pkg_apis_walruscore_v1_ResourceDefinition(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionList":                schema_pkg_apis_walruscore_v1_ResourceDefinitionList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionSpec":                schema_pkg_apis_walruscore_v1_ResourceDefinitionSpec(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionStatus":              schema_pkg_apis_walruscore_v1_ResourceDefinitionStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceList":                          schema_pkg_apis_walruscore_v1_ResourceList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRun":                           schema_pkg_apis_walruscore_v1_ResourceRun(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunList":                       schema_pkg_apis_walruscore_v1_ResourceRunList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunSpec":                       schema_pkg_apis_walruscore_v1_ResourceRunSpec(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStatus":                     schema_pkg_apis_walruscore_v1_ResourceRunStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceSpec":                          schema_pkg_apis_walruscore_v1_ResourceSpec(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceStatus":                        schema_pkg_apis_walruscore_v1_ResourceStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Schema":                                schema_pkg_apis_walruscore_v1_Schema(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.SchemaList":                            schema_pkg_apis_walruscore_v1_SchemaList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.SchemaStatus":                          schema_pkg_apis_walruscore_v1_SchemaStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.StatusDescriptor":                      schema_pkg_apis_walruscore_v1_StatusDescriptor(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Template":                              schema_pkg_apis_walruscore_v1_Template(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.TemplateList":                          schema_pkg_apis_walruscore_v1_TemplateList(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.TemplateSpec":                          schema_pkg_apis_walruscore_v1_TemplateSpec(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.TemplateStatus":                        schema_pkg_apis_walruscore_v1_TemplateStatus(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.TemplateVersion":                       schema_pkg_apis_walruscore_v1_TemplateVersion(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.VCSRepository":                         schema_pkg_apis_walruscore_v1_VCSRepository(ref),
-		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.VCSSource":                             schema_pkg_apis_walruscore_v1_VCSSource(ref),
-		"k8s.io/api/core/v1.AWSElasticBlockStoreVolumeSource":                                    schema_k8sio_api_core_v1_AWSElasticBlockStoreVolumeSource(ref),
-		"k8s.io/api/core/v1.Affinity":                                                            schema_k8sio_api_core_v1_Affinity(ref),
-		"k8s.io/api/core/v1.AttachedVolume":                                                      schema_k8sio_api_core_v1_AttachedVolume(ref),
-		"k8s.io/api/core/v1.AvoidPods":                                                           schema_k8sio_api_core_v1_AvoidPods(ref),
-		"k8s.io/api/core/v1.AzureDiskVolumeSource":                                               schema_k8sio_api_core_v1_AzureDiskVolumeSource(ref),
-		"k8s.io/api/core/v1.AzureFilePersistentVolumeSource":                                     schema_k8sio_api_core_v1_AzureFilePersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.AzureFileVolumeSource":                                               schema_k8sio_api_core_v1_AzureFileVolumeSource(ref),
-		"k8s.io/api/core/v1.Binding":                                                             schema_k8sio_api_core_v1_Binding(ref),
-		"k8s.io/api/core/v1.CSIPersistentVolumeSource":                                           schema_k8sio_api_core_v1_CSIPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.CSIVolumeSource":                                                     schema_k8sio_api_core_v1_CSIVolumeSource(ref),
-		"k8s.io/api/core/v1.Capabilities":                                                        schema_k8sio_api_core_v1_Capabilities(ref),
-		"k8s.io/api/core/v1.CephFSPersistentVolumeSource":                                        schema_k8sio_api_core_v1_CephFSPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.CephFSVolumeSource":                                                  schema_k8sio_api_core_v1_CephFSVolumeSource(ref),
-		"k8s.io/api/core/v1.CinderPersistentVolumeSource":                                        schema_k8sio_api_core_v1_CinderPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.CinderVolumeSource":                                                  schema_k8sio_api_core_v1_CinderVolumeSource(ref),
-		"k8s.io/api/core/v1.ClaimSource":                                                         schema_k8sio_api_core_v1_ClaimSource(ref),
-		"k8s.io/api/core/v1.ClientIPConfig":                                                      schema_k8sio_api_core_v1_ClientIPConfig(ref),
-		"k8s.io/api/core/v1.ClusterTrustBundleProjection":                                        schema_k8sio_api_core_v1_ClusterTrustBundleProjection(ref),
-		"k8s.io/api/core/v1.ComponentCondition":                                                  schema_k8sio_api_core_v1_ComponentCondition(ref),
-		"k8s.io/api/core/v1.ComponentStatus":                                                     schema_k8sio_api_core_v1_ComponentStatus(ref),
-		"k8s.io/api/core/v1.ComponentStatusList":                                                 schema_k8sio_api_core_v1_ComponentStatusList(ref),
-		"k8s.io/api/core/v1.ConfigMap":                                                           schema_k8sio_api_core_v1_ConfigMap(ref),
-		"k8s.io/api/core/v1.ConfigMapEnvSource":                                                  schema_k8sio_api_core_v1_ConfigMapEnvSource(ref),
-		"k8s.io/api/core/v1.ConfigMapKeySelector":                                                schema_k8sio_api_core_v1_ConfigMapKeySelector(ref),
-		"k8s.io/api/core/v1.ConfigMapList":                                                       schema_k8sio_api_core_v1_ConfigMapList(ref),
-		"k8s.io/api/core/v1.ConfigMapNodeConfigSource":                                           schema_k8sio_api_core_v1_ConfigMapNodeConfigSource(ref),
-		"k8s.io/api/core/v1.ConfigMapProjection":                                                 schema_k8sio_api_core_v1_ConfigMapProjection(ref),
-		"k8s.io/api/core/v1.ConfigMapVolumeSource":                                               schema_k8sio_api_core_v1_ConfigMapVolumeSource(ref),
-		"k8s.io/api/core/v1.Container":                                                           schema_k8sio_api_core_v1_Container(ref),
-		"k8s.io/api/core/v1.ContainerImage":                                                      schema_k8sio_api_core_v1_ContainerImage(ref),
-		"k8s.io/api/core/v1.ContainerPort":                                                       schema_k8sio_api_core_v1_ContainerPort(ref),
-		"k8s.io/api/core/v1.ContainerResizePolicy":                                               schema_k8sio_api_core_v1_ContainerResizePolicy(ref),
-		"k8s.io/api/core/v1.ContainerState":                                                      schema_k8sio_api_core_v1_ContainerState(ref),
-		"k8s.io/api/core/v1.ContainerStateRunning":                                               schema_k8sio_api_core_v1_ContainerStateRunning(ref),
-		"k8s.io/api/core/v1.ContainerStateTerminated":                                            schema_k8sio_api_core_v1_ContainerStateTerminated(ref),
-		"k8s.io/api/core/v1.ContainerStateWaiting":                                               schema_k8sio_api_core_v1_ContainerStateWaiting(ref),
-		"k8s.io/api/core/v1.ContainerStatus":                                                     schema_k8sio_api_core_v1_ContainerStatus(ref),
-		"k8s.io/api/core/v1.DaemonEndpoint":                                                      schema_k8sio_api_core_v1_DaemonEndpoint(ref),
-		"k8s.io/api/core/v1.DownwardAPIProjection":                                               schema_k8sio_api_core_v1_DownwardAPIProjection(ref),
-		"k8s.io/api/core/v1.DownwardAPIVolumeFile":                                               schema_k8sio_api_core_v1_DownwardAPIVolumeFile(ref),
-		"k8s.io/api/core/v1.DownwardAPIVolumeSource":                                             schema_k8sio_api_core_v1_DownwardAPIVolumeSource(ref),
-		"k8s.io/api/core/v1.EmptyDirVolumeSource":                                                schema_k8sio_api_core_v1_EmptyDirVolumeSource(ref),
-		"k8s.io/api/core/v1.EndpointAddress":                                                     schema_k8sio_api_core_v1_EndpointAddress(ref),
-		"k8s.io/api/core/v1.EndpointPort":                                                        schema_k8sio_api_core_v1_EndpointPort(ref),
-		"k8s.io/api/core/v1.EndpointSubset":                                                      schema_k8sio_api_core_v1_EndpointSubset(ref),
-		"k8s.io/api/core/v1.Endpoints":                                                           schema_k8sio_api_core_v1_Endpoints(ref),
-		"k8s.io/api/core/v1.EndpointsList":                                                       schema_k8sio_api_core_v1_EndpointsList(ref),
-		"k8s.io/api/core/v1.EnvFromSource":                                                       schema_k8sio_api_core_v1_EnvFromSource(ref),
-		"k8s.io/api/core/v1.EnvVar":                                                              schema_k8sio_api_core_v1_EnvVar(ref),
-		"k8s.io/api/core/v1.EnvVarSource":                                                        schema_k8sio_api_core_v1_EnvVarSource(ref),
-		"k8s.io/api/core/v1.EphemeralContainer":                                                  schema_k8sio_api_core_v1_EphemeralContainer(ref),
-		"k8s.io/api/core/v1.EphemeralContainerCommon":                                            schema_k8sio_api_core_v1_EphemeralContainerCommon(ref),
-		"k8s.io/api/core/v1.EphemeralVolumeSource":                                               schema_k8sio_api_core_v1_EphemeralVolumeSource(ref),
-		"k8s.io/api/core/v1.Event":                                                               schema_k8sio_api_core_v1_Event(ref),
-		"k8s.io/api/core/v1.EventList":                                                           schema_k8sio_api_core_v1_EventList(ref),
-		"k8s.io/api/core/v1.EventSeries":                                                         schema_k8sio_api_core_v1_EventSeries(ref),
-		"k8s.io/api/core/v1.EventSource":                                                         schema_k8sio_api_core_v1_EventSource(ref),
-		"k8s.io/api/core/v1.ExecAction":                                                          schema_k8sio_api_core_v1_ExecAction(ref),
-		"k8s.io/api/core/v1.FCVolumeSource":                                                      schema_k8sio_api_core_v1_FCVolumeSource(ref),
-		"k8s.io/api/core/v1.FlexPersistentVolumeSource":                                          schema_k8sio_api_core_v1_FlexPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.FlexVolumeSource":                                                    schema_k8sio_api_core_v1_FlexVolumeSource(ref),
-		"k8s.io/api/core/v1.FlockerVolumeSource":                                                 schema_k8sio_api_core_v1_FlockerVolumeSource(ref),
-		"k8s.io/api/core/v1.GCEPersistentDiskVolumeSource":                                       schema_k8sio_api_core_v1_GCEPersistentDiskVolumeSource(ref),
-		"k8s.io/api/core/v1.GRPCAction":                                                          schema_k8sio_api_core_v1_GRPCAction(ref),
-		"k8s.io/api/core/v1.GitRepoVolumeSource":                                                 schema_k8sio_api_core_v1_GitRepoVolumeSource(ref),
-		"k8s.io/api/core/v1.GlusterfsPersistentVolumeSource":                                     schema_k8sio_api_core_v1_GlusterfsPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.GlusterfsVolumeSource":                                               schema_k8sio_api_core_v1_GlusterfsVolumeSource(ref),
-		"k8s.io/api/core/v1.HTTPGetAction":                                                       schema_k8sio_api_core_v1_HTTPGetAction(ref),
-		"k8s.io/api/core/v1.HTTPHeader":                                                          schema_k8sio_api_core_v1_HTTPHeader(ref),
-		"k8s.io/api/core/v1.HostAlias":                                                           schema_k8sio_api_core_v1_HostAlias(ref),
-		"k8s.io/api/core/v1.HostIP":                                                              schema_k8sio_api_core_v1_HostIP(ref),
-		"k8s.io/api/core/v1.HostPathVolumeSource":                                                schema_k8sio_api_core_v1_HostPathVolumeSource(ref),
-		"k8s.io/api/core/v1.ISCSIPersistentVolumeSource":                                         schema_k8sio_api_core_v1_ISCSIPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.ISCSIVolumeSource":                                                   schema_k8sio_api_core_v1_ISCSIVolumeSource(ref),
-		"k8s.io/api/core/v1.KeyToPath":                                                           schema_k8sio_api_core_v1_KeyToPath(ref),
-		"k8s.io/api/core/v1.Lifecycle":                                                           schema_k8sio_api_core_v1_Lifecycle(ref),
-		"k8s.io/api/core/v1.LifecycleHandler":                                                    schema_k8sio_api_core_v1_LifecycleHandler(ref),
-		"k8s.io/api/core/v1.LimitRange":                                                          schema_k8sio_api_core_v1_LimitRange(ref),
-		"k8s.io/api/core/v1.LimitRangeItem":                                                      schema_k8sio_api_core_v1_LimitRangeItem(ref),
-		"k8s.io/api/core/v1.LimitRangeList":                                                      schema_k8sio_api_core_v1_LimitRangeList(ref),
-		"k8s.io/api/core/v1.LimitRangeSpec":                                                      schema_k8sio_api_core_v1_LimitRangeSpec(ref),
-		"k8s.io/api/core/v1.List":                                                                schema_k8sio_api_core_v1_List(ref),
-		"k8s.io/api/core/v1.LoadBalancerIngress":                                                 schema_k8sio_api_core_v1_LoadBalancerIngress(ref),
-		"k8s.io/api/core/v1.LoadBalancerStatus":                                                  schema_k8sio_api_core_v1_LoadBalancerStatus(ref),
-		"k8s.io/api/core/v1.LocalObjectReference":                                                schema_k8sio_api_core_v1_LocalObjectReference(ref),
-		"k8s.io/api/core/v1.LocalVolumeSource":                                                   schema_k8sio_api_core_v1_LocalVolumeSource(ref),
-		"k8s.io/api/core/v1.ModifyVolumeStatus":                                                  schema_k8sio_api_core_v1_ModifyVolumeStatus(ref),
-		"k8s.io/api/core/v1.NFSVolumeSource":                                                     schema_k8sio_api_core_v1_NFSVolumeSource(ref),
-		"k8s.io/api/core/v1.Namespace":                                                           schema_k8sio_api_core_v1_Namespace(ref),
-		"k8s.io/api/core/v1.NamespaceCondition":                                                  schema_k8sio_api_core_v1_NamespaceCondition(ref),
-		"k8s.io/api/core/v1.NamespaceList":                                                       schema_k8sio_api_core_v1_NamespaceList(ref),
-		"k8s.io/api/core/v1.NamespaceSpec":                                                       schema_k8sio_api_core_v1_NamespaceSpec(ref),
-		"k8s.io/api/core/v1.NamespaceStatus":                                                     schema_k8sio_api_core_v1_NamespaceStatus(ref),
-		"k8s.io/api/core/v1.Node":                                                                schema_k8sio_api_core_v1_Node(ref),
-		"k8s.io/api/core/v1.NodeAddress":                                                         schema_k8sio_api_core_v1_NodeAddress(ref),
-		"k8s.io/api/core/v1.NodeAffinity":                                                        schema_k8sio_api_core_v1_NodeAffinity(ref),
-		"k8s.io/api/core/v1.NodeCondition":                                                       schema_k8sio_api_core_v1_NodeCondition(ref),
-		"k8s.io/api/core/v1.NodeConfigSource":                                                    schema_k8sio_api_core_v1_NodeConfigSource(ref),
-		"k8s.io/api/core/v1.NodeConfigStatus":                                                    schema_k8sio_api_core_v1_NodeConfigStatus(ref),
-		"k8s.io/api/core/v1.NodeDaemonEndpoints":                                                 schema_k8sio_api_core_v1_NodeDaemonEndpoints(ref),
-		"k8s.io/api/core/v1.NodeList":                                                            schema_k8sio_api_core_v1_NodeList(ref),
-		"k8s.io/api/core/v1.NodeProxyOptions":                                                    schema_k8sio_api_core_v1_NodeProxyOptions(ref),
-		"k8s.io/api/core/v1.NodeResources":                                                       schema_k8sio_api_core_v1_NodeResources(ref),
-		"k8s.io/api/core/v1.NodeSelector":                                                        schema_k8sio_api_core_v1_NodeSelector(ref),
-		"k8s.io/api/core/v1.NodeSelectorRequirement":                                             schema_k8sio_api_core_v1_NodeSelectorRequirement(ref),
-		"k8s.io/api/core/v1.NodeSelectorTerm":                                                    schema_k8sio_api_core_v1_NodeSelectorTerm(ref),
-		"k8s.io/api/core/v1.NodeSpec":                                                            schema_k8sio_api_core_v1_NodeSpec(ref),
-		"k8s.io/api/core/v1.NodeStatus":                                                          schema_k8sio_api_core_v1_NodeStatus(ref),
-		"k8s.io/api/core/v1.NodeSystemInfo":                                                      schema_k8sio_api_core_v1_NodeSystemInfo(ref),
-		"k8s.io/api/core/v1.ObjectFieldSelector":                                                 schema_k8sio_api_core_v1_ObjectFieldSelector(ref),
-		"k8s.io/api/core/v1.ObjectReference":                                                     schema_k8sio_api_core_v1_ObjectReference(ref),
-		"k8s.io/api/core/v1.PersistentVolume":                                                    schema_k8sio_api_core_v1_PersistentVolume(ref),
-		"k8s.io/api/core/v1.PersistentVolumeClaim":                                               schema_k8sio_api_core_v1_PersistentVolumeClaim(ref),
-		"k8s.io/api/core/v1.PersistentVolumeClaimCondition":                                      schema_k8sio_api_core_v1_PersistentVolumeClaimCondition(ref),
-		"k8s.io/api/core/v1.PersistentVolumeClaimList":                                           schema_k8sio_api_core_v1_PersistentVolumeClaimList(ref),
-		"k8s.io/api/core/v1.PersistentVolumeClaimSpec":                                           schema_k8sio_api_core_v1_PersistentVolumeClaimSpec(ref),
-		"k8s.io/api/core/v1.PersistentVolumeClaimStatus":                                         schema_k8sio_api_core_v1_PersistentVolumeClaimStatus(ref),
-		"k8s.io/api/core/v1.PersistentVolumeClaimTemplate":                                       schema_k8sio_api_core_v1_PersistentVolumeClaimTemplate(ref),
-		"k8s.io/api/core/v1.PersistentVolumeClaimVolumeSource":                                   schema_k8sio_api_core_v1_PersistentVolumeClaimVolumeSource(ref),
-		"k8s.io/api/core/v1.PersistentVolumeList":                                                schema_k8sio_api_core_v1_PersistentVolumeList(ref),
-		"k8s.io/api/core/v1.PersistentVolumeSource":                                              schema_k8sio_api_core_v1_PersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.PersistentVolumeSpec":                                                schema_k8sio_api_core_v1_PersistentVolumeSpec(ref),
-		"k8s.io/api/core/v1.PersistentVolumeStatus":                                              schema_k8sio_api_core_v1_PersistentVolumeStatus(ref),
-		"k8s.io/api/core/v1.PhotonPersistentDiskVolumeSource":                                    schema_k8sio_api_core_v1_PhotonPersistentDiskVolumeSource(ref),
-		"k8s.io/api/core/v1.Pod":                                                                 schema_k8sio_api_core_v1_Pod(ref),
-		"k8s.io/api/core/v1.PodAffinity":                                                         schema_k8sio_api_core_v1_PodAffinity(ref),
-		"k8s.io/api/core/v1.PodAffinityTerm":                                                     schema_k8sio_api_core_v1_PodAffinityTerm(ref),
-		"k8s.io/api/core/v1.PodAntiAffinity":                                                     schema_k8sio_api_core_v1_PodAntiAffinity(ref),
-		"k8s.io/api/core/v1.PodAttachOptions":                                                    schema_k8sio_api_core_v1_PodAttachOptions(ref),
-		"k8s.io/api/core/v1.PodCondition":                                                        schema_k8sio_api_core_v1_PodCondition(ref),
-		"k8s.io/api/core/v1.PodDNSConfig":                                                        schema_k8sio_api_core_v1_PodDNSConfig(ref),
-		"k8s.io/api/core/v1.PodDNSConfigOption":                                                  schema_k8sio_api_core_v1_PodDNSConfigOption(ref),
-		"k8s.io/api/core/v1.PodExecOptions":                                                      schema_k8sio_api_core_v1_PodExecOptions(ref),
-		"k8s.io/api/core/v1.PodIP":                                                               schema_k8sio_api_core_v1_PodIP(ref),
-		"k8s.io/api/core/v1.PodList":                                                             schema_k8sio_api_core_v1_PodList(ref),
-		"k8s.io/api/core/v1.PodLogOptions":                                                       schema_k8sio_api_core_v1_PodLogOptions(ref),
-		"k8s.io/api/core/v1.PodOS":                                                               schema_k8sio_api_core_v1_PodOS(ref),
-		"k8s.io/api/core/v1.PodPortForwardOptions":                                               schema_k8sio_api_core_v1_PodPortForwardOptions(ref),
-		"k8s.io/api/core/v1.PodProxyOptions":                                                     schema_k8sio_api_core_v1_PodProxyOptions(ref),
-		"k8s.io/api/core/v1.PodReadinessGate":                                                    schema_k8sio_api_core_v1_PodReadinessGate(ref),
-		"k8s.io/api/core/v1.PodResourceClaim":                                                    schema_k8sio_api_core_v1_PodResourceClaim(ref),
-		"k8s.io/api/core/v1.PodResourceClaimStatus":                                              schema_k8sio_api_core_v1_PodResourceClaimStatus(ref),
-		"k8s.io/api/core/v1.PodSchedulingGate":                                                   schema_k8sio_api_core_v1_PodSchedulingGate(ref),
-		"k8s.io/api/core/v1.PodSecurityContext":                                                  schema_k8sio_api_core_v1_PodSecurityContext(ref),
-		"k8s.io/api/core/v1.PodSignature":                                                        schema_k8sio_api_core_v1_PodSignature(ref),
-		"k8s.io/api/core/v1.PodSpec":                                                             schema_k8sio_api_core_v1_PodSpec(ref),
-		"k8s.io/api/core/v1.PodStatus":                                                           schema_k8sio_api_core_v1_PodStatus(ref),
-		"k8s.io/api/core/v1.PodStatusResult":                                                     schema_k8sio_api_core_v1_PodStatusResult(ref),
-		"k8s.io/api/core/v1.PodTemplate":                                                         schema_k8sio_api_core_v1_PodTemplate(ref),
-		"k8s.io/api/core/v1.PodTemplateList":                                                     schema_k8sio_api_core_v1_PodTemplateList(ref),
-		"k8s.io/api/core/v1.PodTemplateSpec":                                                     schema_k8sio_api_core_v1_PodTemplateSpec(ref),
-		"k8s.io/api/core/v1.PortStatus":                                                          schema_k8sio_api_core_v1_PortStatus(ref),
-		"k8s.io/api/core/v1.PortworxVolumeSource":                                                schema_k8sio_api_core_v1_PortworxVolumeSource(ref),
-		"k8s.io/api/core/v1.PreferAvoidPodsEntry":                                                schema_k8sio_api_core_v1_PreferAvoidPodsEntry(ref),
-		"k8s.io/api/core/v1.PreferredSchedulingTerm":                                             schema_k8sio_api_core_v1_PreferredSchedulingTerm(ref),
-		"k8s.io/api/core/v1.Probe":                                                               schema_k8sio_api_core_v1_Probe(ref),
-		"k8s.io/api/core/v1.ProbeHandler":                                                        schema_k8sio_api_core_v1_ProbeHandler(ref),
-		"k8s.io/api/core/v1.ProjectedVolumeSource":                                               schema_k8sio_api_core_v1_ProjectedVolumeSource(ref),
-		"k8s.io/api/core/v1.QuobyteVolumeSource":                                                 schema_k8sio_api_core_v1_QuobyteVolumeSource(ref),
-		"k8s.io/api/core/v1.RBDPersistentVolumeSource":                                           schema_k8sio_api_core_v1_RBDPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.RBDVolumeSource":                                                     schema_k8sio_api_core_v1_RBDVolumeSource(ref),
-		"k8s.io/api/core/v1.RangeAllocation":                                                     schema_k8sio_api_core_v1_RangeAllocation(ref),
-		"k8s.io/api/core/v1.ReplicationController":                                               schema_k8sio_api_core_v1_ReplicationController(ref),
-		"k8s.io/api/core/v1.ReplicationControllerCondition":                                      schema_k8sio_api_core_v1_ReplicationControllerCondition(ref),
-		"k8s.io/api/core/v1.ReplicationControllerList":                                           schema_k8sio_api_core_v1_ReplicationControllerList(ref),
-		"k8s.io/api/core/v1.ReplicationControllerSpec":                                           schema_k8sio_api_core_v1_ReplicationControllerSpec(ref),
-		"k8s.io/api/core/v1.ReplicationControllerStatus":                                         schema_k8sio_api_core_v1_ReplicationControllerStatus(ref),
-		"k8s.io/api/core/v1.ResourceClaim":                                                       schema_k8sio_api_core_v1_ResourceClaim(ref),
-		"k8s.io/api/core/v1.ResourceFieldSelector":                                               schema_k8sio_api_core_v1_ResourceFieldSelector(ref),
-		"k8s.io/api/core/v1.ResourceQuota":                                                       schema_k8sio_api_core_v1_ResourceQuota(ref),
-		"k8s.io/api/core/v1.ResourceQuotaList":                                                   schema_k8sio_api_core_v1_ResourceQuotaList(ref),
-		"k8s.io/api/core/v1.ResourceQuotaSpec":                                                   schema_k8sio_api_core_v1_ResourceQuotaSpec(ref),
-		"k8s.io/api/core/v1.ResourceQuotaStatus":                                                 schema_k8sio_api_core_v1_ResourceQuotaStatus(ref),
-		"k8s.io/api/core/v1.ResourceRequirements":                                                schema_k8sio_api_core_v1_ResourceRequirements(ref),
-		"k8s.io/api/core/v1.SELinuxOptions":                                                      schema_k8sio_api_core_v1_SELinuxOptions(ref),
-		"k8s.io/api/core/v1.ScaleIOPersistentVolumeSource":                                       schema_k8sio_api_core_v1_ScaleIOPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.ScaleIOVolumeSource":                                                 schema_k8sio_api_core_v1_ScaleIOVolumeSource(ref),
-		"k8s.io/api/core/v1.ScopeSelector":                                                       schema_k8sio_api_core_v1_ScopeSelector(ref),
-		"k8s.io/api/core/v1.ScopedResourceSelectorRequirement":                                   schema_k8sio_api_core_v1_ScopedResourceSelectorRequirement(ref),
-		"k8s.io/api/core/v1.SeccompProfile":                                                      schema_k8sio_api_core_v1_SeccompProfile(ref),
-		"k8s.io/api/core/v1.Secret":                                                              schema_k8sio_api_core_v1_Secret(ref),
-		"k8s.io/api/core/v1.SecretEnvSource":                                                     schema_k8sio_api_core_v1_SecretEnvSource(ref),
-		"k8s.io/api/core/v1.SecretKeySelector":                                                   schema_k8sio_api_core_v1_SecretKeySelector(ref),
-		"k8s.io/api/core/v1.SecretList":                                                          schema_k8sio_api_core_v1_SecretList(ref),
-		"k8s.io/api/core/v1.SecretProjection":                                                    schema_k8sio_api_core_v1_SecretProjection(ref),
-		"k8s.io/api/core/v1.SecretReference":                                                     schema_k8sio_api_core_v1_SecretReference(ref),
-		"k8s.io/api/core/v1.SecretVolumeSource":                                                  schema_k8sio_api_core_v1_SecretVolumeSource(ref),
-		"k8s.io/api/core/v1.SecurityContext":                                                     schema_k8sio_api_core_v1_SecurityContext(ref),
-		"k8s.io/api/core/v1.SerializedReference":                                                 schema_k8sio_api_core_v1_SerializedReference(ref),
-		"k8s.io/api/core/v1.Service":                                                             schema_k8sio_api_core_v1_Service(ref),
-		"k8s.io/api/core/v1.ServiceAccount":                                                      schema_k8sio_api_core_v1_ServiceAccount(ref),
-		"k8s.io/api/core/v1.ServiceAccountList":                                                  schema_k8sio_api_core_v1_ServiceAccountList(ref),
-		"k8s.io/api/core/v1.ServiceAccountTokenProjection":                                       schema_k8sio_api_core_v1_ServiceAccountTokenProjection(ref),
-		"k8s.io/api/core/v1.ServiceList":                                                         schema_k8sio_api_core_v1_ServiceList(ref),
-		"k8s.io/api/core/v1.ServicePort":                                                         schema_k8sio_api_core_v1_ServicePort(ref),
-		"k8s.io/api/core/v1.ServiceProxyOptions":                                                 schema_k8sio_api_core_v1_ServiceProxyOptions(ref),
-		"k8s.io/api/core/v1.ServiceSpec":                                                         schema_k8sio_api_core_v1_ServiceSpec(ref),
-		"k8s.io/api/core/v1.ServiceStatus":                                                       schema_k8sio_api_core_v1_ServiceStatus(ref),
-		"k8s.io/api/core/v1.SessionAffinityConfig":                                               schema_k8sio_api_core_v1_SessionAffinityConfig(ref),
-		"k8s.io/api/core/v1.SleepAction":                                                         schema_k8sio_api_core_v1_SleepAction(ref),
-		"k8s.io/api/core/v1.StorageOSPersistentVolumeSource":                                     schema_k8sio_api_core_v1_StorageOSPersistentVolumeSource(ref),
-		"k8s.io/api/core/v1.StorageOSVolumeSource":                                               schema_k8sio_api_core_v1_StorageOSVolumeSource(ref),
-		"k8s.io/api/core/v1.Sysctl":                                                              schema_k8sio_api_core_v1_Sysctl(ref),
-		"k8s.io/api/core/v1.TCPSocketAction":                                                     schema_k8sio_api_core_v1_TCPSocketAction(ref),
-		"k8s.io/api/core/v1.Taint":                                                               schema_k8sio_api_core_v1_Taint(ref),
-		"k8s.io/api/core/v1.Toleration":                                                          schema_k8sio_api_core_v1_Toleration(ref),
-		"k8s.io/api/core/v1.TopologySelectorLabelRequirement":                                    schema_k8sio_api_core_v1_TopologySelectorLabelRequirement(ref),
-		"k8s.io/api/core/v1.TopologySelectorTerm":                                                schema_k8sio_api_core_v1_TopologySelectorTerm(ref),
-		"k8s.io/api/core/v1.TopologySpreadConstraint":                                            schema_k8sio_api_core_v1_TopologySpreadConstraint(ref),
-		"k8s.io/api/core/v1.TypedLocalObjectReference":                                           schema_k8sio_api_core_v1_TypedLocalObjectReference(ref),
-		"k8s.io/api/core/v1.TypedObjectReference":                                                schema_k8sio_api_core_v1_TypedObjectReference(ref),
-		"k8s.io/api/core/v1.Volume":                                                              schema_k8sio_api_core_v1_Volume(ref),
-		"k8s.io/api/core/v1.VolumeDevice":                                                        schema_k8sio_api_core_v1_VolumeDevice(ref),
-		"k8s.io/api/core/v1.VolumeMount":                                                         schema_k8sio_api_core_v1_VolumeMount(ref),
-		"k8s.io/api/core/v1.VolumeNodeAffinity":                                                  schema_k8sio_api_core_v1_VolumeNodeAffinity(ref),
-		"k8s.io/api/core/v1.VolumeProjection":                                                    schema_k8sio_api_core_v1_VolumeProjection(ref),
-		"k8s.io/api/core/v1.VolumeResourceRequirements":                                          schema_k8sio_api_core_v1_VolumeResourceRequirements(ref),
-		"k8s.io/api/core/v1.VolumeSource":                                                        schema_k8sio_api_core_v1_VolumeSource(ref),
-		"k8s.io/api/core/v1.VsphereVirtualDiskVolumeSource":                                      schema_k8sio_api_core_v1_VsphereVirtualDiskVolumeSource(ref),
-		"k8s.io/api/core/v1.WeightedPodAffinityTerm":                                             schema_k8sio_api_core_v1_WeightedPodAffinityTerm(ref),
-		"k8s.io/api/core/v1.WindowsSecurityContextOptions":                                       schema_k8sio_api_core_v1_WindowsSecurityContextOptions(ref),
-		"k8s.io/apimachinery/pkg/api/resource.Quantity":                                          schema_apimachinery_pkg_api_resource_Quantity(ref),
-		"k8s.io/apimachinery/pkg/api/resource.int64Amount":                                       schema_apimachinery_pkg_api_resource_int64Amount(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.APIGroup":                                          schema_pkg_apis_meta_v1_APIGroup(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.APIGroupList":                                      schema_pkg_apis_meta_v1_APIGroupList(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.APIResource":                                       schema_pkg_apis_meta_v1_APIResource(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.APIResourceList":                                   schema_pkg_apis_meta_v1_APIResourceList(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.APIVersions":                                       schema_pkg_apis_meta_v1_APIVersions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.ApplyOptions":                                      schema_pkg_apis_meta_v1_ApplyOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Condition":                                         schema_pkg_apis_meta_v1_Condition(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.CreateOptions":                                     schema_pkg_apis_meta_v1_CreateOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.DeleteOptions":                                     schema_pkg_apis_meta_v1_DeleteOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Duration":                                          schema_pkg_apis_meta_v1_Duration(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.FieldsV1":                                          schema_pkg_apis_meta_v1_FieldsV1(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.GetOptions":                                        schema_pkg_apis_meta_v1_GetOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupKind":                                         schema_pkg_apis_meta_v1_GroupKind(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupResource":                                     schema_pkg_apis_meta_v1_GroupResource(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersion":                                      schema_pkg_apis_meta_v1_GroupVersion(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersionForDiscovery":                          schema_pkg_apis_meta_v1_GroupVersionForDiscovery(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersionKind":                                  schema_pkg_apis_meta_v1_GroupVersionKind(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersionResource":                              schema_pkg_apis_meta_v1_GroupVersionResource(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.InternalEvent":                                     schema_pkg_apis_meta_v1_InternalEvent(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector":                                     schema_pkg_apis_meta_v1_LabelSelector(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelectorRequirement":                          schema_pkg_apis_meta_v1_LabelSelectorRequirement(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.List":                                              schema_pkg_apis_meta_v1_List(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta":                                          schema_pkg_apis_meta_v1_ListMeta(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.ListOptions":                                       schema_pkg_apis_meta_v1_ListOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.ManagedFieldsEntry":                                schema_pkg_apis_meta_v1_ManagedFieldsEntry(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.MicroTime":                                         schema_pkg_apis_meta_v1_MicroTime(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta":                                        schema_pkg_apis_meta_v1_ObjectMeta(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.OwnerReference":                                    schema_pkg_apis_meta_v1_OwnerReference(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.PartialObjectMetadata":                             schema_pkg_apis_meta_v1_PartialObjectMetadata(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.PartialObjectMetadataList":                         schema_pkg_apis_meta_v1_PartialObjectMetadataList(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Patch":                                             schema_pkg_apis_meta_v1_Patch(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.PatchOptions":                                      schema_pkg_apis_meta_v1_PatchOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Preconditions":                                     schema_pkg_apis_meta_v1_Preconditions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.RootPaths":                                         schema_pkg_apis_meta_v1_RootPaths(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.ServerAddressByClientCIDR":                         schema_pkg_apis_meta_v1_ServerAddressByClientCIDR(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Status":                                            schema_pkg_apis_meta_v1_Status(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.StatusCause":                                       schema_pkg_apis_meta_v1_StatusCause(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.StatusDetails":                                     schema_pkg_apis_meta_v1_StatusDetails(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Table":                                             schema_pkg_apis_meta_v1_Table(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.TableColumnDefinition":                             schema_pkg_apis_meta_v1_TableColumnDefinition(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.TableOptions":                                      schema_pkg_apis_meta_v1_TableOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.TableRow":                                          schema_pkg_apis_meta_v1_TableRow(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.TableRowCondition":                                 schema_pkg_apis_meta_v1_TableRowCondition(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Time":                                              schema_pkg_apis_meta_v1_Time(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.Timestamp":                                         schema_pkg_apis_meta_v1_Timestamp(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.TypeMeta":                                          schema_pkg_apis_meta_v1_TypeMeta(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.UpdateOptions":                                     schema_pkg_apis_meta_v1_UpdateOptions(ref),
-		"k8s.io/apimachinery/pkg/apis/meta/v1.WatchEvent":                                        schema_pkg_apis_meta_v1_WatchEvent(ref),
-		"k8s.io/apimachinery/pkg/runtime.RawExtension":                                           schema_k8sio_apimachinery_pkg_runtime_RawExtension(ref),
-		"k8s.io/apimachinery/pkg/runtime.TypeMeta":                                               schema_k8sio_apimachinery_pkg_runtime_TypeMeta(ref),
-		"k8s.io/apimachinery/pkg/runtime.Unknown":                                                schema_k8sio_apimachinery_pkg_runtime_Unknown(ref),
-		"k8s.io/apimachinery/pkg/util/intstr.IntOrString":                                        schema_apimachinery_pkg_util_intstr_IntOrString(ref),
-		"k8s.io/apimachinery/pkg/version.Info":                                                   schema_k8sio_apimachinery_pkg_version_Info(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Catalog":                                     schema_pkg_apis_walrus_v1_Catalog(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.CatalogList":                                 schema_pkg_apis_walrus_v1_CatalogList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Connector":                                   schema_pkg_apis_walrus_v1_Connector(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ConnectorList":                               schema_pkg_apis_walrus_v1_ConnectorList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Environment":                                 schema_pkg_apis_walrus_v1_Environment(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.EnvironmentList":                             schema_pkg_apis_walrus_v1_EnvironmentList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.EnvironmentSpec":                             schema_pkg_apis_walrus_v1_EnvironmentSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.EnvironmentStatus":                           schema_pkg_apis_walrus_v1_EnvironmentStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.FileExample":                                 schema_pkg_apis_walrus_v1_FileExample(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.FileExampleList":                             schema_pkg_apis_walrus_v1_FileExampleList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.FileExampleStatus":                           schema_pkg_apis_walrus_v1_FileExampleStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Project":                                     schema_pkg_apis_walrus_v1_Project(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ProjectList":                                 schema_pkg_apis_walrus_v1_ProjectList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ProjectSpec":                                 schema_pkg_apis_walrus_v1_ProjectSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ProjectStatus":                               schema_pkg_apis_walrus_v1_ProjectStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ProjectSubject":                              schema_pkg_apis_walrus_v1_ProjectSubject(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ProjectSubjects":                             schema_pkg_apis_walrus_v1_ProjectSubjects(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Resource":                                    schema_pkg_apis_walrus_v1_Resource(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceComponents":                          schema_pkg_apis_walrus_v1_ResourceComponents(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceComponentsList":                      schema_pkg_apis_walrus_v1_ResourceComponentsList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceDefinition":                          schema_pkg_apis_walrus_v1_ResourceDefinition(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceDefinitionList":                      schema_pkg_apis_walrus_v1_ResourceDefinitionList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceList":                                schema_pkg_apis_walrus_v1_ResourceList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceRun":                                 schema_pkg_apis_walrus_v1_ResourceRun(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceRunList":                             schema_pkg_apis_walrus_v1_ResourceRunList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Schema":                                      schema_pkg_apis_walrus_v1_Schema(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SchemaList":                                  schema_pkg_apis_walrus_v1_SchemaList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Setting":                                     schema_pkg_apis_walrus_v1_Setting(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SettingList":                                 schema_pkg_apis_walrus_v1_SettingList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SettingSpec":                                 schema_pkg_apis_walrus_v1_SettingSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SettingStatus":                               schema_pkg_apis_walrus_v1_SettingStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Subject":                                     schema_pkg_apis_walrus_v1_Subject(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectList":                                 schema_pkg_apis_walrus_v1_SubjectList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectLogin":                                schema_pkg_apis_walrus_v1_SubjectLogin(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectLoginSpec":                            schema_pkg_apis_walrus_v1_SubjectLoginSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectLoginStatus":                          schema_pkg_apis_walrus_v1_SubjectLoginStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProvider":                             schema_pkg_apis_walrus_v1_SubjectProvider(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderBitbucketConfig":              schema_pkg_apis_walrus_v1_SubjectProviderBitbucketConfig(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderExternalConfig":               schema_pkg_apis_walrus_v1_SubjectProviderExternalConfig(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGitHubConfig":                 schema_pkg_apis_walrus_v1_SubjectProviderGitHubConfig(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGitLabConfig":                 schema_pkg_apis_walrus_v1_SubjectProviderGitLabConfig(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGiteaConfig":                  schema_pkg_apis_walrus_v1_SubjectProviderGiteaConfig(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderGoogleConfig":                 schema_pkg_apis_walrus_v1_SubjectProviderGoogleConfig(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPConfig":                   schema_pkg_apis_walrus_v1_SubjectProviderLDAPConfig(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPGroupSearch":              schema_pkg_apis_walrus_v1_SubjectProviderLDAPGroupSearch(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLDAPUserSearch":               schema_pkg_apis_walrus_v1_SubjectProviderLDAPUserSearch(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderLdapGroupSearchUserMatcher":   schema_pkg_apis_walrus_v1_SubjectProviderLdapGroupSearchUserMatcher(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderList":                         schema_pkg_apis_walrus_v1_SubjectProviderList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderMicrosoftConfig":              schema_pkg_apis_walrus_v1_SubjectProviderMicrosoftConfig(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOAuthClaimMapping":            schema_pkg_apis_walrus_v1_SubjectProviderOAuthClaimMapping(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOAuthConfig":                  schema_pkg_apis_walrus_v1_SubjectProviderOAuthConfig(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderOIDCConfig":                   schema_pkg_apis_walrus_v1_SubjectProviderOIDCConfig(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderSpec":                         schema_pkg_apis_walrus_v1_SubjectProviderSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectProviderStatus":                       schema_pkg_apis_walrus_v1_SubjectProviderStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectReference":                            schema_pkg_apis_walrus_v1_SubjectReference(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectSpec":                                 schema_pkg_apis_walrus_v1_SubjectSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectToken":                                schema_pkg_apis_walrus_v1_SubjectToken(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectTokenSpec":                            schema_pkg_apis_walrus_v1_SubjectTokenSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.SubjectTokenStatus":                          schema_pkg_apis_walrus_v1_SubjectTokenStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Template":                                    schema_pkg_apis_walrus_v1_Template(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.TemplateList":                                schema_pkg_apis_walrus_v1_TemplateList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.Variable":                                    schema_pkg_apis_walrus_v1_Variable(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.VariableList":                                schema_pkg_apis_walrus_v1_VariableList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.VariableSpec":                                schema_pkg_apis_walrus_v1_VariableSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walrus/v1.VariableStatus":                              schema_pkg_apis_walrus_v1_VariableStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Catalog":                                 schema_pkg_apis_walruscore_v1_Catalog(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.CatalogList":                             schema_pkg_apis_walruscore_v1_CatalogList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.CatalogSpec":                             schema_pkg_apis_walruscore_v1_CatalogSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.CatalogStatus":                           schema_pkg_apis_walruscore_v1_CatalogStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition":                               schema_pkg_apis_walruscore_v1_Condition(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConditionSummary":                        schema_pkg_apis_walruscore_v1_ConditionSummary(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Connector":                               schema_pkg_apis_walruscore_v1_Connector(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorList":                           schema_pkg_apis_walruscore_v1_ConnectorList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorReference":                      schema_pkg_apis_walruscore_v1_ConnectorReference(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorSpec":                           schema_pkg_apis_walruscore_v1_ConnectorSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorStatus":                         schema_pkg_apis_walruscore_v1_ConnectorStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Filters":                                 schema_pkg_apis_walruscore_v1_Filters(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Resource":                                schema_pkg_apis_walruscore_v1_Resource(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponent":                       schema_pkg_apis_walruscore_v1_ResourceComponent(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentAppendix":               schema_pkg_apis_walruscore_v1_ResourceComponentAppendix(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentChangeSummary":          schema_pkg_apis_walruscore_v1_ResourceComponentChangeSummary(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentDependency":             schema_pkg_apis_walruscore_v1_ResourceComponentDependency(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentOperationKey":           schema_pkg_apis_walruscore_v1_ResourceComponentOperationKey(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentOperationKeys":          schema_pkg_apis_walruscore_v1_ResourceComponentOperationKeys(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponents":                      schema_pkg_apis_walruscore_v1_ResourceComponents(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentsList":                  schema_pkg_apis_walruscore_v1_ResourceComponentsList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentsSpec":                  schema_pkg_apis_walruscore_v1_ResourceComponentsSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentsStatus":                schema_pkg_apis_walruscore_v1_ResourceComponentsStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinition":                      schema_pkg_apis_walruscore_v1_ResourceDefinition(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionList":                  schema_pkg_apis_walruscore_v1_ResourceDefinitionList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionMatchingRule":          schema_pkg_apis_walruscore_v1_ResourceDefinitionMatchingRule(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionMatchingRuleList":      schema_pkg_apis_walruscore_v1_ResourceDefinitionMatchingRuleList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionMatchingRuleReference": schema_pkg_apis_walruscore_v1_ResourceDefinitionMatchingRuleReference(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionMatchingRuleSpec":      schema_pkg_apis_walruscore_v1_ResourceDefinitionMatchingRuleSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionMatchingRuleStatus":    schema_pkg_apis_walruscore_v1_ResourceDefinitionMatchingRuleStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionReference":             schema_pkg_apis_walruscore_v1_ResourceDefinitionReference(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionSpec":                  schema_pkg_apis_walruscore_v1_ResourceDefinitionSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionStatus":                schema_pkg_apis_walruscore_v1_ResourceDefinitionStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHook":                            schema_pkg_apis_walruscore_v1_ResourceHook(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHookList":                        schema_pkg_apis_walruscore_v1_ResourceHookList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHookReference":                   schema_pkg_apis_walruscore_v1_ResourceHookReference(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHookSpec":                        schema_pkg_apis_walruscore_v1_ResourceHookSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHookStatus":                      schema_pkg_apis_walruscore_v1_ResourceHookStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHookStep":                        schema_pkg_apis_walruscore_v1_ResourceHookStep(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceList":                            schema_pkg_apis_walruscore_v1_ResourceList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceOperationHook":                   schema_pkg_apis_walruscore_v1_ResourceOperationHook(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRun":                             schema_pkg_apis_walruscore_v1_ResourceRun(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunList":                         schema_pkg_apis_walruscore_v1_ResourceRunList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunSpec":                         schema_pkg_apis_walruscore_v1_ResourceRunSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStatus":                       schema_pkg_apis_walruscore_v1_ResourceRunStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStep":                         schema_pkg_apis_walruscore_v1_ResourceRunStep(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepApprovalRecord":           schema_pkg_apis_walruscore_v1_ResourceRunStepApprovalRecord(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepApprovalTemplate":         schema_pkg_apis_walruscore_v1_ResourceRunStepApprovalTemplate(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepApprovalUserAction":       schema_pkg_apis_walruscore_v1_ResourceRunStepApprovalUserAction(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepTemplate":                 schema_pkg_apis_walruscore_v1_ResourceRunStepTemplate(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepTemplateList":             schema_pkg_apis_walruscore_v1_ResourceRunStepTemplateList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepTemplateReference":        schema_pkg_apis_walruscore_v1_ResourceRunStepTemplateReference(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepTemplateSpec":             schema_pkg_apis_walruscore_v1_ResourceRunStepTemplateSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepTemplateStatus":           schema_pkg_apis_walruscore_v1_ResourceRunStepTemplateStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplate":                     schema_pkg_apis_walruscore_v1_ResourceRunTemplate(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplateList":                 schema_pkg_apis_walruscore_v1_ResourceRunTemplateList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplateReference":            schema_pkg_apis_walruscore_v1_ResourceRunTemplateReference(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplateSpec":                 schema_pkg_apis_walruscore_v1_ResourceRunTemplateSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplateStatus":               schema_pkg_apis_walruscore_v1_ResourceRunTemplateStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplateStep":                 schema_pkg_apis_walruscore_v1_ResourceRunTemplateStep(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceSpec":                            schema_pkg_apis_walruscore_v1_ResourceSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceStatus":                          schema_pkg_apis_walruscore_v1_ResourceStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Schema":                                  schema_pkg_apis_walruscore_v1_Schema(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.SchemaList":                              schema_pkg_apis_walruscore_v1_SchemaList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.SchemaStatus":                            schema_pkg_apis_walruscore_v1_SchemaStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.StatusDescriptor":                        schema_pkg_apis_walruscore_v1_StatusDescriptor(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.TempalteVersionReference":                schema_pkg_apis_walruscore_v1_TempalteVersionReference(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Template":                                schema_pkg_apis_walruscore_v1_Template(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.TemplateList":                            schema_pkg_apis_walruscore_v1_TemplateList(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.TemplateSpec":                            schema_pkg_apis_walruscore_v1_TemplateSpec(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.TemplateStatus":                          schema_pkg_apis_walruscore_v1_TemplateStatus(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.TemplateVersion":                         schema_pkg_apis_walruscore_v1_TemplateVersion(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.VCSRepository":                           schema_pkg_apis_walruscore_v1_VCSRepository(ref),
+		"github.com/seal-io/walrus/pkg/apis/walruscore/v1.VCSSource":                               schema_pkg_apis_walruscore_v1_VCSSource(ref),
+		"k8s.io/api/core/v1.AWSElasticBlockStoreVolumeSource":                                      schema_k8sio_api_core_v1_AWSElasticBlockStoreVolumeSource(ref),
+		"k8s.io/api/core/v1.Affinity":                                                              schema_k8sio_api_core_v1_Affinity(ref),
+		"k8s.io/api/core/v1.AttachedVolume":                                                        schema_k8sio_api_core_v1_AttachedVolume(ref),
+		"k8s.io/api/core/v1.AvoidPods":                                                             schema_k8sio_api_core_v1_AvoidPods(ref),
+		"k8s.io/api/core/v1.AzureDiskVolumeSource":                                                 schema_k8sio_api_core_v1_AzureDiskVolumeSource(ref),
+		"k8s.io/api/core/v1.AzureFilePersistentVolumeSource":                                       schema_k8sio_api_core_v1_AzureFilePersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.AzureFileVolumeSource":                                                 schema_k8sio_api_core_v1_AzureFileVolumeSource(ref),
+		"k8s.io/api/core/v1.Binding":                                                               schema_k8sio_api_core_v1_Binding(ref),
+		"k8s.io/api/core/v1.CSIPersistentVolumeSource":                                             schema_k8sio_api_core_v1_CSIPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.CSIVolumeSource":                                                       schema_k8sio_api_core_v1_CSIVolumeSource(ref),
+		"k8s.io/api/core/v1.Capabilities":                                                          schema_k8sio_api_core_v1_Capabilities(ref),
+		"k8s.io/api/core/v1.CephFSPersistentVolumeSource":                                          schema_k8sio_api_core_v1_CephFSPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.CephFSVolumeSource":                                                    schema_k8sio_api_core_v1_CephFSVolumeSource(ref),
+		"k8s.io/api/core/v1.CinderPersistentVolumeSource":                                          schema_k8sio_api_core_v1_CinderPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.CinderVolumeSource":                                                    schema_k8sio_api_core_v1_CinderVolumeSource(ref),
+		"k8s.io/api/core/v1.ClaimSource":                                                           schema_k8sio_api_core_v1_ClaimSource(ref),
+		"k8s.io/api/core/v1.ClientIPConfig":                                                        schema_k8sio_api_core_v1_ClientIPConfig(ref),
+		"k8s.io/api/core/v1.ClusterTrustBundleProjection":                                          schema_k8sio_api_core_v1_ClusterTrustBundleProjection(ref),
+		"k8s.io/api/core/v1.ComponentCondition":                                                    schema_k8sio_api_core_v1_ComponentCondition(ref),
+		"k8s.io/api/core/v1.ComponentStatus":                                                       schema_k8sio_api_core_v1_ComponentStatus(ref),
+		"k8s.io/api/core/v1.ComponentStatusList":                                                   schema_k8sio_api_core_v1_ComponentStatusList(ref),
+		"k8s.io/api/core/v1.ConfigMap":                                                             schema_k8sio_api_core_v1_ConfigMap(ref),
+		"k8s.io/api/core/v1.ConfigMapEnvSource":                                                    schema_k8sio_api_core_v1_ConfigMapEnvSource(ref),
+		"k8s.io/api/core/v1.ConfigMapKeySelector":                                                  schema_k8sio_api_core_v1_ConfigMapKeySelector(ref),
+		"k8s.io/api/core/v1.ConfigMapList":                                                         schema_k8sio_api_core_v1_ConfigMapList(ref),
+		"k8s.io/api/core/v1.ConfigMapNodeConfigSource":                                             schema_k8sio_api_core_v1_ConfigMapNodeConfigSource(ref),
+		"k8s.io/api/core/v1.ConfigMapProjection":                                                   schema_k8sio_api_core_v1_ConfigMapProjection(ref),
+		"k8s.io/api/core/v1.ConfigMapVolumeSource":                                                 schema_k8sio_api_core_v1_ConfigMapVolumeSource(ref),
+		"k8s.io/api/core/v1.Container":                                                             schema_k8sio_api_core_v1_Container(ref),
+		"k8s.io/api/core/v1.ContainerImage":                                                        schema_k8sio_api_core_v1_ContainerImage(ref),
+		"k8s.io/api/core/v1.ContainerPort":                                                         schema_k8sio_api_core_v1_ContainerPort(ref),
+		"k8s.io/api/core/v1.ContainerResizePolicy":                                                 schema_k8sio_api_core_v1_ContainerResizePolicy(ref),
+		"k8s.io/api/core/v1.ContainerState":                                                        schema_k8sio_api_core_v1_ContainerState(ref),
+		"k8s.io/api/core/v1.ContainerStateRunning":                                                 schema_k8sio_api_core_v1_ContainerStateRunning(ref),
+		"k8s.io/api/core/v1.ContainerStateTerminated":                                              schema_k8sio_api_core_v1_ContainerStateTerminated(ref),
+		"k8s.io/api/core/v1.ContainerStateWaiting":                                                 schema_k8sio_api_core_v1_ContainerStateWaiting(ref),
+		"k8s.io/api/core/v1.ContainerStatus":                                                       schema_k8sio_api_core_v1_ContainerStatus(ref),
+		"k8s.io/api/core/v1.DaemonEndpoint":                                                        schema_k8sio_api_core_v1_DaemonEndpoint(ref),
+		"k8s.io/api/core/v1.DownwardAPIProjection":                                                 schema_k8sio_api_core_v1_DownwardAPIProjection(ref),
+		"k8s.io/api/core/v1.DownwardAPIVolumeFile":                                                 schema_k8sio_api_core_v1_DownwardAPIVolumeFile(ref),
+		"k8s.io/api/core/v1.DownwardAPIVolumeSource":                                               schema_k8sio_api_core_v1_DownwardAPIVolumeSource(ref),
+		"k8s.io/api/core/v1.EmptyDirVolumeSource":                                                  schema_k8sio_api_core_v1_EmptyDirVolumeSource(ref),
+		"k8s.io/api/core/v1.EndpointAddress":                                                       schema_k8sio_api_core_v1_EndpointAddress(ref),
+		"k8s.io/api/core/v1.EndpointPort":                                                          schema_k8sio_api_core_v1_EndpointPort(ref),
+		"k8s.io/api/core/v1.EndpointSubset":                                                        schema_k8sio_api_core_v1_EndpointSubset(ref),
+		"k8s.io/api/core/v1.Endpoints":                                                             schema_k8sio_api_core_v1_Endpoints(ref),
+		"k8s.io/api/core/v1.EndpointsList":                                                         schema_k8sio_api_core_v1_EndpointsList(ref),
+		"k8s.io/api/core/v1.EnvFromSource":                                                         schema_k8sio_api_core_v1_EnvFromSource(ref),
+		"k8s.io/api/core/v1.EnvVar":                                                                schema_k8sio_api_core_v1_EnvVar(ref),
+		"k8s.io/api/core/v1.EnvVarSource":                                                          schema_k8sio_api_core_v1_EnvVarSource(ref),
+		"k8s.io/api/core/v1.EphemeralContainer":                                                    schema_k8sio_api_core_v1_EphemeralContainer(ref),
+		"k8s.io/api/core/v1.EphemeralContainerCommon":                                              schema_k8sio_api_core_v1_EphemeralContainerCommon(ref),
+		"k8s.io/api/core/v1.EphemeralVolumeSource":                                                 schema_k8sio_api_core_v1_EphemeralVolumeSource(ref),
+		"k8s.io/api/core/v1.Event":                                                                 schema_k8sio_api_core_v1_Event(ref),
+		"k8s.io/api/core/v1.EventList":                                                             schema_k8sio_api_core_v1_EventList(ref),
+		"k8s.io/api/core/v1.EventSeries":                                                           schema_k8sio_api_core_v1_EventSeries(ref),
+		"k8s.io/api/core/v1.EventSource":                                                           schema_k8sio_api_core_v1_EventSource(ref),
+		"k8s.io/api/core/v1.ExecAction":                                                            schema_k8sio_api_core_v1_ExecAction(ref),
+		"k8s.io/api/core/v1.FCVolumeSource":                                                        schema_k8sio_api_core_v1_FCVolumeSource(ref),
+		"k8s.io/api/core/v1.FlexPersistentVolumeSource":                                            schema_k8sio_api_core_v1_FlexPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.FlexVolumeSource":                                                      schema_k8sio_api_core_v1_FlexVolumeSource(ref),
+		"k8s.io/api/core/v1.FlockerVolumeSource":                                                   schema_k8sio_api_core_v1_FlockerVolumeSource(ref),
+		"k8s.io/api/core/v1.GCEPersistentDiskVolumeSource":                                         schema_k8sio_api_core_v1_GCEPersistentDiskVolumeSource(ref),
+		"k8s.io/api/core/v1.GRPCAction":                                                            schema_k8sio_api_core_v1_GRPCAction(ref),
+		"k8s.io/api/core/v1.GitRepoVolumeSource":                                                   schema_k8sio_api_core_v1_GitRepoVolumeSource(ref),
+		"k8s.io/api/core/v1.GlusterfsPersistentVolumeSource":                                       schema_k8sio_api_core_v1_GlusterfsPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.GlusterfsVolumeSource":                                                 schema_k8sio_api_core_v1_GlusterfsVolumeSource(ref),
+		"k8s.io/api/core/v1.HTTPGetAction":                                                         schema_k8sio_api_core_v1_HTTPGetAction(ref),
+		"k8s.io/api/core/v1.HTTPHeader":                                                            schema_k8sio_api_core_v1_HTTPHeader(ref),
+		"k8s.io/api/core/v1.HostAlias":                                                             schema_k8sio_api_core_v1_HostAlias(ref),
+		"k8s.io/api/core/v1.HostIP":                                                                schema_k8sio_api_core_v1_HostIP(ref),
+		"k8s.io/api/core/v1.HostPathVolumeSource":                                                  schema_k8sio_api_core_v1_HostPathVolumeSource(ref),
+		"k8s.io/api/core/v1.ISCSIPersistentVolumeSource":                                           schema_k8sio_api_core_v1_ISCSIPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.ISCSIVolumeSource":                                                     schema_k8sio_api_core_v1_ISCSIVolumeSource(ref),
+		"k8s.io/api/core/v1.KeyToPath":                                                             schema_k8sio_api_core_v1_KeyToPath(ref),
+		"k8s.io/api/core/v1.Lifecycle":                                                             schema_k8sio_api_core_v1_Lifecycle(ref),
+		"k8s.io/api/core/v1.LifecycleHandler":                                                      schema_k8sio_api_core_v1_LifecycleHandler(ref),
+		"k8s.io/api/core/v1.LimitRange":                                                            schema_k8sio_api_core_v1_LimitRange(ref),
+		"k8s.io/api/core/v1.LimitRangeItem":                                                        schema_k8sio_api_core_v1_LimitRangeItem(ref),
+		"k8s.io/api/core/v1.LimitRangeList":                                                        schema_k8sio_api_core_v1_LimitRangeList(ref),
+		"k8s.io/api/core/v1.LimitRangeSpec":                                                        schema_k8sio_api_core_v1_LimitRangeSpec(ref),
+		"k8s.io/api/core/v1.List":                                                                  schema_k8sio_api_core_v1_List(ref),
+		"k8s.io/api/core/v1.LoadBalancerIngress":                                                   schema_k8sio_api_core_v1_LoadBalancerIngress(ref),
+		"k8s.io/api/core/v1.LoadBalancerStatus":                                                    schema_k8sio_api_core_v1_LoadBalancerStatus(ref),
+		"k8s.io/api/core/v1.LocalObjectReference":                                                  schema_k8sio_api_core_v1_LocalObjectReference(ref),
+		"k8s.io/api/core/v1.LocalVolumeSource":                                                     schema_k8sio_api_core_v1_LocalVolumeSource(ref),
+		"k8s.io/api/core/v1.ModifyVolumeStatus":                                                    schema_k8sio_api_core_v1_ModifyVolumeStatus(ref),
+		"k8s.io/api/core/v1.NFSVolumeSource":                                                       schema_k8sio_api_core_v1_NFSVolumeSource(ref),
+		"k8s.io/api/core/v1.Namespace":                                                             schema_k8sio_api_core_v1_Namespace(ref),
+		"k8s.io/api/core/v1.NamespaceCondition":                                                    schema_k8sio_api_core_v1_NamespaceCondition(ref),
+		"k8s.io/api/core/v1.NamespaceList":                                                         schema_k8sio_api_core_v1_NamespaceList(ref),
+		"k8s.io/api/core/v1.NamespaceSpec":                                                         schema_k8sio_api_core_v1_NamespaceSpec(ref),
+		"k8s.io/api/core/v1.NamespaceStatus":                                                       schema_k8sio_api_core_v1_NamespaceStatus(ref),
+		"k8s.io/api/core/v1.Node":                                                                  schema_k8sio_api_core_v1_Node(ref),
+		"k8s.io/api/core/v1.NodeAddress":                                                           schema_k8sio_api_core_v1_NodeAddress(ref),
+		"k8s.io/api/core/v1.NodeAffinity":                                                          schema_k8sio_api_core_v1_NodeAffinity(ref),
+		"k8s.io/api/core/v1.NodeCondition":                                                         schema_k8sio_api_core_v1_NodeCondition(ref),
+		"k8s.io/api/core/v1.NodeConfigSource":                                                      schema_k8sio_api_core_v1_NodeConfigSource(ref),
+		"k8s.io/api/core/v1.NodeConfigStatus":                                                      schema_k8sio_api_core_v1_NodeConfigStatus(ref),
+		"k8s.io/api/core/v1.NodeDaemonEndpoints":                                                   schema_k8sio_api_core_v1_NodeDaemonEndpoints(ref),
+		"k8s.io/api/core/v1.NodeList":                                                              schema_k8sio_api_core_v1_NodeList(ref),
+		"k8s.io/api/core/v1.NodeProxyOptions":                                                      schema_k8sio_api_core_v1_NodeProxyOptions(ref),
+		"k8s.io/api/core/v1.NodeResources":                                                         schema_k8sio_api_core_v1_NodeResources(ref),
+		"k8s.io/api/core/v1.NodeSelector":                                                          schema_k8sio_api_core_v1_NodeSelector(ref),
+		"k8s.io/api/core/v1.NodeSelectorRequirement":                                               schema_k8sio_api_core_v1_NodeSelectorRequirement(ref),
+		"k8s.io/api/core/v1.NodeSelectorTerm":                                                      schema_k8sio_api_core_v1_NodeSelectorTerm(ref),
+		"k8s.io/api/core/v1.NodeSpec":                                                              schema_k8sio_api_core_v1_NodeSpec(ref),
+		"k8s.io/api/core/v1.NodeStatus":                                                            schema_k8sio_api_core_v1_NodeStatus(ref),
+		"k8s.io/api/core/v1.NodeSystemInfo":                                                        schema_k8sio_api_core_v1_NodeSystemInfo(ref),
+		"k8s.io/api/core/v1.ObjectFieldSelector":                                                   schema_k8sio_api_core_v1_ObjectFieldSelector(ref),
+		"k8s.io/api/core/v1.ObjectReference":                                                       schema_k8sio_api_core_v1_ObjectReference(ref),
+		"k8s.io/api/core/v1.PersistentVolume":                                                      schema_k8sio_api_core_v1_PersistentVolume(ref),
+		"k8s.io/api/core/v1.PersistentVolumeClaim":                                                 schema_k8sio_api_core_v1_PersistentVolumeClaim(ref),
+		"k8s.io/api/core/v1.PersistentVolumeClaimCondition":                                        schema_k8sio_api_core_v1_PersistentVolumeClaimCondition(ref),
+		"k8s.io/api/core/v1.PersistentVolumeClaimList":                                             schema_k8sio_api_core_v1_PersistentVolumeClaimList(ref),
+		"k8s.io/api/core/v1.PersistentVolumeClaimSpec":                                             schema_k8sio_api_core_v1_PersistentVolumeClaimSpec(ref),
+		"k8s.io/api/core/v1.PersistentVolumeClaimStatus":                                           schema_k8sio_api_core_v1_PersistentVolumeClaimStatus(ref),
+		"k8s.io/api/core/v1.PersistentVolumeClaimTemplate":                                         schema_k8sio_api_core_v1_PersistentVolumeClaimTemplate(ref),
+		"k8s.io/api/core/v1.PersistentVolumeClaimVolumeSource":                                     schema_k8sio_api_core_v1_PersistentVolumeClaimVolumeSource(ref),
+		"k8s.io/api/core/v1.PersistentVolumeList":                                                  schema_k8sio_api_core_v1_PersistentVolumeList(ref),
+		"k8s.io/api/core/v1.PersistentVolumeSource":                                                schema_k8sio_api_core_v1_PersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.PersistentVolumeSpec":                                                  schema_k8sio_api_core_v1_PersistentVolumeSpec(ref),
+		"k8s.io/api/core/v1.PersistentVolumeStatus":                                                schema_k8sio_api_core_v1_PersistentVolumeStatus(ref),
+		"k8s.io/api/core/v1.PhotonPersistentDiskVolumeSource":                                      schema_k8sio_api_core_v1_PhotonPersistentDiskVolumeSource(ref),
+		"k8s.io/api/core/v1.Pod":                                                                   schema_k8sio_api_core_v1_Pod(ref),
+		"k8s.io/api/core/v1.PodAffinity":                                                           schema_k8sio_api_core_v1_PodAffinity(ref),
+		"k8s.io/api/core/v1.PodAffinityTerm":                                                       schema_k8sio_api_core_v1_PodAffinityTerm(ref),
+		"k8s.io/api/core/v1.PodAntiAffinity":                                                       schema_k8sio_api_core_v1_PodAntiAffinity(ref),
+		"k8s.io/api/core/v1.PodAttachOptions":                                                      schema_k8sio_api_core_v1_PodAttachOptions(ref),
+		"k8s.io/api/core/v1.PodCondition":                                                          schema_k8sio_api_core_v1_PodCondition(ref),
+		"k8s.io/api/core/v1.PodDNSConfig":                                                          schema_k8sio_api_core_v1_PodDNSConfig(ref),
+		"k8s.io/api/core/v1.PodDNSConfigOption":                                                    schema_k8sio_api_core_v1_PodDNSConfigOption(ref),
+		"k8s.io/api/core/v1.PodExecOptions":                                                        schema_k8sio_api_core_v1_PodExecOptions(ref),
+		"k8s.io/api/core/v1.PodIP":                                                                 schema_k8sio_api_core_v1_PodIP(ref),
+		"k8s.io/api/core/v1.PodList":                                                               schema_k8sio_api_core_v1_PodList(ref),
+		"k8s.io/api/core/v1.PodLogOptions":                                                         schema_k8sio_api_core_v1_PodLogOptions(ref),
+		"k8s.io/api/core/v1.PodOS":                                                                 schema_k8sio_api_core_v1_PodOS(ref),
+		"k8s.io/api/core/v1.PodPortForwardOptions":                                                 schema_k8sio_api_core_v1_PodPortForwardOptions(ref),
+		"k8s.io/api/core/v1.PodProxyOptions":                                                       schema_k8sio_api_core_v1_PodProxyOptions(ref),
+		"k8s.io/api/core/v1.PodReadinessGate":                                                      schema_k8sio_api_core_v1_PodReadinessGate(ref),
+		"k8s.io/api/core/v1.PodResourceClaim":                                                      schema_k8sio_api_core_v1_PodResourceClaim(ref),
+		"k8s.io/api/core/v1.PodResourceClaimStatus":                                                schema_k8sio_api_core_v1_PodResourceClaimStatus(ref),
+		"k8s.io/api/core/v1.PodSchedulingGate":                                                     schema_k8sio_api_core_v1_PodSchedulingGate(ref),
+		"k8s.io/api/core/v1.PodSecurityContext":                                                    schema_k8sio_api_core_v1_PodSecurityContext(ref),
+		"k8s.io/api/core/v1.PodSignature":                                                          schema_k8sio_api_core_v1_PodSignature(ref),
+		"k8s.io/api/core/v1.PodSpec":                                                               schema_k8sio_api_core_v1_PodSpec(ref),
+		"k8s.io/api/core/v1.PodStatus":                                                             schema_k8sio_api_core_v1_PodStatus(ref),
+		"k8s.io/api/core/v1.PodStatusResult":                                                       schema_k8sio_api_core_v1_PodStatusResult(ref),
+		"k8s.io/api/core/v1.PodTemplate":                                                           schema_k8sio_api_core_v1_PodTemplate(ref),
+		"k8s.io/api/core/v1.PodTemplateList":                                                       schema_k8sio_api_core_v1_PodTemplateList(ref),
+		"k8s.io/api/core/v1.PodTemplateSpec":                                                       schema_k8sio_api_core_v1_PodTemplateSpec(ref),
+		"k8s.io/api/core/v1.PortStatus":                                                            schema_k8sio_api_core_v1_PortStatus(ref),
+		"k8s.io/api/core/v1.PortworxVolumeSource":                                                  schema_k8sio_api_core_v1_PortworxVolumeSource(ref),
+		"k8s.io/api/core/v1.PreferAvoidPodsEntry":                                                  schema_k8sio_api_core_v1_PreferAvoidPodsEntry(ref),
+		"k8s.io/api/core/v1.PreferredSchedulingTerm":                                               schema_k8sio_api_core_v1_PreferredSchedulingTerm(ref),
+		"k8s.io/api/core/v1.Probe":                                                                 schema_k8sio_api_core_v1_Probe(ref),
+		"k8s.io/api/core/v1.ProbeHandler":                                                          schema_k8sio_api_core_v1_ProbeHandler(ref),
+		"k8s.io/api/core/v1.ProjectedVolumeSource":                                                 schema_k8sio_api_core_v1_ProjectedVolumeSource(ref),
+		"k8s.io/api/core/v1.QuobyteVolumeSource":                                                   schema_k8sio_api_core_v1_QuobyteVolumeSource(ref),
+		"k8s.io/api/core/v1.RBDPersistentVolumeSource":                                             schema_k8sio_api_core_v1_RBDPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.RBDVolumeSource":                                                       schema_k8sio_api_core_v1_RBDVolumeSource(ref),
+		"k8s.io/api/core/v1.RangeAllocation":                                                       schema_k8sio_api_core_v1_RangeAllocation(ref),
+		"k8s.io/api/core/v1.ReplicationController":                                                 schema_k8sio_api_core_v1_ReplicationController(ref),
+		"k8s.io/api/core/v1.ReplicationControllerCondition":                                        schema_k8sio_api_core_v1_ReplicationControllerCondition(ref),
+		"k8s.io/api/core/v1.ReplicationControllerList":                                             schema_k8sio_api_core_v1_ReplicationControllerList(ref),
+		"k8s.io/api/core/v1.ReplicationControllerSpec":                                             schema_k8sio_api_core_v1_ReplicationControllerSpec(ref),
+		"k8s.io/api/core/v1.ReplicationControllerStatus":                                           schema_k8sio_api_core_v1_ReplicationControllerStatus(ref),
+		"k8s.io/api/core/v1.ResourceClaim":                                                         schema_k8sio_api_core_v1_ResourceClaim(ref),
+		"k8s.io/api/core/v1.ResourceFieldSelector":                                                 schema_k8sio_api_core_v1_ResourceFieldSelector(ref),
+		"k8s.io/api/core/v1.ResourceQuota":                                                         schema_k8sio_api_core_v1_ResourceQuota(ref),
+		"k8s.io/api/core/v1.ResourceQuotaList":                                                     schema_k8sio_api_core_v1_ResourceQuotaList(ref),
+		"k8s.io/api/core/v1.ResourceQuotaSpec":                                                     schema_k8sio_api_core_v1_ResourceQuotaSpec(ref),
+		"k8s.io/api/core/v1.ResourceQuotaStatus":                                                   schema_k8sio_api_core_v1_ResourceQuotaStatus(ref),
+		"k8s.io/api/core/v1.ResourceRequirements":                                                  schema_k8sio_api_core_v1_ResourceRequirements(ref),
+		"k8s.io/api/core/v1.SELinuxOptions":                                                        schema_k8sio_api_core_v1_SELinuxOptions(ref),
+		"k8s.io/api/core/v1.ScaleIOPersistentVolumeSource":                                         schema_k8sio_api_core_v1_ScaleIOPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.ScaleIOVolumeSource":                                                   schema_k8sio_api_core_v1_ScaleIOVolumeSource(ref),
+		"k8s.io/api/core/v1.ScopeSelector":                                                         schema_k8sio_api_core_v1_ScopeSelector(ref),
+		"k8s.io/api/core/v1.ScopedResourceSelectorRequirement":                                     schema_k8sio_api_core_v1_ScopedResourceSelectorRequirement(ref),
+		"k8s.io/api/core/v1.SeccompProfile":                                                        schema_k8sio_api_core_v1_SeccompProfile(ref),
+		"k8s.io/api/core/v1.Secret":                                                                schema_k8sio_api_core_v1_Secret(ref),
+		"k8s.io/api/core/v1.SecretEnvSource":                                                       schema_k8sio_api_core_v1_SecretEnvSource(ref),
+		"k8s.io/api/core/v1.SecretKeySelector":                                                     schema_k8sio_api_core_v1_SecretKeySelector(ref),
+		"k8s.io/api/core/v1.SecretList":                                                            schema_k8sio_api_core_v1_SecretList(ref),
+		"k8s.io/api/core/v1.SecretProjection":                                                      schema_k8sio_api_core_v1_SecretProjection(ref),
+		"k8s.io/api/core/v1.SecretReference":                                                       schema_k8sio_api_core_v1_SecretReference(ref),
+		"k8s.io/api/core/v1.SecretVolumeSource":                                                    schema_k8sio_api_core_v1_SecretVolumeSource(ref),
+		"k8s.io/api/core/v1.SecurityContext":                                                       schema_k8sio_api_core_v1_SecurityContext(ref),
+		"k8s.io/api/core/v1.SerializedReference":                                                   schema_k8sio_api_core_v1_SerializedReference(ref),
+		"k8s.io/api/core/v1.Service":                                                               schema_k8sio_api_core_v1_Service(ref),
+		"k8s.io/api/core/v1.ServiceAccount":                                                        schema_k8sio_api_core_v1_ServiceAccount(ref),
+		"k8s.io/api/core/v1.ServiceAccountList":                                                    schema_k8sio_api_core_v1_ServiceAccountList(ref),
+		"k8s.io/api/core/v1.ServiceAccountTokenProjection":                                         schema_k8sio_api_core_v1_ServiceAccountTokenProjection(ref),
+		"k8s.io/api/core/v1.ServiceList":                                                           schema_k8sio_api_core_v1_ServiceList(ref),
+		"k8s.io/api/core/v1.ServicePort":                                                           schema_k8sio_api_core_v1_ServicePort(ref),
+		"k8s.io/api/core/v1.ServiceProxyOptions":                                                   schema_k8sio_api_core_v1_ServiceProxyOptions(ref),
+		"k8s.io/api/core/v1.ServiceSpec":                                                           schema_k8sio_api_core_v1_ServiceSpec(ref),
+		"k8s.io/api/core/v1.ServiceStatus":                                                         schema_k8sio_api_core_v1_ServiceStatus(ref),
+		"k8s.io/api/core/v1.SessionAffinityConfig":                                                 schema_k8sio_api_core_v1_SessionAffinityConfig(ref),
+		"k8s.io/api/core/v1.SleepAction":                                                           schema_k8sio_api_core_v1_SleepAction(ref),
+		"k8s.io/api/core/v1.StorageOSPersistentVolumeSource":                                       schema_k8sio_api_core_v1_StorageOSPersistentVolumeSource(ref),
+		"k8s.io/api/core/v1.StorageOSVolumeSource":                                                 schema_k8sio_api_core_v1_StorageOSVolumeSource(ref),
+		"k8s.io/api/core/v1.Sysctl":                                                                schema_k8sio_api_core_v1_Sysctl(ref),
+		"k8s.io/api/core/v1.TCPSocketAction":                                                       schema_k8sio_api_core_v1_TCPSocketAction(ref),
+		"k8s.io/api/core/v1.Taint":                                                                 schema_k8sio_api_core_v1_Taint(ref),
+		"k8s.io/api/core/v1.Toleration":                                                            schema_k8sio_api_core_v1_Toleration(ref),
+		"k8s.io/api/core/v1.TopologySelectorLabelRequirement":                                      schema_k8sio_api_core_v1_TopologySelectorLabelRequirement(ref),
+		"k8s.io/api/core/v1.TopologySelectorTerm":                                                  schema_k8sio_api_core_v1_TopologySelectorTerm(ref),
+		"k8s.io/api/core/v1.TopologySpreadConstraint":                                              schema_k8sio_api_core_v1_TopologySpreadConstraint(ref),
+		"k8s.io/api/core/v1.TypedLocalObjectReference":                                             schema_k8sio_api_core_v1_TypedLocalObjectReference(ref),
+		"k8s.io/api/core/v1.TypedObjectReference":                                                  schema_k8sio_api_core_v1_TypedObjectReference(ref),
+		"k8s.io/api/core/v1.Volume":                                                                schema_k8sio_api_core_v1_Volume(ref),
+		"k8s.io/api/core/v1.VolumeDevice":                                                          schema_k8sio_api_core_v1_VolumeDevice(ref),
+		"k8s.io/api/core/v1.VolumeMount":                                                           schema_k8sio_api_core_v1_VolumeMount(ref),
+		"k8s.io/api/core/v1.VolumeNodeAffinity":                                                    schema_k8sio_api_core_v1_VolumeNodeAffinity(ref),
+		"k8s.io/api/core/v1.VolumeProjection":                                                      schema_k8sio_api_core_v1_VolumeProjection(ref),
+		"k8s.io/api/core/v1.VolumeResourceRequirements":                                            schema_k8sio_api_core_v1_VolumeResourceRequirements(ref),
+		"k8s.io/api/core/v1.VolumeSource":                                                          schema_k8sio_api_core_v1_VolumeSource(ref),
+		"k8s.io/api/core/v1.VsphereVirtualDiskVolumeSource":                                        schema_k8sio_api_core_v1_VsphereVirtualDiskVolumeSource(ref),
+		"k8s.io/api/core/v1.WeightedPodAffinityTerm":                                               schema_k8sio_api_core_v1_WeightedPodAffinityTerm(ref),
+		"k8s.io/api/core/v1.WindowsSecurityContextOptions":                                         schema_k8sio_api_core_v1_WindowsSecurityContextOptions(ref),
+		"k8s.io/apimachinery/pkg/api/resource.Quantity":                                            schema_apimachinery_pkg_api_resource_Quantity(ref),
+		"k8s.io/apimachinery/pkg/api/resource.int64Amount":                                         schema_apimachinery_pkg_api_resource_int64Amount(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.APIGroup":                                            schema_pkg_apis_meta_v1_APIGroup(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.APIGroupList":                                        schema_pkg_apis_meta_v1_APIGroupList(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.APIResource":                                         schema_pkg_apis_meta_v1_APIResource(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.APIResourceList":                                     schema_pkg_apis_meta_v1_APIResourceList(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.APIVersions":                                         schema_pkg_apis_meta_v1_APIVersions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.ApplyOptions":                                        schema_pkg_apis_meta_v1_ApplyOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Condition":                                           schema_pkg_apis_meta_v1_Condition(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.CreateOptions":                                       schema_pkg_apis_meta_v1_CreateOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.DeleteOptions":                                       schema_pkg_apis_meta_v1_DeleteOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Duration":                                            schema_pkg_apis_meta_v1_Duration(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.FieldsV1":                                            schema_pkg_apis_meta_v1_FieldsV1(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.GetOptions":                                          schema_pkg_apis_meta_v1_GetOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupKind":                                           schema_pkg_apis_meta_v1_GroupKind(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupResource":                                       schema_pkg_apis_meta_v1_GroupResource(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersion":                                        schema_pkg_apis_meta_v1_GroupVersion(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersionForDiscovery":                            schema_pkg_apis_meta_v1_GroupVersionForDiscovery(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersionKind":                                    schema_pkg_apis_meta_v1_GroupVersionKind(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.GroupVersionResource":                                schema_pkg_apis_meta_v1_GroupVersionResource(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.InternalEvent":                                       schema_pkg_apis_meta_v1_InternalEvent(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelector":                                       schema_pkg_apis_meta_v1_LabelSelector(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.LabelSelectorRequirement":                            schema_pkg_apis_meta_v1_LabelSelectorRequirement(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.List":                                                schema_pkg_apis_meta_v1_List(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta":                                            schema_pkg_apis_meta_v1_ListMeta(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.ListOptions":                                         schema_pkg_apis_meta_v1_ListOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.ManagedFieldsEntry":                                  schema_pkg_apis_meta_v1_ManagedFieldsEntry(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.MicroTime":                                           schema_pkg_apis_meta_v1_MicroTime(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta":                                          schema_pkg_apis_meta_v1_ObjectMeta(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.OwnerReference":                                      schema_pkg_apis_meta_v1_OwnerReference(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.PartialObjectMetadata":                               schema_pkg_apis_meta_v1_PartialObjectMetadata(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.PartialObjectMetadataList":                           schema_pkg_apis_meta_v1_PartialObjectMetadataList(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Patch":                                               schema_pkg_apis_meta_v1_Patch(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.PatchOptions":                                        schema_pkg_apis_meta_v1_PatchOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Preconditions":                                       schema_pkg_apis_meta_v1_Preconditions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.RootPaths":                                           schema_pkg_apis_meta_v1_RootPaths(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.ServerAddressByClientCIDR":                           schema_pkg_apis_meta_v1_ServerAddressByClientCIDR(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Status":                                              schema_pkg_apis_meta_v1_Status(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.StatusCause":                                         schema_pkg_apis_meta_v1_StatusCause(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.StatusDetails":                                       schema_pkg_apis_meta_v1_StatusDetails(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Table":                                               schema_pkg_apis_meta_v1_Table(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.TableColumnDefinition":                               schema_pkg_apis_meta_v1_TableColumnDefinition(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.TableOptions":                                        schema_pkg_apis_meta_v1_TableOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.TableRow":                                            schema_pkg_apis_meta_v1_TableRow(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.TableRowCondition":                                   schema_pkg_apis_meta_v1_TableRowCondition(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Time":                                                schema_pkg_apis_meta_v1_Time(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.Timestamp":                                           schema_pkg_apis_meta_v1_Timestamp(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.TypeMeta":                                            schema_pkg_apis_meta_v1_TypeMeta(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.UpdateOptions":                                       schema_pkg_apis_meta_v1_UpdateOptions(ref),
+		"k8s.io/apimachinery/pkg/apis/meta/v1.WatchEvent":                                          schema_pkg_apis_meta_v1_WatchEvent(ref),
+		"k8s.io/apimachinery/pkg/runtime.RawExtension":                                             schema_k8sio_apimachinery_pkg_runtime_RawExtension(ref),
+		"k8s.io/apimachinery/pkg/runtime.TypeMeta":                                                 schema_k8sio_apimachinery_pkg_runtime_TypeMeta(ref),
+		"k8s.io/apimachinery/pkg/runtime.Unknown":                                                  schema_k8sio_apimachinery_pkg_runtime_Unknown(ref),
+		"k8s.io/apimachinery/pkg/util/intstr.IntOrString":                                          schema_apimachinery_pkg_util_intstr_IntOrString(ref),
+		"k8s.io/apimachinery/pkg/version.Info":                                                     schema_k8sio_apimachinery_pkg_version_Info(ref),
 	}
 }
 
@@ -1172,33 +1212,11 @@ func schema_pkg_apis_walrus_v1_Resource(ref common.ReferenceCallback) common.Ope
 	}
 }
 
-func schema_pkg_apis_walrus_v1_ResourceComponent(ref common.ReferenceCallback) common.OpenAPIDefinition {
-	return common.OpenAPIDefinition{
-		Schema: spec.Schema{
-			SchemaProps: spec.SchemaProps{
-				Description: "ResourceComponent is the schema for the resource component API.",
-				Type:        []string{"object"},
-				Properties: map[string]spec.Schema{
-					"name": {
-						SchemaProps: spec.SchemaProps{
-							Description: "Name is the name of the component.",
-							Default:     "",
-							Type:        []string{"string"},
-							Format:      "",
-						},
-					},
-				},
-				Required: []string{"name"},
-			},
-		},
-	}
-}
-
 func schema_pkg_apis_walrus_v1_ResourceComponents(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Description: "ResourceComponents holds the list of ResourceComponent.\n\nResourceComponents is the subresource of Resource.",
+				Description: "ResourceComponents is the schema for the resource components API.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"kind": {
@@ -1221,34 +1239,72 @@ func schema_pkg_apis_walrus_v1_ResourceComponents(ref common.ReferenceCallback) 
 							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
 						},
 					},
-					"items": {
-						VendorExtensible: spec.VendorExtensible{
-							Extensions: spec.Extensions{
-								"x-kubernetes-list-map-keys": []interface{}{
-									"name",
-								},
-								"x-kubernetes-list-type":       "map",
-								"x-kubernetes-patch-merge-key": "name",
-								"x-kubernetes-patch-strategy":  "merge",
-							},
-						},
+					"spec": {
 						SchemaProps: spec.SchemaProps{
-							Type: []string{"array"},
-							Items: &spec.SchemaOrArray{
-								Schema: &spec.Schema{
-									SchemaProps: spec.SchemaProps{
-										Default: map[string]interface{}{},
-										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceComponent"),
-									},
-								},
-							},
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentsSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentsStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/seal-io/walrus/pkg/apis/walrus/v1.ResourceComponent", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentsSpec", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentsStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_pkg_apis_walrus_v1_ResourceComponentsList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceComponentsList holds the list of ResourceComponents.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponents"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponents", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
 	}
 }
 
@@ -1427,20 +1483,20 @@ func schema_pkg_apis_walrus_v1_ResourceRun(ref common.ReferenceCallback) common.
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionSpec"),
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionStatus"),
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionSpec", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunSpec", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
@@ -3677,6 +3733,36 @@ func schema_pkg_apis_walruscore_v1_ConnectorList(ref common.ReferenceCallback) c
 	}
 }
 
+func schema_pkg_apis_walruscore_v1_ConnectorReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ConnectorReference is a reference to a connector.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of the connector.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Namespace is the namespace of the connector.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"name", "namespace"},
+			},
+		},
+	}
+}
+
 func schema_pkg_apis_walruscore_v1_ConnectorSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -3770,6 +3856,447 @@ func schema_pkg_apis_walruscore_v1_Resource(ref common.ReferenceCallback) common
 		},
 		Dependencies: []string{
 			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceSpec", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceComponent(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of the component.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Type is the type of the component, example: \"aws_instance\" for aws_instance.foo.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"mode": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Mode is the mode of the component.\n\nPossible enum values:\n - `\"data\"` indicates the resource read from target platform, it is read-only.\n - `\"managed\"` indicates the resource created to target platform, it is writable(update or delete).",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"data", "managed"},
+						},
+					},
+					"shape": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Shape is the shape of the component.\n\nPossible enum values:\n - `\"class\"` defines the resource component as class.\n - `\"composition\"` defines the resource component as composition.\n - `\"instance\"` defines the resource component as instance.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"class", "composition", "instance"},
+						},
+					},
+					"address": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Address is the address of the component.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"connector": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Connector of the resource component.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorReference"),
+						},
+					},
+				},
+				Required: []string{"name", "type", "mode", "shape", "address", "connector"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ConnectorReference"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceComponentAppendix(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceComponentAppendix stores the appendix of the resource component.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"operationKeys": {
+						SchemaProps: spec.SchemaProps{
+							Description: "OperationKeys stores the operation keys of the resource component.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentOperationKeys"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentOperationKeys"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceComponentChangeSummary(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceComponentChangeSummary is the summary of the component changes.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"created": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Created is the number of created components.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"updated": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Updated is the number of updated components.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"deleted": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Deleted is the number of deleted components.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+				},
+				Required: []string{"created", "updated", "deleted"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceComponentDependency(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"from": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"to": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"from", "to"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceComponentOperationKey(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceComponentOperationKey holds hierarchy query keys.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name indicates the name of the key.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"value": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Value indicates the value of the key; usually, it should be valued in leaves.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"loggable": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Loggable indicates whether to be able to get log.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"executable": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Executable indicates whether to be able to execute remote command.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"name"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceComponentOperationKeys(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceComponentOperationKeys stores the operation keys of the resource component.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"labels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Labels stores label of layer, its length means each key contains levels with the same value as level.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"keys": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Keys stores key in tree.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentOperationKey"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentOperationKey"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceComponents(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceComponents is the schema for the resource components API.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentsSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentsStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentsSpec", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentsStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceComponentsList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceComponentsList holds the list of ResourceComponents.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponents"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponents", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceComponentsSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceComponentsSpec defines the desired state of ResourceComponents.",
+				Type:        []string{"object"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceComponentsStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceComponentsStatus defines the observed state of ResourceComponents.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Phase is the summary of conditions.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"phaseMessage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PhaseMessage is the message of the phase.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions holds the conditions for the object.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+					"project": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Project is the project of the resource components.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"resource": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ResourceName is the resource name of the resource components.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"templateVersionReference": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TemplateVersion template version to which is used to create the resource components.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.TempalteVersionReference"),
+						},
+					},
+					"computedAttributes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ComputedAttributes stores the computed attributes of the component. It stores the attributes of the resource that used to create the component.",
+							Ref:         ref("k8s.io/apimachinery/pkg/runtime.RawExtension"),
+						},
+					},
+					"components": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Components store the components of the resource components.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponent"),
+									},
+								},
+							},
+						},
+					},
+					"dependencies": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Dependencies store the dependencies of the resource components.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentDependency"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"project", "resource", "templateVersionReference", "computedAttributes", "components", "dependencies"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponent", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentDependency", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.TempalteVersionReference", "k8s.io/apimachinery/pkg/runtime.RawExtension"},
 	}
 }
 
@@ -3869,6 +4396,178 @@ func schema_pkg_apis_walruscore_v1_ResourceDefinitionList(ref common.ReferenceCa
 	}
 }
 
+func schema_pkg_apis_walruscore_v1_ResourceDefinitionMatchingRule(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceDefinitionMatchingRule is the schema for the resource definition matching rules API.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionMatchingRuleSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionMatchingRuleStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionMatchingRuleSpec", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionMatchingRuleStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceDefinitionMatchingRuleList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceDefinitionMatchingRuleList holds the list of ResourceDefinitionMatchingRule.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionMatchingRule"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionMatchingRule", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceDefinitionMatchingRuleReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"namespace", "name"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceDefinitionMatchingRuleSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceDefinitionMatchingRuleSpec defines the desired state of ResourceDefinitionMatchingRule.",
+				Type:        []string{"object"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceDefinitionMatchingRuleStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceDefinitionMatchingRuleStatus defines the observed state of ResourceDefinitionMatchingRule.",
+				Type:        []string{"object"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceDefinitionReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"namespace", "name"},
+			},
+		},
+	}
+}
+
 func schema_pkg_apis_walruscore_v1_ResourceDefinitionSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -3888,6 +4587,205 @@ func schema_pkg_apis_walruscore_v1_ResourceDefinitionStatus(ref common.Reference
 				Type:        []string{"object"},
 			},
 		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceHook(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceHook is the schema for the resource hooks API, which orchestrates the previous and post steps around resource operations like plan and apply.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHookSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHookStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHookSpec", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHookStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceHookList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceHookList holds the list of ResourceHook.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHook"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHook", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceHookReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"namespace", "name"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceHookSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceHookSpec defines the desired state of ResourceHook.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"plan": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Plan defines the before and after steps to run in the resource hook.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceOperationHook"),
+						},
+					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Apply defines the before and after steps to apply in the resource hook.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceOperationHook"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceOperationHook"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceHookStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceHookStatus defines the observed state of ResourceHook.",
+				Type:        []string{"object"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceHookStep(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceHookStep defines the desired state of ResourceHookStep.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of the step.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"resourceRunStepTemplate": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ResourceRunStepTemplate is a reference to a step template.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepTemplateReference"),
+						},
+					},
+					"container": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Container defines the container step task to run in the resource hook step. It is a reference to a container object. If the step template is not defined, the container could be used to run the task.",
+							Ref:         ref("k8s.io/api/core/v1.Container"),
+						},
+					},
+				},
+				Required: []string{"name"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepTemplateReference", "k8s.io/api/core/v1.Container"},
 	}
 }
 
@@ -3940,6 +4838,49 @@ func schema_pkg_apis_walruscore_v1_ResourceList(ref common.ReferenceCallback) co
 	}
 }
 
+func schema_pkg_apis_walruscore_v1_ResourceOperationHook(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceOperationHook defines the previous and post steps to run in the resource hook for a resource operation.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"pre": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Pre defines the previous steps to run in the operation hook.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHookStep"),
+									},
+								},
+							},
+						},
+					},
+					"post": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Post defines the post steps to run in the operation hook.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHookStep"),
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHookStep"},
+	}
+}
+
 func schema_pkg_apis_walruscore_v1_ResourceRun(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -3970,20 +4911,20 @@ func schema_pkg_apis_walruscore_v1_ResourceRun(ref common.ReferenceCallback) com
 					"spec": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionSpec"),
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunSpec"),
 						},
 					},
 					"status": {
 						SchemaProps: spec.SchemaProps{
 							Default: map[string]interface{}{},
-							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionStatus"),
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStatus"),
 						},
 					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionSpec", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunSpec", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
 	}
 }
 
@@ -4042,8 +4983,75 @@ func schema_pkg_apis_walruscore_v1_ResourceRunSpec(ref common.ReferenceCallback)
 			SchemaProps: spec.SchemaProps{
 				Description: "ResourceRunSpec defines the desired state of ResourceRun.",
 				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"project": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-validations": []interface{}{map[string]interface{}{"message": "immutable field", "rule": "oldSelf == self"}},
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Project is the project of the resource run.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"resource": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-validations": []interface{}{map[string]interface{}{"message": "immutable field", "rule": "oldSelf == self"}},
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "ResourceName is the resource name of the resource run.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"type": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-validations": []interface{}{map[string]interface{}{"message": "immutable field", "rule": "oldSelf == self"}},
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Type is the type of the resource run.\n\n\nPossible enum values:\n - `\"Create\"`\n - `\"Delete\"`\n - `\"Rollback\"`\n - `\"Start\"`\n - `\"Stop\"`\n - `\"Update\"`",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"Create", "Delete", "Rollback", "Start", "Stop", "Update"},
+						},
+					},
+					"attributes": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-validations": []interface{}{map[string]interface{}{"message": "immutable field", "rule": "oldSelf == self"}},
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Attributes is the attributes of the resource run.",
+							Ref:         ref("k8s.io/apimachinery/pkg/runtime.RawExtension"),
+						},
+					},
+					"templateVersionReference": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-validations": []interface{}{map[string]interface{}{"message": "immutable field", "rule": "oldSelf == self"}},
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "TemplateVersion template version to which the resource belongs.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.TempalteVersionReference"),
+						},
+					},
+				},
+				Required: []string{"project", "resource", "type", "attributes", "templateVersionReference"},
 			},
 		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.TempalteVersionReference", "k8s.io/apimachinery/pkg/runtime.RawExtension"},
 	}
 }
 
@@ -4053,8 +5061,713 @@ func schema_pkg_apis_walruscore_v1_ResourceRunStatus(ref common.ReferenceCallbac
 			SchemaProps: spec.SchemaProps{
 				Description: "ResourceRunStatus defines the observed state of ResourceRun.",
 				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Phase is the summary of conditions.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"phaseMessage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PhaseMessage is the message of the phase.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions holds the conditions for the object.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+					"computedAttributes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ComputedAttributes is the computed attributes of the resource run.",
+							Ref:         ref("k8s.io/apimachinery/pkg/runtime.RawExtension"),
+						},
+					},
+					"templateFormat": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TemplateFormat is the format of template version.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"configSecretName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ConfigSecretName is the name of generated secret stores configs for the resource run.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"componentChanges": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ComponentChanges is the changes in the components of the resource run.",
+							Type:        []string{"string"},
+							Format:      "byte",
+						},
+					},
+					"componentChangeSummary": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ComponentChangeSummary is the summary of the component changes.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentChangeSummary"),
+						},
+					},
+					"resourceRunTemplate": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ResourceRunTemplate is a reference to a resource run template.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplateReference"),
+						},
+					},
+					"steps": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Steps stores the step run results of the resource run.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStep"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"computedAttributes", "templateFormat", "configSecretName", "steps"},
 			},
 		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceComponentChangeSummary", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStep", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplateReference", "k8s.io/apimachinery/pkg/runtime.RawExtension"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceRunStep(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceRunStep stores the step run result of the resource run. The step may be the plan, apply, and hook step defined in the resource hook or resource run template.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Phase is the summary of conditions.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"phaseMessage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PhaseMessage is the message of the phase.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions holds the conditions for the object.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of the step.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Type is the type of the step.\n\nPossible enum values:\n - `\"Apply\"` is the type of the apply resource, it is system generated.\n - `\"Approval\"` is the type of the approval resource, it depends on the resource run hooks and resource run template.\n - `\"Container\"` is the type of the container resource, it depends on the resource run hooks and resource run template.\n - `\"Plan\"` is the type of the plan resource, it is system generated.\n - `\"Unknown\"`",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"Apply", "Approval", "Container", "Plan", "Unknown"},
+						},
+					},
+					"template": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Template is a reference to a resource step template.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepTemplateReference"),
+						},
+					},
+					"startTime": {
+						SchemaProps: spec.SchemaProps{
+							Description: "StartTime is the time when the step started.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"finishTime": {
+						SchemaProps: spec.SchemaProps{
+							Description: "FinishTime is the time when the step finished.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"durationInSeconds": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DurationInSeconds is the duration of the step.",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+					"container": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Container is the container configs to run in the resource run step. Only used when ResourceStepTemplate is not provided.",
+							Ref:         ref("k8s.io/api/core/v1.Container"),
+						},
+					},
+					"approvalRecord": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ApprovalRecord stores the approval records of the step. Only the step template reference that has approval spec will have approval record.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepApprovalRecord"),
+						},
+					},
+				},
+				Required: []string{"name", "type"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepApprovalRecord", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepTemplateReference", "k8s.io/api/core/v1.Container", "k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceRunStepApprovalRecord(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceRunStepApprovalRecord stores the approval records of target resource run step.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Type is the type of the approval process.\n\nPossible enum values:\n - `\"and\"` means step is approved only all of the approval users approve it.\n - `\"any\"` means step is approved if any of the approval users approves it.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"and", "any"},
+						},
+					},
+					"users": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-type": "set",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Users is the users to approve the step.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"actions": {
+						VendorExtensible: spec.VendorExtensible{
+							Extensions: spec.Extensions{
+								"x-kubernetes-list-map-keys": []interface{}{
+									"user",
+								},
+								"x-kubernetes-list-type": "map",
+							},
+						},
+						SchemaProps: spec.SchemaProps{
+							Description: "Actions is the user actions of the approval process.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepApprovalUserAction"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"type", "users", "actions"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepApprovalUserAction"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceRunStepApprovalTemplate(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceRunStepApprovalTemplate orchesrates the approval process for the resource run step template.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Type is the type of the approval process.\n\nPossible enum values:\n - `\"and\"` means step is approved only all of the approval users approve it.\n - `\"any\"` means step is approved if any of the approval users approves it.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"and", "any"},
+						},
+					},
+					"users": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Users is the users to approve the step.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"type", "users"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceRunStepApprovalUserAction(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Type is the type of the user action.\n\nPossible enum values:\n - `\"Approve\"` is the type of the approve action.\n - `\"Reject\"` is the type of the reject action.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+							Enum:        []interface{}{"Approve", "Reject"},
+						},
+					},
+					"user": {
+						SchemaProps: spec.SchemaProps{
+							Description: "User is the user who performed the action.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"time": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Time is the time when the action performed.",
+							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Time"),
+						},
+					},
+					"comment": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Comment is the comment of the action.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"type", "user", "time", "comment"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/apis/meta/v1.Time"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceRunStepTemplate(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceRunStepTemplate is the schema for the resource run step templates API.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepTemplateSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepTemplateStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepTemplateSpec", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepTemplateStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceRunStepTemplateList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceRunStepTemplateList holds the list of ResourceRunStepTemplate.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepTemplate"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepTemplate", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceRunStepTemplateReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"namespace", "name"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceRunStepTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceRunStepTemplateSpec defines the desired state of ResourceRunStepTemplate.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"container": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Container is the main container image to run in the resource run step template.",
+							Ref:         ref("k8s.io/api/core/v1.Container"),
+						},
+					},
+					"approval": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Approval is the approval process for the resource run step template.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepApprovalTemplate"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunStepApprovalTemplate", "k8s.io/api/core/v1.Container"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceRunStepTemplateStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceRunStepTemplateStatus defines the observed state of ResourceRunStepTemplate.",
+				Type:        []string{"object"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceRunTemplate(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceRunTemplate is the schema for the resource run templates API.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"),
+						},
+					},
+					"spec": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplateSpec"),
+						},
+					},
+					"status": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplateStatus"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplateSpec", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplateStatus", "k8s.io/apimachinery/pkg/apis/meta/v1.ObjectMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceRunTemplateList(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceRunTemplateList holds the list of ResourceRunTemplate.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"kind": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"apiVersion": {
+						SchemaProps: spec.SchemaProps{
+							Description: "APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"metadata": {
+						SchemaProps: spec.SchemaProps{
+							Default: map[string]interface{}{},
+							Ref:     ref("k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"),
+						},
+					},
+					"items": {
+						SchemaProps: spec.SchemaProps{
+							Type: []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplate"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"items"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplate", "k8s.io/apimachinery/pkg/apis/meta/v1.ListMeta"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceRunTemplateReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"namespace", "name"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceRunTemplateSpec(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceRunTemplateSpec defines the desired state of ResourceRunTemplate. It is a template for a resource run, which defines the previous and post step for resource operation like plan and apply. The order of the steps will be:\n\ntemplate pre-plan--> resource pre-plan --> plan --> resource post-plan --> template post-plan --> template pre-apply --> resource pre-apply --> apply --> resource post-apply --> template post-apply.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"plan": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Plan defines the template steps to run in before and after the resource run template.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceOperationHook"),
+						},
+					},
+					"apply": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Apply defines the template steps to apply in the resource run template.",
+							Default:     map[string]interface{}{},
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceOperationHook"),
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceOperationHook"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceRunTemplateStatus(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceRunTemplateStatus defines the observed state of ResourceRunTemplate.",
+				Type:        []string{"object"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_ResourceRunTemplateStep(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "ResourceRunTemplateStep defines the desired state of ResourceRunTemplateStep.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of the resource run template step.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"description": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Description is the description of the resource run template step.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"resourceRunStepTemplate": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ResourceRunStepTemplate is the reference to the resource run step template.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplateReference"),
+						},
+					},
+					"container": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Container is the main container image to run in the resource run template step. It is used when ResourceRunStepTemplate is not provided.",
+							Ref:         ref("k8s.io/api/core/v1.Container"),
+						},
+					},
+				},
+				Required: []string{"name"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceRunTemplateReference", "k8s.io/api/core/v1.Container"},
 	}
 }
 
@@ -4064,8 +5777,45 @@ func schema_pkg_apis_walruscore_v1_ResourceSpec(ref common.ReferenceCallback) co
 			SchemaProps: spec.SchemaProps{
 				Description: "ResourceSpec defines the desired state of Resource.",
 				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"attributes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Attributes to configure the template.",
+							Ref:         ref("k8s.io/apimachinery/pkg/runtime.RawExtension"),
+						},
+					},
+					"templateVersionReference": {
+						SchemaProps: spec.SchemaProps{
+							Description: "TemplateVersion template version to which the resource belongs.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.TempalteVersionReference"),
+						},
+					},
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Type is a resource definition type.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"draft": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Draft indicates whether the resource is a draft.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"stop": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Stop indicates whether to stop the resource.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
 			},
 		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.TempalteVersionReference", "k8s.io/apimachinery/pkg/runtime.RawExtension"},
 	}
 }
 
@@ -4075,8 +5825,103 @@ func schema_pkg_apis_walruscore_v1_ResourceStatus(ref common.ReferenceCallback) 
 			SchemaProps: spec.SchemaProps{
 				Description: "ResourceStatus defines the observed state of Resource.",
 				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"phase": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Phase is the summary of conditions.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"phaseMessage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "PhaseMessage is the message of the phase.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"conditions": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Conditions holds the conditions for the object.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: map[string]interface{}{},
+										Ref:     ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition"),
+									},
+								},
+							},
+						},
+					},
+					"project": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Project is the project to which the resource belongs.",
+							Default:     "",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"computedAttributes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ComputedAttributes generated from attributes and schemas.",
+							Ref:         ref("k8s.io/apimachinery/pkg/runtime.RawExtension"),
+						},
+					},
+					"dependencies": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Dependencies of the resource.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+					"resourceHook": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ResourceHook is a reference to a resource hook. For one resource, the resource hook is unique.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHookReference"),
+						},
+					},
+					"resourceDefinition": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ResourceDefinition is a reference to a resource definition.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionReference"),
+						},
+					},
+					"resourceDefinitionMatchingRule": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ResourceDefinitionMatchingRule is a reference to a resource definition matching rule.",
+							Ref:         ref("github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionMatchingRuleReference"),
+						},
+					},
+					"endpoints": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Endpoints of the resource.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Default: "",
+										Type:    []string{"string"},
+										Format:  "",
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"project", "computedAttributes", "resourceHook"},
 			},
 		},
+		Dependencies: []string{
+			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionMatchingRuleReference", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceDefinitionReference", "github.com/seal-io/walrus/pkg/apis/walruscore/v1.ResourceHookReference", "k8s.io/apimachinery/pkg/runtime.RawExtension"},
 	}
 }
 
@@ -4253,6 +6098,40 @@ func schema_pkg_apis_walruscore_v1_StatusDescriptor(ref common.ReferenceCallback
 		},
 		Dependencies: []string{
 			"github.com/seal-io/walrus/pkg/apis/walruscore/v1.Condition"},
+	}
+}
+
+func schema_pkg_apis_walruscore_v1_TempalteVersionReference(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"namespace": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+					"version": {
+						SchemaProps: spec.SchemaProps{
+							Default: "",
+							Type:    []string{"string"},
+							Format:  "",
+						},
+					},
+				},
+				Required: []string{"namespace", "name", "version"},
+			},
+		},
 	}
 }
 
@@ -15726,7 +17605,7 @@ func schema_k8sio_api_core_v1_ServiceSpec(ref common.ReferenceCallback) common.O
 					},
 					"externalTrafficPolicy": {
 						SchemaProps: spec.SchemaProps{
-							Description: "externalTrafficPolicy describes how nodes distribute service traffic they receive on one of the Service's \"externally-facing\" addresses (NodePorts, ExternalIPs, and LoadBalancer IPs). If set to \"Local\", the proxy will configure the service in a way that assumes that external load balancers will take care of balancing the service traffic between nodes, and so each node will deliver traffic only to the node-local endpoints of the service, without masquerading the client source IP. (Traffic mistakenly sent to a node with no endpoints will be dropped.) The default value, \"Cluster\", uses the standard behavior of routing to all endpoints evenly (possibly modified by topology and other features). Note that traffic sent to an External IP or LoadBalancer IP from within the cluster will always get \"Cluster\" semantics, but clients sending to a NodePort from within the cluster may need to take traffic policy into account when picking a node.\n\nPossible enum values:\n - `\"Cluster\"` routes traffic to all endpoints.\n - `\"Local\"`",
+							Description: "externalTrafficPolicy describes how nodes distribute service traffic they receive on one of the Service's \"externally-facing\" addresses (NodePorts, ExternalIPs, and LoadBalancer IPs). If set to \"Local\", the proxy will configure the service in a way that assumes that external load balancers will take care of balancing the service traffic between nodes, and so each node will deliver traffic only to the node-local endpoints of the service, without masquerading the client source IP. (Traffic mistakenly sent to a node with no endpoints will be dropped.) The default value, \"Cluster\", uses the standard behavior of routing to all endpoints evenly (possibly modified by topology and other features). Note that traffic sent to an External IP or LoadBalancer IP from within the cluster will always get \"Cluster\" semantics, but clients sending to a NodePort from within the cluster may need to take traffic policy into account when picking a node.\n\nPossible enum values:\n - `\"Cluster\"`\n - `\"Local\"` preserves the source IP of the traffic by routing only to endpoints on the same node as the traffic was received on (dropping the traffic if there are no local endpoints).",
 							Type:        []string{"string"},
 							Format:      "",
 							Enum:        []interface{}{"Cluster", "Local"},

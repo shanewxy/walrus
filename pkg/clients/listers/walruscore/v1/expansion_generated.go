@@ -29,6 +29,14 @@ type ResourceListerExpansion interface{}
 // ResourceNamespaceLister.
 type ResourceNamespaceListerExpansion interface{}
 
+// ResourceComponentsListerExpansion allows custom methods to be added to
+// ResourceComponentsLister.
+type ResourceComponentsListerExpansion interface{}
+
+// ResourceComponentsNamespaceListerExpansion allows custom methods to be added to
+// ResourceComponentsNamespaceLister.
+type ResourceComponentsNamespaceListerExpansion interface{}
+
 // ResourceDefinitionListerExpansion allows custom methods to be added to
 // ResourceDefinitionLister.
 type ResourceDefinitionListerExpansion interface{}
@@ -37,6 +45,22 @@ type ResourceDefinitionListerExpansion interface{}
 // ResourceDefinitionNamespaceLister.
 type ResourceDefinitionNamespaceListerExpansion interface{}
 
+// ResourceDefinitionMatchingRuleListerExpansion allows custom methods to be added to
+// ResourceDefinitionMatchingRuleLister.
+type ResourceDefinitionMatchingRuleListerExpansion interface{}
+
+// ResourceDefinitionMatchingRuleNamespaceListerExpansion allows custom methods to be added to
+// ResourceDefinitionMatchingRuleNamespaceLister.
+type ResourceDefinitionMatchingRuleNamespaceListerExpansion interface{}
+
+// ResourceHookListerExpansion allows custom methods to be added to
+// ResourceHookLister.
+type ResourceHookListerExpansion interface{}
+
+// ResourceHookNamespaceListerExpansion allows custom methods to be added to
+// ResourceHookNamespaceLister.
+type ResourceHookNamespaceListerExpansion interface{}
+
 // ResourceRunListerExpansion allows custom methods to be added to
 // ResourceRunLister.
 type ResourceRunListerExpansion interface{}
@@ -44,6 +68,22 @@ type ResourceRunListerExpansion interface{}
 // ResourceRunNamespaceListerExpansion allows custom methods to be added to
 // ResourceRunNamespaceLister.
 type ResourceRunNamespaceListerExpansion interface{}
+
+// ResourceRunStepTemplateListerExpansion allows custom methods to be added to
+// ResourceRunStepTemplateLister.
+type ResourceRunStepTemplateListerExpansion interface{}
+
+// ResourceRunStepTemplateNamespaceListerExpansion allows custom methods to be added to
+// ResourceRunStepTemplateNamespaceLister.
+type ResourceRunStepTemplateNamespaceListerExpansion interface{}
+
+// ResourceRunTemplateListerExpansion allows custom methods to be added to
+// ResourceRunTemplateLister.
+type ResourceRunTemplateListerExpansion interface{}
+
+// ResourceRunTemplateNamespaceListerExpansion allows custom methods to be added to
+// ResourceRunTemplateNamespaceLister.
+type ResourceRunTemplateNamespaceListerExpansion interface{}
 
 // SchemaListerExpansion allows custom methods to be added to
 // SchemaLister.

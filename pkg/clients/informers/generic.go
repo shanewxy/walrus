@@ -8,8 +8,8 @@ package informers
 import (
 	"fmt"
 
-	v1alpha1 "github.com/argoproj/argo-cd/v2/pkg/apis/application/v1alpha1"
-	workflowv1alpha1 "github.com/argoproj/argo-workflows/v3/pkg/apis/workflow/v1alpha1"
+	applicationv1alpha1 "github.com/argoproj/argo-cd/v2/pkg/apis/application/v1alpha1"
+	v1alpha1 "github.com/argoproj/argo-workflows/v3/pkg/apis/workflow/v1alpha1"
 	walrusv1 "github.com/seal-io/walrus/pkg/apis/walrus/v1"
 	walruscorev1 "github.com/seal-io/walrus/pkg/apis/walruscore/v1"
 	v1 "k8s.io/api/admissionregistration/v1"
@@ -84,30 +84,30 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Apps().V1().StatefulSets().Informer()}, nil
 
 		// Group=argoproj.io, Version=v1alpha1
-	case v1alpha1.SchemeGroupVersion.WithResource("appprojects"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojapplication().V1alpha1().AppProjects().Informer()}, nil
-	case v1alpha1.SchemeGroupVersion.WithResource("applications"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojapplication().V1alpha1().Applications().Informer()}, nil
-	case v1alpha1.SchemeGroupVersion.WithResource("applicationsets"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojapplication().V1alpha1().ApplicationSets().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("clusterworkflowtemplates"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().ClusterWorkflowTemplates().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("cronworkflows"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().CronWorkflows().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("workflows"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().Workflows().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("workflowartifactgctasks"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().WorkflowArtifactGCTasks().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("workfloweventbindings"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().WorkflowEventBindings().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("workflowtaskresults"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().WorkflowTaskResults().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("workflowtasksets"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().WorkflowTaskSets().Informer()}, nil
+	case v1alpha1.SchemeGroupVersion.WithResource("workflowtemplates"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().WorkflowTemplates().Informer()}, nil
 
 		// Group=argoproj.io, Version=v1alpha1
-	case workflowv1alpha1.SchemeGroupVersion.WithResource("clusterworkflowtemplates"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().ClusterWorkflowTemplates().Informer()}, nil
-	case workflowv1alpha1.SchemeGroupVersion.WithResource("cronworkflows"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().CronWorkflows().Informer()}, nil
-	case workflowv1alpha1.SchemeGroupVersion.WithResource("workflows"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().Workflows().Informer()}, nil
-	case workflowv1alpha1.SchemeGroupVersion.WithResource("workflowartifactgctasks"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().WorkflowArtifactGCTasks().Informer()}, nil
-	case workflowv1alpha1.SchemeGroupVersion.WithResource("workfloweventbindings"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().WorkflowEventBindings().Informer()}, nil
-	case workflowv1alpha1.SchemeGroupVersion.WithResource("workflowtaskresults"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().WorkflowTaskResults().Informer()}, nil
-	case workflowv1alpha1.SchemeGroupVersion.WithResource("workflowtasksets"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().WorkflowTaskSets().Informer()}, nil
-	case workflowv1alpha1.SchemeGroupVersion.WithResource("workflowtemplates"):
-		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojworkflow().V1alpha1().WorkflowTemplates().Informer()}, nil
+	case applicationv1alpha1.SchemeGroupVersion.WithResource("appprojects"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojapplication().V1alpha1().AppProjects().Informer()}, nil
+	case applicationv1alpha1.SchemeGroupVersion.WithResource("applications"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojapplication().V1alpha1().Applications().Informer()}, nil
+	case applicationv1alpha1.SchemeGroupVersion.WithResource("applicationsets"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Argoprojapplication().V1alpha1().ApplicationSets().Informer()}, nil
 
 		// Group=autoscaling, Version=v1
 	case autoscalingv1.SchemeGroupVersion.WithResource("horizontalpodautoscalers"):
@@ -210,6 +210,8 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Walrus().V1().Projects().Informer()}, nil
 	case walrusv1.SchemeGroupVersion.WithResource("resources"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Walrus().V1().Resources().Informer()}, nil
+	case walrusv1.SchemeGroupVersion.WithResource("resourcecomponents"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Walrus().V1().ResourceComponents().Informer()}, nil
 	case walrusv1.SchemeGroupVersion.WithResource("resourcedefinitions"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Walrus().V1().ResourceDefinitions().Informer()}, nil
 	case walrusv1.SchemeGroupVersion.WithResource("resourceruns"):
@@ -234,10 +236,20 @@ func (f *sharedInformerFactory) ForResource(resource schema.GroupVersionResource
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Walruscore().V1().Connectors().Informer()}, nil
 	case walruscorev1.SchemeGroupVersion.WithResource("resources"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Walruscore().V1().Resources().Informer()}, nil
+	case walruscorev1.SchemeGroupVersion.WithResource("resourcecomponents"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Walruscore().V1().ResourceComponents().Informer()}, nil
 	case walruscorev1.SchemeGroupVersion.WithResource("resourcedefinitions"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Walruscore().V1().ResourceDefinitions().Informer()}, nil
+	case walruscorev1.SchemeGroupVersion.WithResource("resourcedefinitionmatchingrules"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Walruscore().V1().ResourceDefinitionMatchingRules().Informer()}, nil
+	case walruscorev1.SchemeGroupVersion.WithResource("resourcehooks"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Walruscore().V1().ResourceHooks().Informer()}, nil
 	case walruscorev1.SchemeGroupVersion.WithResource("resourceruns"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Walruscore().V1().ResourceRuns().Informer()}, nil
+	case walruscorev1.SchemeGroupVersion.WithResource("resourcerunsteptemplates"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Walruscore().V1().ResourceRunStepTemplates().Informer()}, nil
+	case walruscorev1.SchemeGroupVersion.WithResource("resourceruntemplates"):
+		return &genericInformer{resource: resource.GroupResource(), informer: f.Walruscore().V1().ResourceRunTemplates().Informer()}, nil
 	case walruscorev1.SchemeGroupVersion.WithResource("schemas"):
 		return &genericInformer{resource: resource.GroupResource(), informer: f.Walruscore().V1().Schemas().Informer()}, nil
 	case walruscorev1.SchemeGroupVersion.WithResource("templates"):

@@ -39,6 +39,10 @@ func (c *FakeWalrusV1) Resources(namespace string) v1.ResourceInterface {
 	return &FakeResources{c, namespace}
 }
 
+func (c *FakeWalrusV1) ResourceComponents(namespace string) v1.ResourceComponentsInterface {
+	return &FakeResourceComponents{c, namespace}
+}
+
 func (c *FakeWalrusV1) ResourceDefinitions(namespace string) v1.ResourceDefinitionInterface {
 	return &FakeResourceDefinitions{c, namespace}
 }

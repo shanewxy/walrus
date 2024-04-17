@@ -21,6 +21,7 @@ type WalrusV1Interface interface {
 	FileExamplesGetter
 	ProjectsGetter
 	ResourcesGetter
+	ResourceComponentsGetter
 	ResourceDefinitionsGetter
 	ResourceRunsGetter
 	SchemasGetter
@@ -58,6 +59,10 @@ func (c *WalrusV1Client) Projects(namespace string) ProjectInterface {
 
 func (c *WalrusV1Client) Resources(namespace string) ResourceInterface {
 	return newResources(c, namespace)
+}
+
+func (c *WalrusV1Client) ResourceComponents(namespace string) ResourceComponentsInterface {
+	return newResourceComponents(c, namespace)
 }
 
 func (c *WalrusV1Client) ResourceDefinitions(namespace string) ResourceDefinitionInterface {

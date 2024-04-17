@@ -17,10 +17,20 @@ type Interface interface {
 	Connectors() ConnectorInformer
 	// Resources returns a ResourceInformer.
 	Resources() ResourceInformer
+	// ResourceComponents returns a ResourceComponentsInformer.
+	ResourceComponents() ResourceComponentsInformer
 	// ResourceDefinitions returns a ResourceDefinitionInformer.
 	ResourceDefinitions() ResourceDefinitionInformer
+	// ResourceDefinitionMatchingRules returns a ResourceDefinitionMatchingRuleInformer.
+	ResourceDefinitionMatchingRules() ResourceDefinitionMatchingRuleInformer
+	// ResourceHooks returns a ResourceHookInformer.
+	ResourceHooks() ResourceHookInformer
 	// ResourceRuns returns a ResourceRunInformer.
 	ResourceRuns() ResourceRunInformer
+	// ResourceRunStepTemplates returns a ResourceRunStepTemplateInformer.
+	ResourceRunStepTemplates() ResourceRunStepTemplateInformer
+	// ResourceRunTemplates returns a ResourceRunTemplateInformer.
+	ResourceRunTemplates() ResourceRunTemplateInformer
 	// Schemas returns a SchemaInformer.
 	Schemas() SchemaInformer
 	// Templates returns a TemplateInformer.
@@ -53,14 +63,39 @@ func (v *version) Resources() ResourceInformer {
 	return &resourceInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }
 
+// ResourceComponents returns a ResourceComponentsInformer.
+func (v *version) ResourceComponents() ResourceComponentsInformer {
+	return &resourceComponentsInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
 // ResourceDefinitions returns a ResourceDefinitionInformer.
 func (v *version) ResourceDefinitions() ResourceDefinitionInformer {
 	return &resourceDefinitionInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }
 
+// ResourceDefinitionMatchingRules returns a ResourceDefinitionMatchingRuleInformer.
+func (v *version) ResourceDefinitionMatchingRules() ResourceDefinitionMatchingRuleInformer {
+	return &resourceDefinitionMatchingRuleInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// ResourceHooks returns a ResourceHookInformer.
+func (v *version) ResourceHooks() ResourceHookInformer {
+	return &resourceHookInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
 // ResourceRuns returns a ResourceRunInformer.
 func (v *version) ResourceRuns() ResourceRunInformer {
 	return &resourceRunInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// ResourceRunStepTemplates returns a ResourceRunStepTemplateInformer.
+func (v *version) ResourceRunStepTemplates() ResourceRunStepTemplateInformer {
+	return &resourceRunStepTemplateInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// ResourceRunTemplates returns a ResourceRunTemplateInformer.
+func (v *version) ResourceRunTemplates() ResourceRunTemplateInformer {
+	return &resourceRunTemplateInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }
 
 // Schemas returns a SchemaInformer.

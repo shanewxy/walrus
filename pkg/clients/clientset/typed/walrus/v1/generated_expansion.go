@@ -17,6 +17,8 @@ type ProjectExpansion interface{}
 
 type ResourceExpansion interface{}
 
+type ResourceComponentsExpansion interface{}
+
 type ResourceDefinitionExpansion interface{}
 
 type ResourceRunExpansion interface{}

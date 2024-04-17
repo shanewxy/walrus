@@ -18,8 +18,13 @@ type WalruscoreV1Interface interface {
 	CatalogsGetter
 	ConnectorsGetter
 	ResourcesGetter
+	ResourceComponentsGetter
 	ResourceDefinitionsGetter
+	ResourceDefinitionMatchingRulesGetter
+	ResourceHooksGetter
 	ResourceRunsGetter
+	ResourceRunStepTemplatesGetter
+	ResourceRunTemplatesGetter
 	SchemasGetter
 	TemplatesGetter
 }
@@ -41,12 +46,32 @@ func (c *WalruscoreV1Client) Resources(namespace string) ResourceInterface {
 	return newResources(c, namespace)
 }
 
+func (c *WalruscoreV1Client) ResourceComponents(namespace string) ResourceComponentsInterface {
+	return newResourceComponents(c, namespace)
+}
+
 func (c *WalruscoreV1Client) ResourceDefinitions(namespace string) ResourceDefinitionInterface {
 	return newResourceDefinitions(c, namespace)
 }
 
+func (c *WalruscoreV1Client) ResourceDefinitionMatchingRules(namespace string) ResourceDefinitionMatchingRuleInterface {
+	return newResourceDefinitionMatchingRules(c, namespace)
+}
+
+func (c *WalruscoreV1Client) ResourceHooks(namespace string) ResourceHookInterface {
+	return newResourceHooks(c, namespace)
+}
+
 func (c *WalruscoreV1Client) ResourceRuns(namespace string) ResourceRunInterface {
 	return newResourceRuns(c, namespace)
+}
+
+func (c *WalruscoreV1Client) ResourceRunStepTemplates(namespace string) ResourceRunStepTemplateInterface {
+	return newResourceRunStepTemplates(c, namespace)
+}
+
+func (c *WalruscoreV1Client) ResourceRunTemplates(namespace string) ResourceRunTemplateInterface {
+	return newResourceRunTemplates(c, namespace)
 }
 
 func (c *WalruscoreV1Client) Schemas(namespace string) SchemaInterface {

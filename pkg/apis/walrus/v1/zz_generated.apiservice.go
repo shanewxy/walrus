@@ -328,7 +328,7 @@ var _ rest.ShortNamesProvider = (*ResourceComponents)(nil)
 
 func (*ResourceComponents) ShortNames() []string {
 	return []string{
-		"rescomp",
+		"rescomps",
 	}
 }
 

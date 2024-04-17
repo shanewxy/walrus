@@ -53,6 +53,14 @@ type ResourceListerExpansion interface{}
 // ResourceNamespaceLister.
 type ResourceNamespaceListerExpansion interface{}
 
+// ResourceComponentsListerExpansion allows custom methods to be added to
+// ResourceComponentsLister.
+type ResourceComponentsListerExpansion interface{}
+
+// ResourceComponentsNamespaceListerExpansion allows custom methods to be added to
+// ResourceComponentsNamespaceLister.
+type ResourceComponentsNamespaceListerExpansion interface{}
+
 // ResourceDefinitionListerExpansion allows custom methods to be added to
 // ResourceDefinitionLister.
 type ResourceDefinitionListerExpansion interface{}

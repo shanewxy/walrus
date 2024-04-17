@@ -10,6 +10,7 @@ syntax = "proto2";
 
 package github.com.seal_io.walrus.pkg.apis.walruscore.v1;
 
+import "k8s.io/api/core/v1/generated.proto";
 import "k8s.io/apimachinery/pkg/apis/meta/v1/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/generated.proto";
 import "k8s.io/apimachinery/pkg/runtime/schema/generated.proto";
@@ -132,6 +133,15 @@ message ConnectorList {
   repeated Connector items = 2;
 }
 
+// ConnectorReference is a reference to a connector.
+message ConnectorReference {
+  // Name is the name of the connector.
+  optional string name = 1;
+
+  // Namespace is the namespace of the connector.
+  optional string namespace = 2;
+}
+
 // ConnectorSpec defines the desired state of Connector.
 message ConnectorSpec {
 }
@@ -162,6 +172,127 @@ message Resource {
   optional ResourceStatus status = 3;
 }
 
+message ResourceComponent {
+  // Name is the name of the component.
+  optional string name = 1;
+
+  // Type is the type of the component, example: "aws_instance" for aws_instance.foo.
+  optional string type = 2;
+
+  // Mode is the mode of the component.
+  optional string mode = 3;
+
+  // Shape is the shape of the component.
+  optional string shape = 4;
+
+  // Address is the address of the component.
+  optional string address = 5;
+
+  // Connector of the resource component.
+  optional ConnectorReference connector = 6;
+}
+
+// ResourceComponentAppendix stores the appendix of the resource component.
+message ResourceComponentAppendix {
+  // OperationKeys stores the operation keys of the resource component.
+  optional ResourceComponentOperationKeys operationKeys = 1;
+}
+
+// ResourceComponentChangeSummary is the summary of the component changes.
+message ResourceComponentChangeSummary {
+  // Created is the number of created components.
+  optional int64 created = 1;
+
+  // Updated is the number of updated components.
+  optional int64 updated = 2;
+
+  // Deleted is the number of deleted components.
+  optional int64 deleted = 3;
+}
+
+message ResourceComponentDependency {
+  optional string from = 1;
+
+  optional string to = 2;
+}
+
+// ResourceComponentOperationKey holds hierarchy query keys.
+message ResourceComponentOperationKey {
+  // Name indicates the name of the key.
+  optional string name = 1;
+
+  // Value indicates the value of the key;
+  // usually, it should be valued in leaves.
+  optional string value = 2;
+
+  // Loggable indicates whether to be able to get log.
+  optional bool loggable = 3;
+
+  // Executable indicates whether to be able to execute remote command.
+  optional bool executable = 4;
+}
+
+// ResourceComponentOperationKeys stores the operation keys of the resource component.
+message ResourceComponentOperationKeys {
+  // Labels stores label of layer,
+  // its length means each key contains levels with the same value as level.
+  repeated string labels = 1;
+
+  // Keys stores key in tree.
+  repeated ResourceComponentOperationKey keys = 2;
+}
+
+// ResourceComponents is the schema for the resource components API.
+//
+// +genclient
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +k8s:crd-gen:resource:scope="Namespaced",subResources=["status"]
+message ResourceComponents {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+
+  optional ResourceComponentsSpec spec = 2;
+
+  optional ResourceComponentsStatus status = 3;
+}
+
+// ResourceComponentsList holds the list of ResourceComponents.
+//
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+message ResourceComponentsList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+
+  repeated ResourceComponents items = 2;
+}
+
+// ResourceComponentsSpec defines the desired state of ResourceComponents.
+message ResourceComponentsSpec {
+}
+
+// ResourceComponentsStatus defines the observed state of ResourceComponents.
+message ResourceComponentsStatus {
+  // StatusDescriptor defines the status of the resource components.
+  optional StatusDescriptor statusDescriptor = 1;
+
+  // Project is the project of the resource components.
+  optional string project = 2;
+
+  // ResourceName is the resource name of the resource components.
+  optional string resource = 3;
+
+  // TemplateVersion template version to which is used to create the resource components.
+  optional TempalteVersionReference templateVersionReference = 4;
+
+  // ComputedAttributes stores the computed attributes of the component.
+  // It stores the attributes of the resource that used to create the component.
+  optional k8s.io.apimachinery.pkg.runtime.RawExtension computedAttributes = 5;
+
+  // Components store the components of the resource components.
+  repeated ResourceComponent components = 6;
+
+  // Dependencies store the dependencies of the resource components.
+  repeated ResourceComponentDependency dependencies = 7;
+}
+
 // ResourceDefinition is the schema for the resource definitions API.
 //
 // +genclient
@@ -184,12 +315,110 @@ message ResourceDefinitionList {
   repeated ResourceDefinition items = 2;
 }
 
+// ResourceDefinitionMatchingRule is the schema for the resource definition matching rules API.
+//
+// +genclient
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +k8s:crd-gen:resource:scope="Namespaced",subResources=["status"]
+message ResourceDefinitionMatchingRule {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+
+  optional ResourceDefinitionMatchingRuleSpec spec = 2;
+
+  optional ResourceDefinitionMatchingRuleStatus status = 3;
+}
+
+// ResourceDefinitionMatchingRuleList holds the list of ResourceDefinitionMatchingRule.
+//
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+message ResourceDefinitionMatchingRuleList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+
+  repeated ResourceDefinitionMatchingRule items = 2;
+}
+
+message ResourceDefinitionMatchingRuleReference {
+  optional string namespace = 1;
+
+  optional string name = 2;
+}
+
+// ResourceDefinitionMatchingRuleSpec defines the desired state of ResourceDefinitionMatchingRule.
+message ResourceDefinitionMatchingRuleSpec {
+}
+
+// ResourceDefinitionMatchingRuleStatus defines the observed state of ResourceDefinitionMatchingRule.
+message ResourceDefinitionMatchingRuleStatus {
+}
+
+message ResourceDefinitionReference {
+  optional string namespace = 1;
+
+  optional string name = 2;
+}
+
 // ResourceDefinitionSpec defines the desired state of ResourceDefinition.
 message ResourceDefinitionSpec {
 }
 
 // ResourceDefinitionStatus defines the observed state of ResourceDefinition.
 message ResourceDefinitionStatus {
+}
+
+// ResourceHook is the schema for the resource hooks API,
+// which orchestrates the previous and post steps around resource operations like plan and apply.
+//
+// +genclient
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +k8s:crd-gen:resource:scope="Namespaced",subResources=["status"]
+message ResourceHook {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+
+  optional ResourceHookSpec spec = 2;
+
+  optional ResourceHookStatus status = 3;
+}
+
+// ResourceHookList holds the list of ResourceHook.
+//
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+message ResourceHookList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+
+  repeated ResourceHook items = 2;
+}
+
+message ResourceHookReference {
+  optional string namespace = 1;
+
+  optional string name = 2;
+}
+
+// ResourceHookSpec defines the desired state of ResourceHook.
+message ResourceHookSpec {
+  // Plan defines the before and after steps to run in the resource hook.
+  optional ResourceOperationHook plan = 1;
+
+  // Apply defines the before and after steps to apply in the resource hook.
+  optional ResourceOperationHook apply = 2;
+}
+
+// ResourceHookStatus defines the observed state of ResourceHook.
+message ResourceHookStatus {
+}
+
+// ResourceHookStep defines the desired state of ResourceHookStep.
+message ResourceHookStep {
+  // Name is the name of the step.
+  optional string name = 1;
+
+  // ResourceRunStepTemplate is a reference to a step template.
+  optional ResourceRunStepTemplateReference resourceRunStepTemplate = 2;
+
+  // Container defines the container step task to run in the resource hook step.
+  // It is a reference to a container object. If the step template is not defined,
+  // the container could be used to run the task.
+  optional k8s.io.api.core.v1.Container container = 3;
 }
 
 // ResourceList holds the list of Resource.
@@ -201,6 +430,15 @@ message ResourceList {
   repeated Resource items = 2;
 }
 
+// ResourceOperationHook defines the previous and post steps to run in the resource hook for a resource operation.
+message ResourceOperationHook {
+  // Pre defines the previous steps to run in the operation hook.
+  repeated ResourceHookStep pre = 1;
+
+  // Post defines the post steps to run in the operation hook.
+  repeated ResourceHookStep post = 2;
+}
+
 // ResourceRun is the schema for the resource runs API.
 //
 // +genclient
@@ -209,9 +447,9 @@ message ResourceList {
 message ResourceRun {
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
 
-  optional ResourceDefinitionSpec spec = 2;
+  optional ResourceRunSpec spec = 2;
 
-  optional ResourceDefinitionStatus status = 3;
+  optional ResourceRunStatus status = 3;
 }
 
 // ResourceRunList holds the list of ResourceRun.
@@ -225,18 +463,285 @@ message ResourceRunList {
 
 // ResourceRunSpec defines the desired state of ResourceRun.
 message ResourceRunSpec {
+  // Project is the project of the resource run.
+  //
+  // +k8s:validation:cel[0]:rule="oldSelf == self"
+  // +k8s:validation:cel[0]:message="immutable field"
+  optional string project = 1;
+
+  // ResourceName is the resource name of the resource run.
+  //
+  // +k8s:validation:cel[0]:rule="oldSelf == self"
+  // +k8s:validation:cel[0]:message="immutable field"
+  optional string resource = 2;
+
+  // Type is the type of the resource run.
+  //
+  // +k8s:validation:cel[0]:rule="oldSelf == self"
+  // +k8s:validation:cel[0]:message="immutable field"
+  optional string type = 3;
+
+  // Attributes is the attributes of the resource run.
+  //
+  // +k8s:validation:cel[0]:rule="oldSelf == self"
+  // +k8s:validation:cel[0]:message="immutable field"
+  optional k8s.io.apimachinery.pkg.runtime.RawExtension attributes = 4;
+
+  // TemplateVersion template version to which the resource belongs.
+  //
+  // +k8s:validation:cel[0]:rule="oldSelf == self"
+  // +k8s:validation:cel[0]:message="immutable field"
+  optional TempalteVersionReference templateVersionReference = 5;
 }
 
 // ResourceRunStatus defines the observed state of ResourceRun.
 message ResourceRunStatus {
+  // StatusDescriptor defines the status of the resource run.
+  optional StatusDescriptor statusDescriptor = 1;
+
+  // ComputedAttributes is the computed attributes of the resource run.
+  optional k8s.io.apimachinery.pkg.runtime.RawExtension computedAttributes = 2;
+
+  // TemplateFormat is the format of template version.
+  optional string templateFormat = 3;
+
+  // ConfigSecretName is the name of generated secret stores configs for the resource run.
+  optional string configSecretName = 4;
+
+  // ComponentChanges is the changes in the components of the resource run.
+  optional bytes componentChanges = 5;
+
+  // ComponentChangeSummary is the summary of the component changes.
+  optional ResourceComponentChangeSummary componentChangeSummary = 6;
+
+  // ResourceRunTemplate is a reference to a resource run template.
+  optional ResourceRunTemplateReference resourceRunTemplate = 7;
+
+  // Steps stores the step run results of the resource run.
+  repeated ResourceRunStep steps = 8;
+}
+
+// ResourceRunStep stores the step run result of the resource run.
+// The step may be the plan, apply, and hook step defined in the resource hook or resource run template.
+message ResourceRunStep {
+  // StatusDescriptor defines the status of the step.
+  optional StatusDescriptor statusDescriptor = 1;
+
+  // Name is the name of the step.
+  optional string name = 2;
+
+  // Type is the type of the step.
+  optional string type = 3;
+
+  // Template is a reference to a resource step template.
+  optional ResourceRunStepTemplateReference template = 4;
+
+  // StartTime is the time when the step started.
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time startTime = 5;
+
+  // FinishTime is the time when the step finished.
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time finishTime = 6;
+
+  // DurationInSeconds is the duration of the step.
+  optional int64 durationInSeconds = 7;
+
+  // Container is the container configs to run in the resource run step.
+  // Only used when ResourceStepTemplate is not provided.
+  optional k8s.io.api.core.v1.Container container = 8;
+
+  // ApprovalRecord stores the approval records of the step.
+  // Only the step template reference that has approval spec will have approval record.
+  optional ResourceRunStepApprovalRecord approvalRecord = 9;
+}
+
+// ResourceRunStepApprovalRecord stores the approval records of target resource run step.
+message ResourceRunStepApprovalRecord {
+  // Type is the type of the approval process.
+  optional string type = 1;
+
+  // Users is the users to approve the step.
+  //
+  // +listType=set
+  repeated string users = 2;
+
+  // Actions is the user actions of the approval process.
+  //
+  // +listType=map
+  // +listMapKey=user
+  repeated ResourceRunStepApprovalUserAction actions = 3;
+}
+
+// ResourceRunStepApprovalTemplate orchesrates the approval process for the resource run step template.
+message ResourceRunStepApprovalTemplate {
+  // Type is the type of the approval process.
+  optional string type = 1;
+
+  // Users is the users to approve the step.
+  repeated string users = 2;
+}
+
+message ResourceRunStepApprovalUserAction {
+  // Type is the type of the user action.
+  optional string type = 1;
+
+  // User is the user who performed the action.
+  optional string user = 2;
+
+  // Time is the time when the action performed.
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.Time time = 3;
+
+  // Comment is the comment of the action.
+  optional string comment = 4;
+}
+
+// ResourceRunStepTemplate is the schema for the resource run step templates API.
+//
+// +genclient
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +k8s:crd-gen:resource:scope="Namespaced",subResources=["status"]
+message ResourceRunStepTemplate {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+
+  optional ResourceRunStepTemplateSpec spec = 2;
+
+  optional ResourceRunStepTemplateStatus status = 3;
+}
+
+// ResourceRunStepTemplateList holds the list of ResourceRunStepTemplate.
+//
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+message ResourceRunStepTemplateList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+
+  repeated ResourceRunStepTemplate items = 2;
+}
+
+message ResourceRunStepTemplateReference {
+  optional string namespace = 1;
+
+  optional string name = 2;
+}
+
+// ResourceRunStepTemplateSpec defines the desired state of ResourceRunStepTemplate.
+message ResourceRunStepTemplateSpec {
+  // Container is the main container image to run in the resource run step template.
+  optional k8s.io.api.core.v1.Container container = 1;
+
+  // Approval is the approval process for the resource run step template.
+  optional ResourceRunStepApprovalTemplate approval = 2;
+}
+
+// ResourceRunStepTemplateStatus defines the observed state of ResourceRunStepTemplate.
+message ResourceRunStepTemplateStatus {
+}
+
+// ResourceRunTemplate is the schema for the resource run templates API.
+//
+// +genclient
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+// +k8s:crd-gen:resource:scope="Namespaced",subResources=["status"]
+message ResourceRunTemplate {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
+
+  optional ResourceRunTemplateSpec spec = 2;
+
+  optional ResourceRunTemplateStatus status = 3;
+}
+
+// ResourceRunTemplateList holds the list of ResourceRunTemplate.
+//
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+message ResourceRunTemplateList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+
+  repeated ResourceRunTemplate items = 2;
+}
+
+message ResourceRunTemplateReference {
+  optional string namespace = 1;
+
+  optional string name = 2;
+}
+
+// ResourceRunTemplateSpec defines the desired state of ResourceRunTemplate.
+// It is a template for a resource run, which defines the previous and post step for resource operation like plan and apply.
+// The order of the steps will be:
+//
+// template pre-plan--> resource pre-plan --> plan --> resource post-plan
+// --> template post-plan --> template pre-apply --> resource pre-apply --> apply
+// --> resource post-apply --> template post-apply.
+message ResourceRunTemplateSpec {
+  // Plan defines the template steps to run in before and after the resource run template.
+  optional ResourceOperationHook plan = 1;
+
+  // Apply defines the template steps to apply in the resource run template.
+  optional ResourceOperationHook apply = 2;
+}
+
+// ResourceRunTemplateStatus defines the observed state of ResourceRunTemplate.
+message ResourceRunTemplateStatus {
+}
+
+// ResourceRunTemplateStep defines the desired state of ResourceRunTemplateStep.
+message ResourceRunTemplateStep {
+  // Name is the name of the resource run template step.
+  optional string name = 1;
+
+  // Description is the description of the resource run template step.
+  optional string description = 2;
+
+  // ResourceRunStepTemplate is the reference to the resource run step template.
+  optional ResourceRunTemplateReference resourceRunStepTemplate = 3;
+
+  // Container is the main container image to run in the resource run template step.
+  // It is used when ResourceRunStepTemplate is not provided.
+  optional k8s.io.api.core.v1.Container container = 4;
 }
 
 // ResourceSpec defines the desired state of Resource.
 message ResourceSpec {
+  // Attributes to configure the template.
+  optional k8s.io.apimachinery.pkg.runtime.RawExtension attributes = 1;
+
+  // TemplateVersion template version to which the resource belongs.
+  optional TempalteVersionReference templateVersionReference = 2;
+
+  // Type is a resource definition type.
+  optional string type = 3;
+
+  // Draft indicates whether the resource is a draft.
+  optional bool draft = 4;
+
+  // Stop indicates whether to stop the resource.
+  optional bool stop = 5;
 }
 
 // ResourceStatus defines the observed state of Resource.
 message ResourceStatus {
+  // StatusDescriptor defines the status of the resource.
+  optional StatusDescriptor statusDescriptor = 1;
+
+  // Project is the project to which the resource belongs.
+  optional string project = 2;
+
+  // ComputedAttributes generated from attributes and schemas.
+  optional k8s.io.apimachinery.pkg.runtime.RawExtension computedAttributes = 3;
+
+  // Dependencies of the resource.
+  repeated string dependencies = 4;
+
+  // ResourceHook is a reference to a resource hook.
+  // For one resource, the resource hook is unique.
+  optional ResourceHookReference resourceHook = 5;
+
+  // ResourceDefinition is a reference to a resource definition.
+  optional ResourceDefinitionReference resourceDefinition = 6;
+
+  // ResourceDefinitionMatchingRule is a reference to a resource definition matching rule.
+  optional ResourceDefinitionMatchingRuleReference resourceDefinitionMatchingRule = 7;
+
+  // Endpoints of the resource.
+  repeated string endpoints = 8;
 }
 
 // Schema API for the template's version.
@@ -277,6 +782,14 @@ message StatusDescriptor {
 
   // Conditions holds the conditions for the object.
   repeated Condition conditions = 2;
+}
+
+message TempalteVersionReference {
+  optional string namespace = 1;
+
+  optional string name = 2;
+
+  optional string version = 3;
 }
 
 // Template is the schema for the templates API.

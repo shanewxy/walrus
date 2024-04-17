@@ -69,6 +69,7 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 		&ProjectSubjects{},
 		&Resource{},
 		&ResourceComponents{},
+		&ResourceComponentsList{},
 		&ResourceDefinition{},
 		&ResourceDefinitionList{},
 		&ResourceList{},

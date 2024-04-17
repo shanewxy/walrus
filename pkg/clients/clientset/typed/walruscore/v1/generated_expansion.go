@@ -11,9 +11,19 @@ type ConnectorExpansion interface{}
 
 type ResourceExpansion interface{}
 
+type ResourceComponentsExpansion interface{}
+
 type ResourceDefinitionExpansion interface{}
 
+type ResourceDefinitionMatchingRuleExpansion interface{}
+
+type ResourceHookExpansion interface{}
+
 type ResourceRunExpansion interface{}
+
+type ResourceRunStepTemplateExpansion interface{}
+
+type ResourceRunTemplateExpansion interface{}
 
 type SchemaExpansion interface{}
 

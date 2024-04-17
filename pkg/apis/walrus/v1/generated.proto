@@ -222,26 +222,26 @@ message Resource {
   optional github.com.seal_io.walrus.pkg.apis.walruscore.v1.ResourceStatus status = 3;
 }
 
-// ResourceComponent is the schema for the resource component API.
-message ResourceComponent {
-  // Name is the name of the component.
-  optional string name = 1;
-}
-
-// ResourceComponents holds the list of ResourceComponent.
+// ResourceComponents is the schema for the resource components API.
 //
-// ResourceComponents is the subresource of Resource.
-//
+// +genclient
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
-// +k8s:apireg-gen:resource:scope="Namespaced",categories=["walrus"],shortName=["rescomp"]
+// +k8s:apireg-gen:resource:scope="Namespaced",categories=["walrus"],shortName=["rescomps"]
 message ResourceComponents {
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
 
-  // +patchStrategy=merge
-  // +patchMergeKey=name
-  // +listType=map
-  // +listMapKey=name
-  repeated ResourceComponent items = 2;
+  optional github.com.seal_io.walrus.pkg.apis.walruscore.v1.ResourceComponentsSpec spec = 2;
+
+  optional github.com.seal_io.walrus.pkg.apis.walruscore.v1.ResourceComponentsStatus status = 3;
+}
+
+// ResourceComponentsList holds the list of ResourceComponents.
+//
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+message ResourceComponentsList {
+  optional k8s.io.apimachinery.pkg.apis.meta.v1.ListMeta metadata = 1;
+
+  repeated github.com.seal_io.walrus.pkg.apis.walruscore.v1.ResourceComponents items = 2;
 }
 
 // ResourceDefinition is the schema for the resource definitions API.
@@ -283,9 +283,9 @@ message ResourceList {
 message ResourceRun {
   optional k8s.io.apimachinery.pkg.apis.meta.v1.ObjectMeta metadata = 1;
 
-  optional github.com.seal_io.walrus.pkg.apis.walruscore.v1.ResourceDefinitionSpec spec = 2;
+  optional github.com.seal_io.walrus.pkg.apis.walruscore.v1.ResourceRunSpec spec = 2;
 
-  optional github.com.seal_io.walrus.pkg.apis.walruscore.v1.ResourceDefinitionStatus status = 3;
+  optional github.com.seal_io.walrus.pkg.apis.walruscore.v1.ResourceRunStatus status = 3;
 }
 
 // ResourceRunList holds the list of ResourceRun.

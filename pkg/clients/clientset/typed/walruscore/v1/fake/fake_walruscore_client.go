@@ -27,12 +27,32 @@ func (c *FakeWalruscoreV1) Resources(namespace string) v1.ResourceInterface {
 	return &FakeResources{c, namespace}
 }
 
+func (c *FakeWalruscoreV1) ResourceComponents(namespace string) v1.ResourceComponentsInterface {
+	return &FakeResourceComponents{c, namespace}
+}
+
 func (c *FakeWalruscoreV1) ResourceDefinitions(namespace string) v1.ResourceDefinitionInterface {
 	return &FakeResourceDefinitions{c, namespace}
 }
 
+func (c *FakeWalruscoreV1) ResourceDefinitionMatchingRules(namespace string) v1.ResourceDefinitionMatchingRuleInterface {
+	return &FakeResourceDefinitionMatchingRules{c, namespace}
+}
+
+func (c *FakeWalruscoreV1) ResourceHooks(namespace string) v1.ResourceHookInterface {
+	return &FakeResourceHooks{c, namespace}
+}
+
 func (c *FakeWalruscoreV1) ResourceRuns(namespace string) v1.ResourceRunInterface {
 	return &FakeResourceRuns{c, namespace}
+}
+
+func (c *FakeWalruscoreV1) ResourceRunStepTemplates(namespace string) v1.ResourceRunStepTemplateInterface {
+	return &FakeResourceRunStepTemplates{c, namespace}
+}
+
+func (c *FakeWalruscoreV1) ResourceRunTemplates(namespace string) v1.ResourceRunTemplateInterface {
+	return &FakeResourceRunTemplates{c, namespace}
 }
 
 func (c *FakeWalruscoreV1) Schemas(namespace string) v1.SchemaInterface {

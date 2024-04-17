@@ -21,6 +21,8 @@ type Interface interface {
 	Projects() ProjectInformer
 	// Resources returns a ResourceInformer.
 	Resources() ResourceInformer
+	// ResourceComponents returns a ResourceComponentsInformer.
+	ResourceComponents() ResourceComponentsInformer
 	// ResourceDefinitions returns a ResourceDefinitionInformer.
 	ResourceDefinitions() ResourceDefinitionInformer
 	// ResourceRuns returns a ResourceRunInformer.
@@ -73,6 +75,11 @@ func (v *version) Projects() ProjectInformer {
 // Resources returns a ResourceInformer.
 func (v *version) Resources() ResourceInformer {
 	return &resourceInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// ResourceComponents returns a ResourceComponentsInformer.
+func (v *version) ResourceComponents() ResourceComponentsInformer {
+	return &resourceComponentsInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }
 
 // ResourceDefinitions returns a ResourceDefinitionInformer.

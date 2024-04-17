@@ -1214,6 +1214,8 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &applyconfigurationwalrusv1.ProjectStatusApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("Resource"):
 		return &applyconfigurationwalrusv1.ResourceApplyConfiguration{}
+	case walrusv1.SchemeGroupVersion.WithKind("ResourceComponents"):
+		return &applyconfigurationwalrusv1.ResourceComponentsApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("ResourceDefinition"):
 		return &applyconfigurationwalrusv1.ResourceDefinitionApplyConfiguration{}
 	case walrusv1.SchemeGroupVersion.WithKind("ResourceRun"):
@@ -1286,20 +1288,78 @@ func ForKind(kind schema.GroupVersionKind) interface{} {
 		return &applyconfigurationwalruscorev1.ConditionSummaryApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("Connector"):
 		return &applyconfigurationwalruscorev1.ConnectorApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ConnectorReference"):
+		return &applyconfigurationwalruscorev1.ConnectorReferenceApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("Filters"):
 		return &applyconfigurationwalruscorev1.FiltersApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("Resource"):
 		return &applyconfigurationwalruscorev1.ResourceApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceComponent"):
+		return &applyconfigurationwalruscorev1.ResourceComponentApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceComponentChangeSummary"):
+		return &applyconfigurationwalruscorev1.ResourceComponentChangeSummaryApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceComponentDependency"):
+		return &applyconfigurationwalruscorev1.ResourceComponentDependencyApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceComponents"):
+		return &applyconfigurationwalruscorev1.ResourceComponentsApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceComponentsStatus"):
+		return &applyconfigurationwalruscorev1.ResourceComponentsStatusApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("ResourceDefinition"):
 		return &applyconfigurationwalruscorev1.ResourceDefinitionApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceDefinitionMatchingRule"):
+		return &applyconfigurationwalruscorev1.ResourceDefinitionMatchingRuleApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceDefinitionMatchingRuleReference"):
+		return &applyconfigurationwalruscorev1.ResourceDefinitionMatchingRuleReferenceApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceDefinitionReference"):
+		return &applyconfigurationwalruscorev1.ResourceDefinitionReferenceApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceHook"):
+		return &applyconfigurationwalruscorev1.ResourceHookApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceHookReference"):
+		return &applyconfigurationwalruscorev1.ResourceHookReferenceApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceHookSpec"):
+		return &applyconfigurationwalruscorev1.ResourceHookSpecApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceHookStep"):
+		return &applyconfigurationwalruscorev1.ResourceHookStepApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceOperationHook"):
+		return &applyconfigurationwalruscorev1.ResourceOperationHookApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("ResourceRun"):
 		return &applyconfigurationwalruscorev1.ResourceRunApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceRunSpec"):
+		return &applyconfigurationwalruscorev1.ResourceRunSpecApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceRunStatus"):
+		return &applyconfigurationwalruscorev1.ResourceRunStatusApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceRunStep"):
+		return &applyconfigurationwalruscorev1.ResourceRunStepApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceRunStepApprovalRecord"):
+		return &applyconfigurationwalruscorev1.ResourceRunStepApprovalRecordApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceRunStepApprovalTemplate"):
+		return &applyconfigurationwalruscorev1.ResourceRunStepApprovalTemplateApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceRunStepApprovalUserAction"):
+		return &applyconfigurationwalruscorev1.ResourceRunStepApprovalUserActionApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceRunStepTemplate"):
+		return &applyconfigurationwalruscorev1.ResourceRunStepTemplateApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceRunStepTemplateReference"):
+		return &applyconfigurationwalruscorev1.ResourceRunStepTemplateReferenceApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceRunStepTemplateSpec"):
+		return &applyconfigurationwalruscorev1.ResourceRunStepTemplateSpecApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceRunTemplate"):
+		return &applyconfigurationwalruscorev1.ResourceRunTemplateApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceRunTemplateReference"):
+		return &applyconfigurationwalruscorev1.ResourceRunTemplateReferenceApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceRunTemplateSpec"):
+		return &applyconfigurationwalruscorev1.ResourceRunTemplateSpecApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceSpec"):
+		return &applyconfigurationwalruscorev1.ResourceSpecApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("ResourceStatus"):
+		return &applyconfigurationwalruscorev1.ResourceStatusApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("Schema"):
 		return &applyconfigurationwalruscorev1.SchemaApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("SchemaStatus"):
 		return &applyconfigurationwalruscorev1.SchemaStatusApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("StatusDescriptor"):
 		return &applyconfigurationwalruscorev1.StatusDescriptorApplyConfiguration{}
+	case walruscorev1.SchemeGroupVersion.WithKind("TempalteVersionReference"):
+		return &applyconfigurationwalruscorev1.TempalteVersionReferenceApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("Template"):
 		return &applyconfigurationwalruscorev1.TemplateApplyConfiguration{}
 	case walruscorev1.SchemeGroupVersion.WithKind("TemplateSpec"):
