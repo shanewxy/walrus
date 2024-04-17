@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/http/pprof"
 	"runtime"
+	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/collectors"
@@ -28,11 +29,11 @@ import (
 	"github.com/seal-io/walrus/pkg/controllers"
 	"github.com/seal-io/walrus/pkg/kuberest"
 	"github.com/seal-io/walrus/pkg/system"
-	"github.com/seal-io/walrus/pkg/webhooks"
 )
 
 type Manager struct {
-	CtrlManager ctrl.Manager
+	CtrlManager CtrlManager
+	sentinel    _CtrlManagerSentinel
 }
 
 func (m *Manager) Prepare(ctx context.Context) error {
@@ -74,12 +75,6 @@ func (m *Manager) Prepare(ctx context.Context) error {
 func (m *Manager) Start(ctx context.Context) error {
 	cm := m.CtrlManager
 	ms := cm.GetWebhookServer()
-
-	// Register /validate-*, /mutate-*.
-	err := webhooks.Setup(ctx, cm, ms.WebhookMux())
-	if err != nil {
-		return fmt.Errorf("setup webhooks: %w", err)
-	}
 
 	// Register /metrics.
 	{
@@ -145,4 +140,28 @@ func (m *Manager) Start(ctx context.Context) error {
 
 	// Start.
 	return cm.Start(ctx)
+}
+
+func (m *Manager) WaitForReady(ctx context.Context) error {
+	// Wait for controller manager to start.
+	{
+		ctx, cancel := context.WithTimeoutCause(ctx, 10*time.Second, errors.New("controller manager start timeout"))
+		defer cancel()
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-m.sentinel.Done():
+		}
+	}
+
+	// Wait for cache sync.
+	if !m.CtrlManager.CacheDisabled() {
+		ctx, cancel := context.WithTimeoutCause(ctx, 15*time.Second, errors.New("cache sync timeout"))
+		defer cancel()
+		if !m.CtrlManager.GetCache().WaitForCacheSync(ctx) {
+			return errors.New("cache is not synced yet")
+		}
+	}
+
+	return nil
 }

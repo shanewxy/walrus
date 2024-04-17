@@ -198,7 +198,7 @@ func (h *VariableHandler) OnList(ctx context.Context, opts ctrlcli.ListOptions) 
 	// List.
 	if opts.Namespace == "" {
 		secList := new(core.SecretList)
-		err := h.Client.List(ctx, secList,
+		err := h.APIReader.List(ctx, secList,
 			convertSecretListOptsFromVariableListOpts(opts))
 		if err != nil {
 			return nil, err
@@ -302,7 +302,12 @@ func (h *VariableHandler) OnWatch(ctx context.Context, opts ctrlcli.ListOptions)
 	vraIndexer := map[string]walrus.Variable{}         // [vnamespace/vname] -> vra
 	vraReverseIndexer := map[string]sets.Set[string]{} // [vname] -> [vnamespace, ...]
 	{
-		listObj, err := h.OnList(ctx, opts)
+		lopts := opts
+		if opts.Raw != nil {
+			lopts.Raw = opts.Raw.DeepCopy()
+			lopts.Raw.Watch = false // Avoid infinite loop.
+		}
+		listObj, err := h.OnList(ctx, lopts)
 		if err != nil {
 			return nil, err
 		}

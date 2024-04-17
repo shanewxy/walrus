@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/http/pprof"
@@ -124,11 +123,12 @@ func (s *Server) Prepare(ctx context.Context) error {
 		// After extension API is ready.
 		err := apis.WaitForAPIServicesReady(ctx, loopbackKubeCli)
 		if err != nil {
-			return fmt.Errorf("wait for extension API services ready: %w", err)
+			return fmt.Errorf("wait for extension API services to be ready: %w", err)
 		}
-		// After cache is synced.
-		if !s.Manager.CtrlManager.GetCache().WaitForCacheSync(ctx) {
-			return errors.New("wait for cache sync")
+		// After manager is ready.
+		err = s.Manager.WaitForReady(ctx)
+		if err != nil {
+			return fmt.Errorf("wait for manager to be ready: %w", err)
 		}
 
 		// Initialize default subject provider.
@@ -184,14 +184,17 @@ func (s *Server) Start(ctx context.Context) error {
 
 	// Register /readyz.
 	{
-		err = s.APIServer.AddReadyzChecks(
-			healthz.NamedCheck("informer", func(r *http.Request) error {
-				if cm.GetCache().WaitForCacheSync(r.Context()) {
-					return nil
+		var cs []healthz.HealthChecker
+		if !s.Manager.CtrlManager.CacheDisabled() {
+			cs = append(cs, healthz.NamedCheck("manager", func(r *http.Request) error {
+				err := s.Manager.WaitForReady(ctx)
+				if err != nil {
+					return fmt.Errorf("wait for manager to be ready: %w", err)
 				}
-				return errors.New("informer cache is not synced yet")
-			}),
-		)
+				return nil
+			}))
+		}
+		err = s.APIServer.AddReadyzChecks(cs...)
 		if err != nil {
 			return fmt.Errorf("add readyz checks: %w", err)
 		}
@@ -234,9 +237,7 @@ func (s *Server) Start(ctx context.Context) error {
 
 	// Start.
 	gp := gopool.GroupWithContextIn(ctx)
-	gp.Go(func(ctx context.Context) error {
-		return cm.Start(ctx)
-	})
+	gp.Go(cm.Start)
 	gp.Go(func(ctx context.Context) error {
 		return s.APIServer.PrepareRun().Run(ctx.Done())
 	})

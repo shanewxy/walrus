@@ -3,6 +3,7 @@ package manager
 import (
 	"context"
 	"fmt"
+	"math"
 	"net"
 	"net/http"
 	"time"
@@ -14,11 +15,11 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	ctrlcache "sigs.k8s.io/controller-runtime/pkg/cache"
 	ctrlcli "sigs.k8s.io/controller-runtime/pkg/client"
-	"sigs.k8s.io/controller-runtime/pkg/client/apiutil"
 	ctrlmetricsrv "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 
 	"github.com/seal-io/walrus/pkg/clients/clientset"
 	"github.com/seal-io/walrus/pkg/clients/clientset/scheme"
+	"github.com/seal-io/walrus/pkg/manager/leaderelection"
 	"github.com/seal-io/walrus/pkg/manager/webhookserver"
 	"github.com/seal-io/walrus/pkg/system"
 	"github.com/seal-io/walrus/pkg/systemkuberes"
@@ -35,6 +36,7 @@ type Config struct {
 	KubeLeaderRenewTimeout    time.Duration
 	ServeListenerCertDir      string
 	ServeListener             net.Listener
+	DisableCache              bool
 }
 
 func (c *Config) Apply(_ context.Context) (*Manager, error) {
@@ -77,58 +79,40 @@ func (c *Config) Apply(_ context.Context) (*Manager, error) {
 		PprofBindAddress: "0",
 	}
 
+	// Inject a lease locker that will never succeed to prevent controller from starting.
+	if c.DisableCache {
+		ctrlMgrOpts.LeaderElection = true
+		ctrlMgrOpts.RetryPeriod = ptr.To(time.Duration(math.MaxInt64)) // Set longest retry period.
+		ctrlMgrOpts.LeaderElectionResourceLockInterface = leaderelection.Dummy()
+	}
+
 	// Enable webhook serving,
 	// includes configurations installation.
 	if c.ServeListener != nil {
 		ctrlMgrOpts.WebhookServer = webhookserver.Enhance(c.ServeListener, c.ServeListenerCertDir, c.KubeClient)
 	}
 
-	ctrlManager, err := ctrl.NewManager(rest.CopyConfig(&c.KubeClientConfig), ctrlMgrOpts)
+	// Create controller manager and wrap it.
+	rawCtrlManager, err := ctrl.NewManager(rest.CopyConfig(&c.KubeClientConfig), ctrlMgrOpts)
 	if err != nil {
 		return nil, fmt.Errorf("create controller manager: %w", err)
 	}
+	// Add manager sentinel.
+	sentinel := _CtrlManagerSentinel{done: make(chan struct{})}
+	err = rawCtrlManager.Add(sentinel)
+	if err != nil {
+		return nil, fmt.Errorf("add manager sentinel: %w", err)
+	}
 
+	ctrlManager := CtrlManager{
+		Manager:       rawCtrlManager,
+		disableCache:  c.DisableCache,
+		indexedFields: sets.Set[string]{},
+	}
 	system.ConfigureLoopbackCtrlRuntime(ctrlManager.GetClient(), ctrlManager.GetAPIReader())
 
 	return &Manager{
-		CtrlManager: &_CtrlManager{
-			Manager:       ctrlManager,
-			IndexedFields: sets.Set[string]{},
-		},
+		CtrlManager: ctrlManager,
+		sentinel:    sentinel,
 	}, nil
-}
-
-type (
-	// _CtrlManager is a wrapper around ctrl.Manager.
-	_CtrlManager struct {
-		ctrl.Manager
-		IndexedFields sets.Set[string]
-	}
-
-	// _CtrlClientFieldIndexer is a wrapper around ctrl.FieldIndexer.
-	_CtrlClientFieldIndexer struct {
-		ctrl.Manager
-		IndexedFields sets.Set[string]
-	}
-)
-
-func (m *_CtrlManager) GetFieldIndexer() ctrlcli.FieldIndexer {
-	return &_CtrlClientFieldIndexer{
-		Manager:       m.Manager,
-		IndexedFields: m.IndexedFields,
-	}
-}
-
-func (i *_CtrlClientFieldIndexer) IndexField(ctx context.Context, obj ctrlcli.Object, field string, extractValue ctrlcli.IndexerFunc) error {
-	gvk, err := apiutil.GVKForObject(obj, i.Manager.GetScheme())
-	if err != nil {
-		return err
-	}
-	key := gvk.String() + "/" + field
-	if i.IndexedFields.Has(key) {
-		// If the field is already indexed, skip.
-		return nil
-	}
-	i.IndexedFields.Insert(key)
-	return i.Manager.GetFieldIndexer().IndexField(ctx, obj, field, extractValue)
 }

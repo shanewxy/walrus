@@ -30,6 +30,7 @@ type Options struct {
 	// Control.
 	BootstrapPassword   string
 	DisableAuths        bool
+	DisableController   bool
 	DisableApplications []string
 	CorsAllowedOrigins  []string
 
@@ -60,6 +61,7 @@ func NewOptions() *Options {
 		// Control.
 		BootstrapPassword:   "",
 		DisableAuths:        false,
+		DisableController:   false,
 		DisableApplications: []string{},
 		CorsAllowedOrigins:  []string{},
 
@@ -89,7 +91,9 @@ func (o *Options) AddFlags(fs *pflag.FlagSet) {
 		"the password to bootstrap instead of random generating, "+
 			"it is used to create the administrator account.")
 	fs.BoolVar(&o.DisableAuths, "disable-auths", o.DisableAuths,
-		"disable authentication and authorization.")
+		"disable checking authentication and authorization.")
+	fs.BoolVar(&o.DisableController, "disable-controller", o.DisableController,
+		"disable running the manager controller, which is used to split running manager and server.")
 	fs.StringSliceVar(&o.DisableApplications, "disable-applications", o.DisableApplications,
 		"disable installing applications, select from [\"minio\", \"hermitcrab\", \"argo-workflows\"]. "+
 			"specified \"*\" to disable all applications.")
@@ -183,6 +187,7 @@ func (o *Options) Complete(ctx context.Context) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+	mgrConfig.DisableCache = o.DisableController
 
 	system.ConfigureControl(
 		o.BootstrapPassword,

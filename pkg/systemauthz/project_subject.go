@@ -16,6 +16,7 @@ import (
 	walrus "github.com/seal-io/walrus/pkg/apis/walrus/v1"
 	"github.com/seal-io/walrus/pkg/kubeclientset"
 	"github.com/seal-io/walrus/pkg/kubemeta"
+	"github.com/seal-io/walrus/pkg/systemkuberes"
 	"github.com/seal-io/walrus/pkg/systemmeta"
 )
 
@@ -128,10 +129,14 @@ func GrantProjectSubjectRole(ctx context.Context, cli ctrlcli.Client, proj *walr
 		return errors.New("request user not found")
 	}
 
-	// Don't bind the system:admin user or system:master group.
-	if ui.GetName() == "system:admin" ||
-		slices.Contains(ui.GetGroups(), "system:master") {
-		return nil
+	// Don't bind the walrus admin, system:admin user or system:master group.
+	{
+		if un, ug := ui.GetName(), ui.GetGroups(); un == "system:admin" || slices.Contains(ug, "system:master") {
+			return nil
+		}
+		if ns, n, ok := ConvertSubjectNamesFromAuthnUser(ui); ok && ns == systemkuberes.SystemNamespaceName && n == systemkuberes.AdminSubjectName {
+			return nil
+		}
 	}
 
 	return GrantProjectSubjectRoleFor(ctx, cli, proj, role, ui)
