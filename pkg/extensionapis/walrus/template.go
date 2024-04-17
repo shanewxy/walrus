@@ -12,7 +12,6 @@ import (
 	walrus "github.com/seal-io/walrus/pkg/apis/walrus/v1"
 	walruscore "github.com/seal-io/walrus/pkg/apis/walruscore/v1"
 	"github.com/seal-io/walrus/pkg/extensionapi"
-	"github.com/seal-io/walrus/pkg/templates/sourceurl"
 )
 
 // TemplateHandler handles v1.Template objects.
@@ -130,17 +129,4 @@ func (h *TemplateHandler) CastObjectListFrom(uol *walruscore.TemplateList) (dol 
 		dol.Items[i].APIVersion = walrus.SchemeGroupVersion.String()
 	}
 	return dol
-}
-
-func (h *TemplateHandler) OnCreate(ctx context.Context, obj runtime.Object, opts ctrlcli.CreateOptions) (runtime.Object, error) {
-	// Validate.
-	t := obj.(*walrus.Template)
-	_, err := sourceurl.ParseURLToSourceURL(t.Spec.VCSRepository.URL)
-	if err != nil {
-		return nil, err
-	}
-
-	uo := h.CastObjectTo(t)
-	err = h.client.Create(ctx, uo, &opts)
-	return h.CastObjectFrom(uo), err
 }

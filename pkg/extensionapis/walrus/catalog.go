@@ -2,8 +2,6 @@ package walrus
 
 import (
 	"context"
-	"fmt"
-	"regexp"
 
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -129,50 +127,4 @@ func (h *CatalogHandler) CastObjectListFrom(uol *walruscore.CatalogList) (dol *w
 		dol.Items[i].APIVersion = walrus.SchemeGroupVersion.String()
 	}
 	return dol
-}
-
-func (h *CatalogHandler) OnCreate(ctx context.Context, obj runtime.Object, opts ctrlcli.CreateOptions) (runtime.Object, error) {
-	// Validate.
-	c := obj.(*walrus.Catalog)
-	err := h.validateFilter(c)
-	if err != nil {
-		return nil, err
-	}
-
-	uo := h.CastObjectTo(c)
-	err = h.client.Create(ctx, uo, &opts)
-	return h.CastObjectFrom(uo), err
-}
-
-func (h *CatalogHandler) OnUpdate(ctx context.Context, obj, _ runtime.Object, opts ctrlcli.UpdateOptions) (runtime.Object, error) {
-	// Validate.
-	c := obj.(*walrus.Catalog)
-	err := h.validateFilter(c)
-	if err != nil {
-		return nil, err
-	}
-
-	uo := h.CastObjectTo(c)
-	err = h.client.Update(ctx, uo, &opts)
-	return h.CastObjectFrom(uo), err
-}
-
-func (h *CatalogHandler) validateFilter(obj *walrus.Catalog) error {
-	filters := obj.Spec.Filters
-	if filters == nil {
-		return nil
-	}
-
-	if filters.IncludeExpression != "" {
-		if _, err := regexp.Compile(filters.IncludeExpression); err != nil {
-			return fmt.Errorf("invalid include expression: %w", err)
-		}
-	}
-
-	if filters.ExcludeExpression != "" {
-		if _, err := regexp.Compile(filters.ExcludeExpression); err != nil {
-			return fmt.Errorf("invalid exclude expression: %w", err)
-		}
-	}
-	return nil
 }
