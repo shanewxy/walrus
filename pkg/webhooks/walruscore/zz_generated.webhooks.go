@@ -84,6 +84,7 @@ func vwh_walrus_pkg_webhooks_walruscore_CatalogWebhook(c v1.WebhookClientConfig)
 					Scope: ptr.To[v1.ScopeType]("Namespaced"),
 				},
 				Operations: []v1.OperationType{
+					"CREATE",
 					"UPDATE",
 					"DELETE",
 				},
@@ -226,7 +227,7 @@ func vwh_walrus_pkg_webhooks_walruscore_TemplateWebhook(c v1.WebhookClientConfig
 					Scope: ptr.To[v1.ScopeType]("Namespaced"),
 				},
 				Operations: []v1.OperationType{
-					"UPDATE",
+					"CREATE",
 					"DELETE",
 				},
 			},
