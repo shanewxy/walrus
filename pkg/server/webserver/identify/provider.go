@@ -38,12 +38,19 @@ type (
 	ExternalConnectorConfig   = dexserver.ConnectorConfig
 	ExternalConnector         = dexconnector.Connector
 	ExternalPasswordConnector interface {
+		// Login logs in with the given username and password.
+		// It returns the identity if the login is successful,
+		// the valid flag indicates whether the login is valid.
 		Login(ctx context.Context, username, password string) (id *ExternalIdentity, valid bool, err error)
 	}
 	ExternalCallbackConnector interface {
+		// GetLoginURL returns the login URL with the given callback URL and state.
 		GetLoginURL(callbackUrl, state string) (loginUrl string, err error)
+		// GetClientID returns the client ID.
 		GetClientID() string
-		HandleCallback(req *http.Request) (id *ExternalIdentity, err error)
+		// HandleCallback handles the callback request and returns the identity,
+		// the given callback URL must be the same as the one used in GetLoginURL.
+		HandleCallback(callbackUrl string, req *http.Request) (id *ExternalIdentity, err error)
 	}
 )
 
@@ -123,7 +130,11 @@ func (p *_ExternalCallbackConnector[T]) GetClientID() string {
 	return p.ClientID
 }
 
-func (p *_ExternalCallbackConnector[T]) HandleCallback(req *http.Request) (*ExternalIdentity, error) {
+func (p *_ExternalCallbackConnector[T]) HandleCallback(callbackUrl string, req *http.Request) (*ExternalIdentity, error) {
+	if p.InjectCallbackUrl != nil {
+		p.InjectCallbackUrl(callbackUrl, p.ConnConfig)
+	}
+
 	conn, err := p.openConnector()
 	if err != nil {
 		return nil, fmt.Errorf("open connector: %w", err)
@@ -220,12 +231,13 @@ func getExternalConnectorFromSubjectProvider(subjProv *walrus.SubjectProvider) (
 		}
 		return NewExternalCallbackConnector(dst, src.ClientID,
 			func(s string, o *oidc.Config) { o.RedirectURI = s }), nil
-	case walrus.SubjectProviderTypeGithub:
+	case walrus.SubjectProviderTypeGitHub:
 		src := subjProv.Spec.ExternalConfig.GitHub
 		dst := &github.Config{
 			ClientID:      src.ClientID,
 			ClientSecret:  src.ClientSecret,
 			TeamNameField: "both",
+			LoadAllGroups: true,
 			UseLoginAsID:  true,
 		}
 		for k, v := range src.Groups.ToMap() {
@@ -236,7 +248,7 @@ func getExternalConnectorFromSubjectProvider(subjProv *walrus.SubjectProvider) (
 		}
 		return NewExternalCallbackConnector(dst, src.ClientID,
 			func(s string, o *github.Config) { o.RedirectURI = s }), nil
-	case walrus.SubjectProviderTypeGitlab:
+	case walrus.SubjectProviderTypeGitLab:
 		src := subjProv.Spec.ExternalConfig.GitLab
 		dst := &gitlab.Config{
 			ClientID:     src.ClientID,

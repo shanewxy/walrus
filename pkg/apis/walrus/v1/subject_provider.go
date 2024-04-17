@@ -51,16 +51,16 @@ const (
 	// which is able to use standards-compliant OpenID Connect as an authentication source.
 	SubjectProviderTypeOIDC SubjectProviderType = "OIDC"
 
-	// SubjectProviderTypeGithub means the subject provider is based on GitHub.
+	// SubjectProviderTypeGitHub means the subject provider is based on GitHub.
 	//
 	// This type is an external subject provider type,
 	// which is able to use GitHub as an authentication source.
-	SubjectProviderTypeGithub SubjectProviderType = "GitHub"
-	// SubjectProviderTypeGitlab means the subject provider is based on GitLab.
+	SubjectProviderTypeGitHub SubjectProviderType = "GitHub"
+	// SubjectProviderTypeGitLab means the subject provider is based on GitLab.
 	//
 	// This type is an external subject provider type,
 	// which is able to use GitLab as an authentication source.
-	SubjectProviderTypeGitlab SubjectProviderType = "GitLab"
+	SubjectProviderTypeGitLab SubjectProviderType = "GitLab"
 	// SubjectProviderTypeBitbucket means the subject provider is based on Bitbucket.
 	//
 	// This type is an external subject provider type,
@@ -91,7 +91,7 @@ func (in SubjectProviderType) Validate() error {
 	switch in {
 	case SubjectProviderTypeInternal, SubjectProviderTypeLDAP,
 		SubjectProviderTypeOIDC, SubjectProviderTypeOAuth,
-		SubjectProviderTypeGithub, SubjectProviderTypeGitlab,
+		SubjectProviderTypeGitHub, SubjectProviderTypeGitLab,
 		SubjectProviderTypeBitbucket, SubjectProviderTypeGitea,
 		SubjectProviderTypeGoogle, SubjectProviderTypeMicrosoft:
 		return nil
@@ -447,12 +447,12 @@ func (in *SubjectProviderExternalConfig) ValidateWithType(pt SubjectProviderType
 		}
 		in.OIDC.Default()
 		return in.OIDC.Validate()
-	case SubjectProviderTypeGithub:
+	case SubjectProviderTypeGitHub:
 		if in.GitHub == nil {
 			return errors.New("github is required")
 		}
 		return in.GitHub.Validate()
-	case SubjectProviderTypeGitlab:
+	case SubjectProviderTypeGitLab:
 		if in.GitLab == nil {
 			return errors.New("gitlab is required")
 		}

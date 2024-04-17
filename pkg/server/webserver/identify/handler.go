@@ -211,23 +211,6 @@ func login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// Create state.
-		sec := &core.Secret{
-			ObjectMeta: meta.ObjectMeta{
-				Namespace:    systemkuberes.SystemNamespaceName,
-				GenerateName: "walrus-subject-login-callback-",
-			},
-			Data: map[string][]byte{
-				"provider": []byte(req.Provider),
-				"clientID": []byte(cn.GetClientID()),
-			},
-		}
-		sec, err := kubeclientset.CreateWithCtrlClient(ctx, system.LoopbackCtrlClient.Get(), sec)
-		if err != nil {
-			ui.ResponseErrorWithCode(w, http.StatusInternalServerError, fmt.Errorf("create state: %w", err))
-			return
-		}
-
 		// Get callback URL.
 		var callbackUrl string
 		{
@@ -246,6 +229,25 @@ func login(w http.ResponseWriter, r *http.Request) {
 			callbackUrl = u.String()
 		}
 
+		// Create state.
+		sec := &core.Secret{
+			ObjectMeta: meta.ObjectMeta{
+				Namespace:    systemkuberes.SystemNamespaceName,
+				GenerateName: "walrus-subject-login-callback-",
+			},
+			Data: map[string][]byte{
+				"provider":    []byte(req.Provider),
+				"clientID":    []byte(cn.GetClientID()),
+				"callbackUrl": []byte(callbackUrl),
+			},
+		}
+		sec, err := kubeclientset.CreateWithCtrlClient(ctx, system.LoopbackCtrlClient.Get(), sec)
+		if err != nil {
+			ui.ResponseErrorWithCode(w, http.StatusInternalServerError, fmt.Errorf("create state: %w", err))
+			return
+		}
+
+		// Get login URL.
 		loginUrl, err := cn.GetLoginURL(callbackUrl, sec.Name)
 		if err != nil {
 			ui.ResponseErrorWithCode(w, http.StatusInternalServerError, err)
@@ -296,14 +298,8 @@ func callback(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Handle callback.
-	id, err := cn.HandleCallback(r)
-	if err != nil {
-		ui.RedirectErrorWithCode(w, r, http.StatusInternalServerError, fmt.Errorf("handle callback: %w", err))
-		return
-	}
-
-	// Verify state.
+	// Verify state and get callback URL.
+	var callbackUrl string
 	{
 		sec := &core.Secret{
 			ObjectMeta: meta.ObjectMeta{
@@ -329,6 +325,8 @@ func callback(w http.ResponseWriter, r *http.Request) {
 				return errors.New("provider mismatch")
 			case string(sec.Data["clientID"]) != cn.GetClientID():
 				return errors.New("client id mismatch")
+			case string(sec.Data["callbackUrl"]) == "":
+				return errors.New("callback URL not found")
 			case time.Since(sec.CreationTimestamp.Time) > 5*time.Minute:
 				return errors.New("state expired")
 			}
@@ -338,6 +336,15 @@ func callback(w http.ResponseWriter, r *http.Request) {
 			ui.RedirectErrorWithCode(w, r, http.StatusForbidden, err)
 			return
 		}
+
+		callbackUrl = string(sec.Data["callbackUrl"])
+	}
+
+	// Handle callback.
+	id, err := cn.HandleCallback(callbackUrl, r)
+	if err != nil {
+		ui.RedirectErrorWithCode(w, r, http.StatusInternalServerError, fmt.Errorf("handle callback: %w", err))
+		return
 	}
 
 	// Get subject.

@@ -66,7 +66,7 @@ func RedirectErrorWithCode(w http.ResponseWriter, r *http.Request, c int, err er
 	sb.WriteString(q)
 
 	// Redirect to the error page with the status code and error message.
-	http.Redirect(w, r, sb.String(), c)
+	http.Redirect(w, r, sb.String(), http.StatusSeeOther)
 }
 
 // RedirectError is similar to RedirectErrorWithCode,
