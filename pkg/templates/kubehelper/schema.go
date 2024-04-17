@@ -114,7 +114,7 @@ func createOrUpdateSchema(ctx context.Context, loopbackKubeCli clientset.Interfa
 		return as, false, nil
 	}
 
-	_, err := kubeclientset.Update(ctx, cli, nil,
+	_, err := kubeclientset.Update(ctx, cli, es,
 		kubeclientset.WithUpdateAlign(alignFn),
 		kubeclientset.WithCreateIfNotExisted[*walruscore.Schema]())
 	return err

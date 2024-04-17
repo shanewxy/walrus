@@ -44,7 +44,7 @@ func getVersions(
 
 	for i := range versions {
 		tag := versions[i]
-		klog.Infof("getting schema of template \"%s/%s\", version \"%s\"", t.Namespace, t.Name, tag)
+		klog.V(5).Infof("getting schema of template \"%s/%s\", version \"%s\"", t.Namespace, t.Name, tag)
 
 		// Checkout tag.
 		{
