@@ -64,18 +64,14 @@ func (h *ResourceHandler) NewList() runtime.Object {
 	return &walrus.ResourceList{}
 }
 
+func (h *ResourceHandler) NewListForProxy() runtime.Object {
+	return &walruscore.ResourceList{}
+}
+
 func (h *ResourceHandler) CastObjectTo(do *walrus.Resource) (uo *walruscore.Resource) {
 	return (*walruscore.Resource)(do)
 }
 
 func (h *ResourceHandler) CastObjectFrom(uo *walruscore.Resource) (do *walrus.Resource) {
 	return (*walrus.Resource)(uo)
-}
-
-func (h *ResourceHandler) CastObjectListTo(dol *walrus.ResourceList) (uol *walruscore.ResourceList) {
-	return (*walruscore.ResourceList)(dol)
-}
-
-func (h *ResourceHandler) CastObjectListFrom(uol *walruscore.ResourceList) (dol *walrus.ResourceList) {
-	return (*walrus.ResourceList)(uol)
 }

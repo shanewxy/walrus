@@ -86,32 +86,16 @@ func (h *SchemaHandler) NewList() runtime.Object {
 	return &walrus.SchemaList{}
 }
 
+func (h *SchemaHandler) NewListForProxy() runtime.Object {
+	return &walruscore.SchemaList{}
+}
+
 func (h *SchemaHandler) CastObjectTo(do *walrus.Schema) (uo *walruscore.Schema) {
-	uo = (*walruscore.Schema)(do)
-	uo.APIVersion = walruscore.SchemeGroupVersion.String()
-	return uo
+	return (*walruscore.Schema)(do)
 }
 
 func (h *SchemaHandler) CastObjectFrom(uo *walruscore.Schema) (do *walrus.Schema) {
-	do = (*walrus.Schema)(uo)
-	do.APIVersion = walrus.SchemeGroupVersion.String()
-	return do
-}
-
-func (h *SchemaHandler) CastObjectListTo(dol *walrus.SchemaList) (uol *walruscore.SchemaList) {
-	uol = (*walruscore.SchemaList)(dol)
-	for i := range uol.Items {
-		uol.Items[i].APIVersion = walruscore.SchemeGroupVersion.String()
-	}
-	return uol
-}
-
-func (h *SchemaHandler) CastObjectListFrom(uol *walruscore.SchemaList) (dol *walrus.SchemaList) {
-	dol = (*walrus.SchemaList)(uol)
-	for i := range dol.Items {
-		dol.Items[i].APIVersion = walrus.SchemeGroupVersion.String()
-	}
-	return dol
+	return (*walrus.Schema)(uo)
 }
 
 func (h *SchemaHandler) OnGet(ctx context.Context, key types.NamespacedName, opts ctrlcli.GetOptions) (runtime.Object, error) {

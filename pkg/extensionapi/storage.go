@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/seal-io/utils/funcx"
 	"github.com/seal-io/utils/pools/gopool"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"
 	kmeta "k8s.io/apimachinery/pkg/api/meta"
@@ -23,6 +24,7 @@ import (
 	"k8s.io/apiserver/pkg/util/dryrun"
 	"k8s.io/utils/ptr"
 	ctrlcli "sigs.k8s.io/controller-runtime/pkg/client"
+	ctrlapiutil "sigs.k8s.io/controller-runtime/pkg/client/apiutil"
 )
 
 type (
@@ -790,14 +792,12 @@ type (
 		rest.Storage
 		// NewList returns an empty object that can be used with the List call.
 		NewList() runtime.Object
+		// NewListForProxy returns an empty object that can be used with the List call for proxy.
+		NewListForProxy() runtime.Object
 		// CastObjectTo casts the object from downstream to upstream.
 		CastObjectTo(DO) UO
 		// CastObjectFrom casts the object from upstream to downstream.
 		CastObjectFrom(UO) DO
-		// CastObjectListTo casts the object list from downstream to upstream.
-		CastObjectListTo(DOL) UOL
-		// CastObjectListFrom casts the object list from upstream to downstream.
-		CastObjectListFrom(UOL) DOL
 	}
 
 	// CurdProxyOnCreateAdvice is an interface for intercepting OnCreate.
@@ -833,7 +833,11 @@ type (
 	// _CurdProxyHandler is a private struct that implements CurdProxyHandler.
 	_CurdProxyHandler[DO MetaObject, DOL MetaObjectList, UO MetaObject, UOL MetaObjectList] struct {
 		CurdProxyHandler[DO, DOL, UO, UOL]
-		CtrlCli ctrlcli.WithWatch
+		CtrlCli      ctrlcli.WithWatch
+		DOAPIVersion string
+		DOKind       string
+		UOAPIVersion string
+		UOKind       string
 	}
 )
 
@@ -843,11 +847,39 @@ func WithCurdProxy[DO MetaObject, DOL MetaObjectList, UO MetaObject, UOL MetaObj
 	h CurdProxyHandler[DO, DOL, UO, UOL],
 	ctrlCli ctrlcli.WithWatch,
 ) CurdOperations {
+	do := h.New().(DO)
+	uo := h.CastObjectTo(do)
+	doGvk := funcx.MustNoError(ctrlapiutil.GVKForObject(do, ctrlCli.Scheme()))
+	uoGvk := funcx.MustNoError(ctrlapiutil.GVKForObject(uo, ctrlCli.Scheme()))
 	ph := _CurdProxyHandler[DO, DOL, UO, UOL]{
 		CurdProxyHandler: h,
 		CtrlCli:          ctrlCli,
+		DOAPIVersion:     doGvk.GroupVersion().String(),
+		DOKind:           doGvk.Kind,
+		UOAPIVersion:     uoGvk.GroupVersion().String(),
+		UOKind:           uoGvk.Kind,
 	}
 	return WithCurd(tc, ph)
+}
+
+func (h _CurdProxyHandler[DO, DOL, UO, UOL]) CastObjectTo(do DO) UO {
+	uo := h.CurdProxyHandler.CastObjectTo(do)
+	uot, err := kmeta.TypeAccessor(uo)
+	if err == nil {
+		uot.SetAPIVersion(h.UOAPIVersion)
+		uot.SetKind(h.UOKind)
+	}
+	return uo
+}
+
+func (h _CurdProxyHandler[DO, DOL, UO, UOL]) CastObjectFrom(uo UO) DO {
+	do := h.CurdProxyHandler.CastObjectFrom(uo)
+	dot, err := kmeta.TypeAccessor(do)
+	if err == nil {
+		dot.SetAPIVersion(h.DOAPIVersion)
+		dot.SetKind(h.DOKind)
+	}
+	return do
 }
 
 // _CreateHandlerWithoutNew is an interface for a creation handler without New function.
@@ -875,7 +907,10 @@ func (h _CurdProxyHandler[DO, DOL, UO, UOL]) OnCreate(
 
 	uo := h.CastObjectTo(obj.(DO))
 	err := h.CtrlCli.Create(ctx, uo, &opts)
-	return h.CastObjectFrom(uo), err
+	if err != nil {
+		return nil, err
+	}
+	return h.CastObjectFrom(uo), nil
 }
 
 func (h _CurdProxyHandler[DO, DOL, UO, UOL]) OnList(
@@ -893,9 +928,28 @@ func (h _CurdProxyHandler[DO, DOL, UO, UOL]) OnList(
 		}
 	}
 
-	uol := h.CastObjectListTo(h.NewList().(DOL))
+	uol := h.NewListForProxy().(UOL)
 	err := h.CtrlCli.List(ctx, uol, &opts)
-	return h.CastObjectListFrom(uol), err
+	if err != nil {
+		return nil, err
+	}
+
+	uos, err := kmeta.ExtractList(uol)
+	if err != nil {
+		return nil, fmt.Errorf("get upstream list: %w", err)
+	}
+	dos := make([]runtime.Object, 0, len(uos))
+	for i := range uos {
+		dos = append(dos, h.CastObjectFrom(uos[i].(UO)))
+	}
+
+	dol := h.NewList()
+	err = kmeta.SetList(dol, dos)
+	if err != nil {
+		return nil, fmt.Errorf("set downstream list: %w", err)
+	}
+
+	return dol, nil
 }
 
 func (h _CurdProxyHandler[DO, DOL, UO, UOL]) OnWatch(
@@ -913,7 +967,7 @@ func (h _CurdProxyHandler[DO, DOL, UO, UOL]) OnWatch(
 		}
 	}
 
-	uol := h.CastObjectListTo(h.NewList().(DOL))
+	uol := h.NewListForProxy().(UOL)
 	uw, err := h.CtrlCli.Watch(ctx, uol, &opts)
 	if err != nil {
 		return nil, err
@@ -978,7 +1032,10 @@ func (h _CurdProxyHandler[DO, DOL, UO, UOL]) OnGet(
 	}
 	uo := h.CastObjectTo(h.New().(DO))
 	err := h.CtrlCli.Get(ctx, key, uo, &opts)
-	return h.CastObjectFrom(uo), err
+	if err != nil {
+		return nil, err
+	}
+	return h.CastObjectFrom(uo), nil
 }
 
 // _UpdateHandlerWithoutNew is an interface for an updating handler without New function.
@@ -1005,7 +1062,10 @@ func (h _CurdProxyHandler[DO, DOL, UO, UOL]) OnUpdate(
 	}
 	uo := h.CastObjectTo(obj.(DO))
 	err := h.CtrlCli.Update(ctx, uo, &opts)
-	return h.CastObjectFrom(uo), err
+	if err != nil {
+		return nil, err
+	}
+	return h.CastObjectFrom(uo), nil
 }
 
 func (h _CurdProxyHandler[DO, DOL, UO, UOL]) OnDelete(

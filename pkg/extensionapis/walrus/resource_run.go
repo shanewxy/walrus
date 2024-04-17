@@ -60,18 +60,14 @@ func (h *ResourceRunHandler) NewList() runtime.Object {
 	return &walrus.ResourceRunList{}
 }
 
+func (h *ResourceRunHandler) NewListForProxy() runtime.Object {
+	return &walruscore.ResourceRunList{}
+}
+
 func (h *ResourceRunHandler) CastObjectTo(do *walrus.ResourceRun) (uo *walruscore.ResourceRun) {
 	return (*walruscore.ResourceRun)(do)
 }
 
 func (h *ResourceRunHandler) CastObjectFrom(uo *walruscore.ResourceRun) (do *walrus.ResourceRun) {
 	return (*walrus.ResourceRun)(uo)
-}
-
-func (h *ResourceRunHandler) CastObjectListTo(dol *walrus.ResourceRunList) (uol *walruscore.ResourceRunList) {
-	return (*walruscore.ResourceRunList)(dol)
-}
-
-func (h *ResourceRunHandler) CastObjectListFrom(uol *walruscore.ResourceRunList) (dol *walrus.ResourceRunList) {
-	return (*walrus.ResourceRunList)(uol)
 }

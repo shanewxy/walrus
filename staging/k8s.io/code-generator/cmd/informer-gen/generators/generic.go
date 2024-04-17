@@ -76,6 +76,9 @@ type groupSort []group
 
 func (g groupSort) Len() int { return len(g) }
 func (g groupSort) Less(i, j int) bool {
+	if g[i].Name == g[j].Name {
+		return strings.ToLower(g[i].GroupGoName) < strings.ToLower(g[j].GroupGoName)
+	}
 	return strings.ToLower(g[i].Name) < strings.ToLower(g[j].Name)
 }
 func (g groupSort) Swap(i, j int) { g[i], g[j] = g[j], g[i] }

@@ -9,7 +9,7 @@ env:
   REPO: "sealio"
   VERSION: "${{ github.ref_name }}"
   PARALLELIZE: "false"
-  GO_VERSION: "1.21.7"
+  GO_VERSION: "1.21.9"
 
 defaults:
   run:

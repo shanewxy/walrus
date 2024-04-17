@@ -103,28 +103,14 @@ func (h *CatalogHandler) NewList() runtime.Object {
 	return &walrus.CatalogList{}
 }
 
+func (h *CatalogHandler) NewListForProxy() runtime.Object {
+	return &walruscore.CatalogList{}
+}
+
 func (h *CatalogHandler) CastObjectTo(do *walrus.Catalog) (uo *walruscore.Catalog) {
 	return (*walruscore.Catalog)(do)
 }
 
 func (h *CatalogHandler) CastObjectFrom(uo *walruscore.Catalog) (do *walrus.Catalog) {
-	do = (*walrus.Catalog)(uo)
-	do.APIVersion = walrus.SchemeGroupVersion.String()
-	return do
-}
-
-func (h *CatalogHandler) CastObjectListTo(dol *walrus.CatalogList) (uol *walruscore.CatalogList) {
-	uol = (*walruscore.CatalogList)(dol)
-	for i := range dol.Items {
-		dol.Items[i].APIVersion = walruscore.SchemeGroupVersion.String()
-	}
-	return uol
-}
-
-func (h *CatalogHandler) CastObjectListFrom(uol *walruscore.CatalogList) (dol *walrus.CatalogList) {
-	dol = (*walrus.CatalogList)(uol)
-	for i := range dol.Items {
-		dol.Items[i].APIVersion = walrus.SchemeGroupVersion.String()
-	}
-	return dol
+	return (*walrus.Catalog)(uo)
 }

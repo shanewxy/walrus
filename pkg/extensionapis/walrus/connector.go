@@ -60,18 +60,14 @@ func (h *ConnectorHandler) NewList() runtime.Object {
 	return &walrus.ConnectorList{}
 }
 
+func (h *ConnectorHandler) NewListForProxy() runtime.Object {
+	return &walruscore.ConnectorList{}
+}
+
 func (h *ConnectorHandler) CastObjectTo(do *walrus.Connector) (uo *walruscore.Connector) {
 	return (*walruscore.Connector)(do)
 }
 
 func (h *ConnectorHandler) CastObjectFrom(uo *walruscore.Connector) (do *walrus.Connector) {
 	return (*walrus.Connector)(uo)
-}
-
-func (h *ConnectorHandler) CastObjectListTo(dol *walrus.ConnectorList) (uol *walruscore.ConnectorList) {
-	return (*walruscore.ConnectorList)(dol)
-}
-
-func (h *ConnectorHandler) CastObjectListFrom(uol *walruscore.ConnectorList) (dol *walrus.ConnectorList) {
-	return (*walrus.ConnectorList)(uol)
 }

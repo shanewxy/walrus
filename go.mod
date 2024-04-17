@@ -86,10 +86,11 @@ require (
 	k8s.io/code-generator v0.29.2
 	k8s.io/component-base v0.29.2
 	k8s.io/gengo v0.0.0-20240228010128-51d4e06bde70
+	k8s.io/gengo/v2 v2.0.0-20240228010128-51d4e06bde70
 	k8s.io/klog v1.0.0
 	k8s.io/klog/v2 v2.120.1
 	k8s.io/kube-aggregator v0.29.2
-	k8s.io/kube-openapi v0.0.0-20240224005224-582cce78233b
+	k8s.io/kube-openapi v0.0.0-20240228010602-8092cb00ec3f
 	k8s.io/utils v0.0.0-20240102154912-e7106e64919e
 	sigs.k8s.io/controller-runtime v0.17.2
 	sigs.k8s.io/structured-merge-diff/v4 v4.4.1

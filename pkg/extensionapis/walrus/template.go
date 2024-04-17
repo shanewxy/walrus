@@ -103,30 +103,14 @@ func (h *TemplateHandler) NewList() runtime.Object {
 	return &walrus.TemplateList{}
 }
 
+func (h *TemplateHandler) NewListForProxy() runtime.Object {
+	return &walruscore.TemplateList{}
+}
+
 func (h *TemplateHandler) CastObjectTo(do *walrus.Template) (uo *walruscore.Template) {
-	uo = (*walruscore.Template)(do)
-	uo.APIVersion = walruscore.SchemeGroupVersion.String()
-	return uo
+	return (*walruscore.Template)(do)
 }
 
 func (h *TemplateHandler) CastObjectFrom(uo *walruscore.Template) (do *walrus.Template) {
-	do = (*walrus.Template)(uo)
-	do.APIVersion = walrus.SchemeGroupVersion.String()
-	return do
-}
-
-func (h *TemplateHandler) CastObjectListTo(dol *walrus.TemplateList) (uol *walruscore.TemplateList) {
-	uol = (*walruscore.TemplateList)(dol)
-	for i := range uol.Items {
-		uol.Items[i].APIVersion = walruscore.SchemeGroupVersion.String()
-	}
-	return uol
-}
-
-func (h *TemplateHandler) CastObjectListFrom(uol *walruscore.TemplateList) (dol *walrus.TemplateList) {
-	dol = (*walrus.TemplateList)(uol)
-	for i := range dol.Items {
-		dol.Items[i].APIVersion = walrus.SchemeGroupVersion.String()
-	}
-	return dol
+	return (*walrus.Template)(uo)
 }
