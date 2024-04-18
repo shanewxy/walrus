@@ -31,7 +31,8 @@ type ProjectSubjectsHandler struct {
 	extensionapi.GetOperation
 	extensionapi.UpdateOperation
 
-	Client ctrlcli.Client
+	Client    ctrlcli.Client
+	APIReader ctrlcli.Reader
 }
 
 func newProjectSubjectsHandler(opts extensionapi.SetupOptions) *ProjectSubjectsHandler {
@@ -44,6 +45,7 @@ func newProjectSubjectsHandler(opts extensionapi.SetupOptions) *ProjectSubjectsH
 
 	// Set client.
 	h.Client = opts.Manager.GetClient()
+	h.APIReader = opts.Manager.GetAPIReader()
 
 	return h
 }
@@ -61,7 +63,7 @@ func (h *ProjectSubjectsHandler) New() runtime.Object {
 
 func (h *ProjectSubjectsHandler) Destroy() {}
 
-func (h *ProjectSubjectsHandler) OnGet(ctx context.Context, key types.NamespacedName, _ ctrlcli.GetOptions) (runtime.Object, error) {
+func (h *ProjectSubjectsHandler) OnGet(ctx context.Context, key types.NamespacedName, opts ctrlcli.GetOptions) (runtime.Object, error) {
 	// Validate.
 	if key.Namespace != systemkuberes.SystemNamespaceName {
 		return nil, kerrors.NewNotFound(walrus.SchemeResource("projectsubjects"), key.Name)
@@ -69,7 +71,7 @@ func (h *ProjectSubjectsHandler) OnGet(ctx context.Context, key types.Namespaced
 
 	// List.
 	rbList := new(rbac.RoleBindingList)
-	err := h.Client.List(ctx, rbList,
+	err := h.APIReader.List(ctx, rbList,
 		ctrlcli.InNamespace(key.Name),
 		ctrlcli.MatchingLabelsSelector{
 			Selector: systemmeta.GetResourcesLabelSelectorOfType("rolebindings"),
@@ -87,7 +89,7 @@ func (h *ProjectSubjectsHandler) OnGet(ctx context.Context, key types.Namespaced
 
 	// Get and refill.
 	proj := new(walrus.Project)
-	err = h.Client.Get(ctx, key, proj)
+	err = h.Client.Get(ctx, key, proj, &opts)
 	if err != nil {
 		return nil, kerrors.NewInternalError(err)
 	}
