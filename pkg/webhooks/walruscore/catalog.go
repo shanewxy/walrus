@@ -55,7 +55,6 @@ func (r *CatalogWebhook) validateFilter(obj runtime.Object) (ctrladmission.Warni
 				field.NewPath("spec.filters.includeExpression"), filters.IncludeExpression, err.Error())
 		}
 	}
-
 	if filters.ExcludeExpression != "" {
 		if _, err := regexp.Compile(filters.ExcludeExpression); err != nil {
 			return nil, field.Invalid(

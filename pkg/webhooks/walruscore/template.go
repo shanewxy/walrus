@@ -30,8 +30,11 @@ var _ ctrlwebhook.CustomValidator = (*TemplateWebhook)(nil)
 func (r *TemplateWebhook) ValidateCreate(ctx context.Context, obj runtime.Object) (ctrladmission.Warnings, error) {
 	t := obj.(*walruscore.Template)
 	_, err := sourceurl.ParseURLToSourceURL(t.Spec.VCSRepository.URL)
-	return nil, field.Invalid(
-		field.NewPath("spec.vcsRepository.url"), t.Spec.VCSRepository.URL, err.Error())
+	if err != nil {
+		return nil, field.Invalid(
+			field.NewPath("spec.vcsRepository.url"), t.Spec.VCSRepository.URL, err.Error())
+	}
+	return nil, nil
 }
 
 func (r *TemplateWebhook) ValidateDelete(ctx context.Context, obj runtime.Object) (ctrladmission.Warnings, error) {
