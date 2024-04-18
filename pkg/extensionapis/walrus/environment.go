@@ -253,7 +253,7 @@ func (h *EnvironmentHandler) OnWatch(ctx context.Context, opts ctrlcli.ListOptio
 
 				// Ignore if not be selected by `kubectl get --field-selector=metadata.namespace=...`.
 				if fs := opts.FieldSelector; fs != nil &&
-					!fs.Matches(fields.Set{"metadata.namespace": env.Namespace}) {
+					!fs.Matches(fields.Set{"metadata.namespace": env.Namespace, "metadata.name": env.Name}) {
 					continue
 				}
 
@@ -455,7 +455,7 @@ func convertEnvironmentListFromNamespaceList(nsList *core.NamespaceList, opts ct
 		}
 		// Ignore if not be selected by `kubectl get --field-selector=metadata.namespace=...`.
 		if fs := opts.FieldSelector; fs != nil &&
-			!fs.Matches(fields.Set{"metadata.namespace": env.Namespace}) {
+			!fs.Matches(fields.Set{"metadata.namespace": env.Namespace, "metadata.name": env.Name}) {
 			continue
 		}
 		eList.Items = append(eList.Items, *env)

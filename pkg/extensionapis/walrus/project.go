@@ -264,7 +264,7 @@ func (h *ProjectHandler) OnWatch(ctx context.Context, opts ctrlcli.ListOptions) 
 
 				// Ignore if not be selected by `kubectl get --field-selector=metadata.namespace=...`.
 				if fs := opts.FieldSelector; fs != nil &&
-					!fs.Matches(fields.Set{"metadata.namespace": proj.Namespace}) {
+					!fs.Matches(fields.Set{"metadata.namespace": proj.Namespace, "metadata.name": proj.Name}) {
 					continue
 				}
 
@@ -355,12 +355,10 @@ func (h *ProjectHandler) OnDelete(ctx context.Context, obj runtime.Object, opts 
 }
 
 func convertNamespaceListOptsFromProjectListOpts(in ctrlcli.ListOptions) (out *ctrlcli.ListOptions) {
-	if in.Namespace != systemkuberes.SystemNamespaceName {
-		return &in
-	}
-
 	// Ignore namespace selector.
-	in.Namespace = ""
+	if in.Namespace == systemkuberes.SystemNamespaceName {
+		in.Namespace = ""
+	}
 	if in.FieldSelector != nil {
 		reqs := slices.DeleteFunc(in.FieldSelector.Requirements(), func(req fields.Requirement) bool {
 			return req.Field == "metadata.namespace"
@@ -451,7 +449,7 @@ func convertProjectListFromNamespaceList(nsList *core.NamespaceList, opts ctrlcl
 		}
 		// Ignore if not be selected by `kubectl get --field-selector=metadata.namespace=...`.
 		if fs := opts.FieldSelector; fs != nil &&
-			!fs.Matches(fields.Set{"metadata.namespace": proj.Namespace}) {
+			!fs.Matches(fields.Set{"metadata.namespace": proj.Namespace, "metadata.name": proj.Name}) {
 			continue
 		}
 		pList.Items = append(pList.Items, *proj)
