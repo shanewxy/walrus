@@ -77,6 +77,9 @@ func vwh_webhook_gen_generators_testdata_webhook_gen_DummyReconciler(c v1.Webhoo
 					},
 					Resources: []string{
 						"dummies",
+						"dummies/others",
+						"dummies/scale",
+						"dummies/status",
 					},
 					Scope: ptr.To[v1.ScopeType]("*"),
 				},
@@ -144,6 +147,7 @@ func mwh_webhook_gen_generators_testdata_webhook_gen_DummyReconciler(c v1.Webhoo
 					},
 					Resources: []string{
 						"dummies",
+						"dummies/status",
 					},
 					Scope: ptr.To[v1.ScopeType]("*"),
 				},

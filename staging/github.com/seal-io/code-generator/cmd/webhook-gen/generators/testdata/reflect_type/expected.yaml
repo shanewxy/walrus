@@ -20,6 +20,7 @@ mutating:
     - v1
     resources:
     - dummies
+    - dummies/status
     scope: '*'
   sideEffects: None
   timeoutSeconds: 10
@@ -51,6 +52,9 @@ validating:
     - DELETE
     resources:
     - dummies
+    - dummies/others
+    - dummies/scale
+    - dummies/status
     scope: '*'
   sideEffects: None
   timeoutSeconds: 10

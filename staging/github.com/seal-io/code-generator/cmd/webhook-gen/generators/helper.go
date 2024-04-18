@@ -3,6 +3,7 @@ package generators
 import (
 	"encoding/json"
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/seal-io/utils/stringx"
@@ -56,11 +57,13 @@ func reflectType(t *types.Type) *WebhookTypeDefinition {
 	// Collect type markers.
 	//
 	// +k8s:webhook-gen:validating:group=,version=,resource=,scope=,failurePolicy=,sideEffects=,matchPolicy=,timeoutSeconds=
+	// +k8s:webhook-gen:validating:subResources=
 	// +k8s:webhook-gen:validating:operations=
 	// +k8s:webhook-gen:validating:namespaceSelector=
 	// +k8s:webhook-gen:validating:objectSelector=
 	// +k8s:webhook-gen:validating:matchConditions=
 	// +k8s:webhook-gen:mutating:group=,version=,resource=,scope=,failurePolicy=,sideEffects=,matchPolicy=,reinvocationPolicy=,timeoutSeconds=
+	// +k8s:webhook-gen:mutating:subResources=
 	// +k8s:webhook-gen:mutating:operations=
 	// +k8s:webhook-gen:mutating:namespaceSelector=
 	// +k8s:webhook-gen:mutating:objectSelector=
@@ -113,7 +116,40 @@ func reflectType(t *types.Type) *WebhookTypeDefinition {
 						if len(wh.Rules) == 0 {
 							wh.Rules = append(wh.Rules, admreg.RuleWithOperations{})
 						}
-						wh.Rules[0].Resources = []string{strings.ToLower(v)}
+						if len(wh.Rules[0].Resources) == 0 {
+							wh.Rules[0].Resources = []string{strings.ToLower(v)}
+							continue
+						}
+						r := strings.ToLower(v)
+						for i := range wh.Rules[0].Resources {
+							if strings.HasPrefix(wh.Rules[0].Resources[i], r+"/") {
+								continue
+							}
+							wh.Rules[0].Resources[i] = r + "/" + wh.Rules[0].Resources[i]
+						}
+						wh.Rules[0].Resources = append(wh.Rules[0].Resources, r)
+						sort.Strings(wh.Rules[0].Resources)
+					}
+				case "subResources":
+					var vs []string
+					if err := json.Unmarshal([]byte(mv), &vs); err != nil {
+						logger.Error(nil, "unmarshal sub resources", "value", mv)
+					} else {
+						if len(wh.Rules) == 0 {
+							wh.Rules = append(wh.Rules, admreg.RuleWithOperations{})
+						}
+						if len(wh.Rules[0].Resources) == 0 {
+							for i := range vs {
+								wh.Rules[0].Resources = append(wh.Rules[0].Resources,
+									strings.ToLower(vs[i]))
+							}
+							continue
+						}
+						for i := range vs {
+							r := strings.ToLower(vs[i])
+							wh.Rules[0].Resources = append(wh.Rules[0].Resources,
+								wh.Rules[0].Resources[0]+"/"+r)
+						}
 					}
 				case "scope":
 					var v admreg.ScopeType
@@ -223,6 +259,7 @@ func reflectType(t *types.Type) *WebhookTypeDefinition {
 			if len(wh.Rules[0].APIVersions) != 0 {
 				ver = wh.Rules[0].APIVersions[0]
 			}
+			sort.Strings(wh.Rules[0].Resources)
 			klow = strings.ToLower(stringx.Singularize(wh.Rules[0].Resources[0]))
 			wh.Name = fmt.Sprintf("%s.%s.%s.%s", pre, grp, ver, klow)
 			td.Validating = wh
@@ -267,7 +304,40 @@ func reflectType(t *types.Type) *WebhookTypeDefinition {
 						if len(wh.Rules) == 0 {
 							wh.Rules = append(wh.Rules, admreg.RuleWithOperations{})
 						}
-						wh.Rules[0].Resources = []string{strings.ToLower(v)}
+						if len(wh.Rules[0].Resources) == 0 {
+							wh.Rules[0].Resources = []string{strings.ToLower(v)}
+							continue
+						}
+						r := strings.ToLower(v)
+						for i := range wh.Rules[0].Resources {
+							if strings.HasPrefix(wh.Rules[0].Resources[i], r+"/") {
+								continue
+							}
+							wh.Rules[0].Resources[i] = r + "/" + wh.Rules[0].Resources[i]
+						}
+						wh.Rules[0].Resources = append(wh.Rules[0].Resources, r)
+						sort.Strings(wh.Rules[0].Resources)
+					}
+				case "subResources":
+					var vs []string
+					if err := json.Unmarshal([]byte(mv), &vs); err != nil {
+						logger.Error(nil, "unmarshal sub resources", "value", mv)
+					} else {
+						if len(wh.Rules) == 0 {
+							wh.Rules = append(wh.Rules, admreg.RuleWithOperations{})
+						}
+						if len(wh.Rules[0].Resources) == 0 {
+							for i := range vs {
+								wh.Rules[0].Resources = append(wh.Rules[0].Resources,
+									strings.ToLower(vs[i]))
+							}
+							continue
+						}
+						for i := range vs {
+							r := strings.ToLower(vs[i])
+							wh.Rules[0].Resources = append(wh.Rules[0].Resources,
+								wh.Rules[0].Resources[0]+"/"+r)
+						}
 					}
 				case "scope":
 					var v admreg.ScopeType
@@ -388,6 +458,7 @@ func reflectType(t *types.Type) *WebhookTypeDefinition {
 			if len(wh.Rules[0].APIVersions) != 0 {
 				ver = wh.Rules[0].APIVersions[0]
 			}
+			sort.Strings(wh.Rules[0].Resources)
 			klow = strings.ToLower(stringx.Singularize(wh.Rules[0].Resources[0]))
 			wh.Name = fmt.Sprintf("%s.%s.%s.%s", pre, grp, ver, klow)
 			td.Mutating = wh

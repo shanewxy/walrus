@@ -7,9 +7,10 @@ This directory contains the code generators for the Webhook Configuration API.
 - Type Markers:
     - `+k8s:webhook-gen:validating:*`: Specify to generate ValidatingWebhookConfiguration.
     - `+k8s:webhook-gen:mutating:*`: Specify to generate MutatingWebhookConfiguration.
-    - `+k8s:webhook-gen:*:group="example.domain.io",version="v1",resource="dummies",scope="Namespaced"`: Specify the
-      group, version and resource name, which is used for generate the webhook configuration's path.
+    - `+k8s:webhook-gen:*:group="example.domain.io",version="v1",resource="dummies",scope="Namespaced",subResources=[""]`: Specify the
+      group, version, resource name and sub resources, which is used for generate the webhook configuration's path.
         - `scope`: Select from `Namespaced`, `Cluster` or `*`.
+        - `subResources`: Specify the sub resources in the JSON array format.
     - `+k8s:webhook-gen:*:operations=["..."],failurePolicy="Fail",sideEffects="None",matchPolicy="Equivalent",timeoutSeconds=10,reinvocationPolicy="Never"`:
       Specify the configuration of the webhook.
         - `operations`: Specify in the JSON array format. Combine by `CREATE`, `UPDATE`, `DELETE`, `CONNECT`, or `*`.
