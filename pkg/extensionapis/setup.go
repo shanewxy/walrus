@@ -40,6 +40,7 @@ type _APIOptions struct {
 	SubResourceStorages map[string]rest.Storage
 }
 
+// Setup installs the extension api handlers.
 func Setup(
 	ctx context.Context,
 	srv *genericapiserver.GenericAPIServer,

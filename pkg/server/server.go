@@ -20,6 +20,7 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/component-base/logs"
 	"k8s.io/component-base/metrics/legacyregistry"
+	"k8s.io/klog/v2"
 	apireg "k8s.io/kube-aggregator/pkg/apis/apiregistration/v1"
 	"k8s.io/utils/ptr"
 	ctrlmetrics "sigs.k8s.io/controller-runtime/pkg/metrics"
@@ -53,6 +54,8 @@ type Server struct {
 	APIServer *genericapiserver.GenericAPIServer
 }
 
+// Prepare prepares the runtime for the server,
+// including installing system resources, etc.
 func (s *Server) Prepare(ctx context.Context) error {
 	err := s.Manager.Prepare(ctx)
 	if err != nil {
@@ -110,22 +113,12 @@ func (s *Server) Prepare(ctx context.Context) error {
 		return fmt.Errorf("install application: %w", err)
 	}
 
-	// Setup extension API handlers.
-	err = extensionapis.Setup(ctx, s.APIServer, scheme.Scheme, scheme.ParameterCodec, scheme.Codecs, s.Manager.CtrlManager)
-	if err != nil {
-		return fmt.Errorf("setup extension API handlers: %w", err)
-	}
-
 	// Initialize builtin resources after cache synced.
 	err = s.APIServer.AddPostStartHook("install-builtin-resources", func(phc genericapiserver.PostStartHookContext) error {
 		ctx := contextx.Background(phc.StopCh)
 
-		// After extension API is ready.
-		err := apis.WaitForAPIServicesReady(ctx, loopbackKubeCli)
-		if err != nil {
-			return fmt.Errorf("wait for extension API services to be ready: %w", err)
-		}
-		// After manager is ready.
+		// NB(thxCode): we install builtin resources after manager is ready,
+		// which allows the installer to use the extension api resources.
 		err = s.Manager.WaitForReady(ctx)
 		if err != nil {
 			return fmt.Errorf("wait for manager to be ready: %w", err)
@@ -160,6 +153,8 @@ func (s *Server) Prepare(ctx context.Context) error {
 		if err != nil {
 			return err
 		}
+
+		klog.Info("!!! everything is ready !!!")
 		return nil
 	})
 	if err != nil {
@@ -169,12 +164,22 @@ func (s *Server) Prepare(ctx context.Context) error {
 	return nil
 }
 
+// Start starts the server.
+//
+// Start sets up extension apis, webhooks and registers assistant routes,
+// before starting the manager and the API server.
 func (s *Server) Start(ctx context.Context) error {
 	cm := s.Manager.CtrlManager
 	mu := s.APIServer.Handler.NonGoRestfulMux
 
+	// Setup extension API handlers.
+	err := extensionapis.Setup(ctx, s.APIServer, scheme.Scheme, scheme.ParameterCodec, scheme.Codecs, cm)
+	if err != nil {
+		return fmt.Errorf("setup extension API handlers: %w", err)
+	}
+
 	// Register /validate-*, /mutate-*.
-	err := webhooks.Setup(ctx, cm, mu)
+	err = webhooks.Setup(ctx, cm, mu)
 	if err != nil {
 		return fmt.Errorf("setup webhooks: %w", err)
 	}
@@ -237,8 +242,17 @@ func (s *Server) Start(ctx context.Context) error {
 
 	// Start.
 	gp := gopool.GroupWithContextIn(ctx)
-	gp.Go(cm.Start)
 	gp.Go(func(ctx context.Context) error {
+		// NB(thxCode): we start the manager after extension api is ready,
+		// which allows the controller to index the extension api resources.
+		err := apis.WaitForAPIServicesReady(ctx, system.LoopbackKubeClient.Get())
+		if err != nil {
+			return fmt.Errorf("wait for extension API services to be ready: %w", err)
+		}
+		return s.Manager.Start(ctx)
+	})
+	gp.Go(func(ctx context.Context) error {
+		klog.Info("starting api server")
 		return s.APIServer.PrepareRun().Run(ctx.Done())
 	})
 	return gp.Wait()

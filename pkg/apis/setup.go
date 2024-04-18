@@ -138,7 +138,7 @@ func WaitForAPIServicesReady(ctx context.Context, cli clientset.Interface) error
 	svcCli := cli.ApiregistrationV1().APIServices()
 	svcs := GetAPIServices(apireg.ServiceReference{}, nil)
 
-	return waitx.PollUntilContextTimeout(ctx, 2*time.Second, 30*time.Second, true,
+	return waitx.PollUntilContextTimeout(ctx, time.Second, 30*time.Second, true,
 		func(ctx context.Context) error {
 			for i := range svcs {
 				svc, err := svcCli.Get(ctx, svcs[i].Name, meta.GetOptions{ResourceVersion: "0"})

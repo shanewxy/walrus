@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	kmeta "k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/rest"
 	"k8s.io/klog/v2"
@@ -15,6 +16,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	ctrlcache "sigs.k8s.io/controller-runtime/pkg/cache"
 	ctrlcli "sigs.k8s.io/controller-runtime/pkg/client"
+	ctrlapiutil "sigs.k8s.io/controller-runtime/pkg/client/apiutil"
 	ctrlmetricsrv "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 
 	"github.com/seal-io/walrus/pkg/clients/clientset"
@@ -39,12 +41,26 @@ type Config struct {
 	DisableCache              bool
 }
 
-func (c *Config) Apply(_ context.Context) (*Manager, error) {
+func (c *Config) Apply(ctx context.Context) (*Manager, error) {
+	// Set controller logger.
+	ctrl.SetLogger(klog.Background().WithName("ctrl"))
+
 	ctrlMgrOpts := ctrl.Options{
 		// General.
 		GracefulShutdownTimeout: ptr.To(30 * time.Second),
 		Scheme:                  scheme.Scheme,
-		Logger:                  klog.Background().WithName("ctrl"),
+		Logger:                  klog.Background().V(4).WithName("ctrlmgr"),
+
+		// Context.
+		BaseContext: func() context.Context {
+			return ctx
+		},
+
+		// Mapper.
+		MapperProvider: func(config *rest.Config, _ *http.Client) (kmeta.RESTMapper, error) {
+			// NB(thxCode): Mapper
+			return ctrlapiutil.NewDynamicRESTMapper(config, c.KubeHTTPClient)
+		},
 
 		// Client.
 		Client: ctrlcli.Options{
@@ -106,6 +122,7 @@ func (c *Config) Apply(_ context.Context) (*Manager, error) {
 
 	ctrlManager := CtrlManager{
 		Manager:       rawCtrlManager,
+		httpClient:    c.KubeHTTPClient,
 		disableCache:  c.DisableCache,
 		indexedFields: sets.Set[string]{},
 	}

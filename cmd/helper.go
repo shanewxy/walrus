@@ -19,7 +19,7 @@ func Init(c *cobra.Command) *cobra.Command {
 	klog.InitFlags(gcl)
 	{ // Default klog configuration.
 		_ = gcl.Set("logtostderr", "true")
-		_ = gcl.Set("v", "4")
+		_ = gcl.Set("v", "0")
 	}
 	pcl.AddGoFlag(gcl.Lookup("v"))           // --v
 	pcl.AddGoFlag(gcl.Lookup("vmodule"))     // --vmodule

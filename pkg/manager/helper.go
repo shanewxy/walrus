@@ -3,6 +3,7 @@ package manager
 import (
 	"context"
 	"net"
+	"net/http"
 	"net/url"
 	"slices"
 	"strings"
@@ -89,6 +90,7 @@ type (
 	// CtrlManager is a wrapper around ctrl.Manager.
 	CtrlManager struct {
 		ctrl.Manager
+		httpClient    *http.Client
 		disableCache  bool
 		indexedFields sets.Set[string]
 	}
@@ -105,6 +107,13 @@ type (
 		indexedFields sets.Set[string]
 	}
 )
+
+func (m CtrlManager) GetHTTPClient() *http.Client {
+	if m.httpClient != nil {
+		return m.httpClient
+	}
+	return m.Manager.GetHTTPClient()
+}
 
 func (m CtrlManager) GetClient() ctrlcli.Client {
 	if !m.disableCache {
@@ -156,7 +165,7 @@ func (i RepeatableCtrlFieldIndexer) IndexField(ctx context.Context, obj ctrlcli.
 	key := gvk.String() + "/" + field
 	if i.indexedFields.Has(key) {
 		// If the field is already indexed, skip.
-		logger.Info("field is already indexed, skipping", "field", field, "gvk", gvk)
+		logger.InfoDepth(1, "field is already indexed, skipping", "field", field, "gvk", gvk)
 		return nil
 	}
 	i.indexedFields.Insert(key)

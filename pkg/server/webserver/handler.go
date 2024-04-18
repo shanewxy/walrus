@@ -16,7 +16,7 @@ import (
 func Index() http.Handler {
 	r := mux.NewRouter()
 
-	// Extension APIs.
+	// Extension routes.
 	clisOpenapi := clis.Route(r.PathPrefix("/clis").Methods(http.MethodGet))
 	identifyOpenapi := identify.Route(r.PathPrefix("/identify"))
 	loopbackOpenapi := loopback.Route(r.PathPrefix("/loopback"))

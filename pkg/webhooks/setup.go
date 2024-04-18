@@ -50,6 +50,7 @@ type (
 	}
 )
 
+// Setup installs the webhooks.
 func Setup(ctx context.Context, mgr ctrl.Manager, mux HTTPServeMux) error {
 	scheme := mgr.GetScheme()
 	for i := range setupers {

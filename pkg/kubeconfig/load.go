@@ -19,7 +19,7 @@ func LoadRestConfigNonInteractive() (cfgPath string, restCfg *rest.Config, insid
 	switch {
 	case err == nil:
 		return "", restCfg, true, nil
-	case err != nil && !errors.Is(err, rest.ErrNotInCluster):
+	case !errors.Is(err, rest.ErrNotInCluster):
 		return "", nil, false, err
 	}
 

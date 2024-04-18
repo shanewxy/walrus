@@ -21,7 +21,6 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/component-base/logs"
 	"k8s.io/klog/v2"
-	ctrl "sigs.k8s.io/controller-runtime"
 	ctrlhealthz "sigs.k8s.io/controller-runtime/pkg/healthz"
 	ctrlmetrics "sigs.k8s.io/controller-runtime/pkg/metrics"
 
@@ -36,6 +35,8 @@ type Manager struct {
 	sentinel    _CtrlManagerSentinel
 }
 
+// Prepare prepares the runtime for the manager,
+// including installing CRDs and registering metric collectors.
 func (m *Manager) Prepare(ctx context.Context) error {
 	loopbackKubeCli := system.LoopbackKubeClient.Get()
 
@@ -60,21 +61,22 @@ func (m *Manager) Prepare(ctx context.Context) error {
 		}
 	}
 
-	// Set controller manager's logger.
-	ctrl.SetLogger(klog.Background().WithName("ctrlmgr"))
-
-	// Setup controllers.
-	err = controllers.Setup(ctx, m.CtrlManager)
-	if err != nil {
-		return fmt.Errorf("setup controllers: %w", err)
-	}
-
 	return nil
 }
 
+// Start starts the manager.
+//
+// Start sets up controllers and registers assistant routes,
+// before starting the controller manager.
 func (m *Manager) Start(ctx context.Context) error {
 	cm := m.CtrlManager
 	ms := cm.GetWebhookServer()
+
+	// Setup controllers.
+	err := controllers.Setup(ctx, cm)
+	if err != nil {
+		return fmt.Errorf("setup controllers: %w", err)
+	}
 
 	// Register /metrics.
 	{
@@ -139,19 +141,17 @@ func (m *Manager) Start(ctx context.Context) error {
 	}
 
 	// Start.
+	klog.Info("starting controller manager")
 	return cm.Start(ctx)
 }
 
+// WaitForReady waits for the manager to be ready.
 func (m *Manager) WaitForReady(ctx context.Context) error {
 	// Wait for controller manager to start.
-	{
-		ctx, cancel := context.WithTimeoutCause(ctx, 10*time.Second, errors.New("controller manager start timeout"))
-		defer cancel()
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		case <-m.sentinel.Done():
-		}
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-m.sentinel.Done():
 	}
 
 	// Wait for cache sync.

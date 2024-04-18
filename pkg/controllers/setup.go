@@ -23,6 +23,7 @@ var setupers = []controller.Setup{
 	new(walruscore.TemplateReconciler),
 }
 
+// Setup installs the CRD controllers.
 func Setup(ctx context.Context, mgr ctrl.Manager) error {
 	for i := range setupers {
 		opts := controller.SetupOptions{Manager: mgr}
