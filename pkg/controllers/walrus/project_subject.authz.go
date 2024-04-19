@@ -216,6 +216,7 @@ func (r *ProjectSubjectAuthzReconciler) SetupController(ctx context.Context, opt
 	})
 
 	return ctrl.NewControllerManagedBy(opts.Manager).
+		Named("project_subject.authz").
 		For(
 			// Focus on the role bindings under the Project namespace.
 			&rbac.RoleBinding{},

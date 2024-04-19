@@ -265,6 +265,8 @@ func (o *Options) Complete(ctx context.Context) (*Config, error) {
 		}
 	}
 
+	// Configure loopback Kubernetes,
+	// including the client config and client.
 	system.ConfigureLoopbackKube(lpInside, lpNearby, lpCfgPath, *lpCliCfg, lpCli)
 
 	return &Config{

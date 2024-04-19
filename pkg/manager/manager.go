@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/http/pprof"
 	"runtime"
-	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/collectors"
@@ -155,12 +154,8 @@ func (m *Manager) WaitForReady(ctx context.Context) error {
 	}
 
 	// Wait for cache sync.
-	if !m.CtrlManager.CacheDisabled() {
-		ctx, cancel := context.WithTimeoutCause(ctx, 15*time.Second, errors.New("cache sync timeout"))
-		defer cancel()
-		if !m.CtrlManager.GetCache().WaitForCacheSync(ctx) {
-			return errors.New("cache is not synced yet")
-		}
+	if !m.CtrlManager.GetCache().WaitForCacheSync(ctx) {
+		return errors.New("cache is not synced yet")
 	}
 
 	return nil

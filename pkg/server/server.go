@@ -189,17 +189,14 @@ func (s *Server) Start(ctx context.Context) error {
 
 	// Register /readyz.
 	{
-		var cs []healthz.HealthChecker
-		if !s.Manager.CtrlManager.CacheDisabled() {
-			cs = append(cs, healthz.NamedCheck("manager", func(r *http.Request) error {
+		err = s.APIServer.AddReadyzChecks(
+			healthz.NamedCheck("manager", func(r *http.Request) error {
 				err := s.Manager.WaitForReady(ctx)
 				if err != nil {
 					return fmt.Errorf("wait for manager to be ready: %w", err)
 				}
 				return nil
 			}))
-		}
-		err = s.APIServer.AddReadyzChecks(cs...)
 		if err != nil {
 			return fmt.Errorf("add readyz checks: %w", err)
 		}

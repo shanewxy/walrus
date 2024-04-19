@@ -144,6 +144,10 @@ linters-settings:
         alias: ctrlmgr
       - pkg: sigs.k8s.io/controller-runtime/pkg/client/apiutil
         alias: ctrlapiutil
+      - pkg: sigs.k8s.io/controller-runtime/pkg/controller
+        alias: ctrlctrl
+      - pkg: sigs.k8s.io/controller-runtime/pkg/config
+        alias: ctrlcfg
   lll:
     line-length: 150
     tab-width: 1

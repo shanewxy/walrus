@@ -10,12 +10,13 @@ import (
 
 	"github.com/seal-io/utils/netx"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/rest"
 	ctrl "sigs.k8s.io/controller-runtime"
 	ctrlcli "sigs.k8s.io/controller-runtime/pkg/client"
 	ctrlapiutil "sigs.k8s.io/controller-runtime/pkg/client/apiutil"
+	ctrlctrl "sigs.k8s.io/controller-runtime/pkg/controller"
 	ctrllog "sigs.k8s.io/controller-runtime/pkg/log"
+	ctrlmgr "sigs.k8s.io/controller-runtime/pkg/manager"
 
 	"github.com/seal-io/walrus/pkg/system"
 )
@@ -90,15 +91,9 @@ type (
 	// CtrlManager is a wrapper around ctrl.Manager.
 	CtrlManager struct {
 		ctrl.Manager
-		httpClient    *http.Client
-		disableCache  bool
-		indexedFields sets.Set[string]
-	}
-
-	// UnCachedCtrlClient is a wrapper around ctrl.Client.
-	UnCachedCtrlClient struct {
-		ctrlcli.Client
-		apiReader ctrlcli.Reader
+		httpClient        *http.Client
+		disableController bool
+		indexedFields     sets.Set[string]
 	}
 
 	// RepeatableCtrlFieldIndexer is a wrapper around ctrlcli.FieldIndexer.
@@ -108,6 +103,7 @@ type (
 	}
 )
 
+// GetHTTPClient implements the controller manager interface to returns the singleton HTTP client of the system.
 func (m CtrlManager) GetHTTPClient() *http.Client {
 	if m.httpClient != nil {
 		return m.httpClient
@@ -115,40 +111,30 @@ func (m CtrlManager) GetHTTPClient() *http.Client {
 	return m.Manager.GetHTTPClient()
 }
 
-func (m CtrlManager) GetClient() ctrlcli.Client {
-	if !m.disableCache {
-		return m.Manager.GetClient()
-	}
-	return UnCachedCtrlClient{
-		Client:    m.Manager.GetClient(),
-		apiReader: m.Manager.GetAPIReader(),
-	}
-}
-
+// Start implements the controller manager interface to avoid function ambiguity.
 func (m CtrlManager) Start(ctx context.Context) error {
 	return m.Manager.Start(ctx)
 }
 
-func (m CtrlManager) CacheDisabled() bool {
-	return m.disableCache
+// Add implements the controller manager interface to add a controller to the manager.
+//
+// Add skips controllers who need leader election, when specifies with disableController.
+func (m CtrlManager) Add(r ctrlmgr.Runnable) error {
+	if m.disableController {
+		// If cache is disabled, skip controllers who need leader election.
+		l, ok := r.(ctrlmgr.LeaderElectionRunnable)
+		if ok && l.NeedLeaderElection() {
+			if _, ok := r.(ctrlctrl.Controller); ok {
+				return nil
+			}
+		}
+	}
+	return m.Manager.Add(r)
 }
 
-func (i UnCachedCtrlClient) Get(ctx context.Context, key ctrlcli.ObjectKey, obj ctrlcli.Object, opts ...ctrlcli.GetOption) error {
-	return i.apiReader.Get(ctx, key, obj, opts...)
-}
-
-func (i UnCachedCtrlClient) List(ctx context.Context, list ctrlcli.ObjectList, opts ...ctrlcli.ListOption) error {
-	return i.apiReader.List(ctx, list, opts...)
-}
-
-func (i UnCachedCtrlClient) Watch(ctx context.Context, obj ctrlcli.ObjectList, opts ...ctrlcli.ListOption) (watch.Interface, error) {
-	return i.Client.(ctrlcli.WithWatch).Watch(ctx, obj, opts...)
-}
-
-func (i UnCachedCtrlClient) CacheDisabled() bool {
-	return true
-}
-
+// GetFieldIndexer implements the controller manager interface to returns the repeatable field indexer.
+//
+// GetFieldIndexer warns up if the same field is indexed multiple times.
 func (m CtrlManager) GetFieldIndexer() ctrlcli.FieldIndexer {
 	return RepeatableCtrlFieldIndexer{
 		Manager:       m.Manager,

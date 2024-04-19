@@ -132,6 +132,7 @@ func (r *SubjectAuthzReconciler) SetupController(ctx context.Context, opts contr
 	}
 
 	return ctrl.NewControllerManagedBy(opts.Manager).
+		Named("subject.authz").
 		For(
 			// Focus on the Subject.
 			&walrus.Subject{},

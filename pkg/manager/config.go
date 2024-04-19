@@ -3,7 +3,6 @@ package manager
 import (
 	"context"
 	"fmt"
-	"math"
 	"net"
 	"net/http"
 	"time"
@@ -17,11 +16,11 @@ import (
 	ctrlcache "sigs.k8s.io/controller-runtime/pkg/cache"
 	ctrlcli "sigs.k8s.io/controller-runtime/pkg/client"
 	ctrlapiutil "sigs.k8s.io/controller-runtime/pkg/client/apiutil"
+	ctrlcfg "sigs.k8s.io/controller-runtime/pkg/config"
 	ctrlmetricsrv "sigs.k8s.io/controller-runtime/pkg/metrics/server"
 
 	"github.com/seal-io/walrus/pkg/clients/clientset"
 	"github.com/seal-io/walrus/pkg/clients/clientset/scheme"
-	"github.com/seal-io/walrus/pkg/manager/leaderelection"
 	"github.com/seal-io/walrus/pkg/manager/webhookserver"
 	"github.com/seal-io/walrus/pkg/system"
 	"github.com/seal-io/walrus/pkg/systemkuberes"
@@ -38,7 +37,7 @@ type Config struct {
 	KubeLeaderRenewTimeout    time.Duration
 	ServeListenerCertDir      string
 	ServeListener             net.Listener
-	DisableCache              bool
+	DisableController         bool
 }
 
 func (c *Config) Apply(ctx context.Context) (*Manager, error) {
@@ -58,25 +57,41 @@ func (c *Config) Apply(ctx context.Context) (*Manager, error) {
 
 		// Mapper.
 		MapperProvider: func(config *rest.Config, _ *http.Client) (kmeta.RESTMapper, error) {
-			// NB(thxCode): Mapper
+			// NB(thxCode): since mapper provider cannot reuse the singleton http client,
+			// we have to pass the http client to the provider here.
 			return ctrlapiutil.NewDynamicRESTMapper(config, c.KubeHTTPClient)
 		},
 
 		// Client.
 		Client: ctrlcli.Options{
+			// Reuse http client.
 			HTTPClient: c.KubeHTTPClient,
 		},
 		NewClient: func(config *rest.Config, options ctrlcli.Options) (ctrlcli.Client, error) {
+			// Create watchable controller client here.
 			return ctrlcli.NewWithWatch(config, options)
 		},
 
 		// Cache.
 		Cache: ctrlcache.Options{
+			// Reuse http client.
 			HTTPClient: c.KubeHTTPClient,
+			// Set resync period to underlay informer.
 			SyncPeriod: ptr.To(c.InformerCacheResyncPeriod),
 		},
 
-		// Leader election.
+		// Controller.
+		Controller: ctrlcfg.Controller{
+			// How long we should wait for the watching cache to be synced before controller starts.
+			CacheSyncTimeout: 2 * time.Minute,
+			// Recover from panic.
+			RecoverPanic: ptr.To(true),
+			// NB(thxCode): make controllers run with leader election by default,
+			// this configuration does not affect the manager leader election.
+			NeedLeaderElection: ptr.To(true),
+		},
+
+		// Controller manager leader election.
 		LeaderElectionReleaseOnCancel: true,
 		LeaderElectionNamespace:       systemkuberes.SystemNamespaceName,
 		LeaderElectionID:              "walrus-leader",
@@ -95,37 +110,40 @@ func (c *Config) Apply(ctx context.Context) (*Manager, error) {
 		PprofBindAddress: "0",
 	}
 
-	// Inject a lease locker that will never succeed to prevent controller from starting.
-	if c.DisableCache {
-		ctrlMgrOpts.LeaderElection = true
-		ctrlMgrOpts.RetryPeriod = ptr.To(time.Duration(math.MaxInt64)) // Set longest retry period.
-		ctrlMgrOpts.LeaderElectionResourceLockInterface = leaderelection.Dummy()
+	// Disable controller manager election if needed
+	if c.DisableController {
+		ctrlMgrOpts.LeaderElection = false
 	}
 
-	// Enable webhook serving,
-	// includes configurations installation.
+	// Enable webhook serving, includes configurations installation.
 	if c.ServeListener != nil {
 		ctrlMgrOpts.WebhookServer = webhookserver.Enhance(c.ServeListener, c.ServeListenerCertDir, c.KubeClient)
 	}
 
 	// Create controller manager and wrap it.
-	rawCtrlManager, err := ctrl.NewManager(rest.CopyConfig(&c.KubeClientConfig), ctrlMgrOpts)
-	if err != nil {
-		return nil, fmt.Errorf("create controller manager: %w", err)
-	}
-	// Add manager sentinel.
-	sentinel := _CtrlManagerSentinel{done: make(chan struct{})}
-	err = rawCtrlManager.Add(sentinel)
-	if err != nil {
-		return nil, fmt.Errorf("add manager sentinel: %w", err)
+	var ctrlManager CtrlManager
+	{
+		rawCtrlManager, err := ctrl.NewManager(rest.CopyConfig(&c.KubeClientConfig), ctrlMgrOpts)
+		if err != nil {
+			return nil, fmt.Errorf("create controller manager: %w", err)
+		}
+		ctrlManager = CtrlManager{
+			Manager:           rawCtrlManager,
+			httpClient:        c.KubeHTTPClient,
+			disableController: c.DisableController,
+			indexedFields:     sets.Set[string]{},
+		}
 	}
 
-	ctrlManager := CtrlManager{
-		Manager:       rawCtrlManager,
-		httpClient:    c.KubeHTTPClient,
-		disableCache:  c.DisableCache,
-		indexedFields: sets.Set[string]{},
+	// Add controller manager sentinel.
+	sentinel := _CtrlManagerSentinel{done: make(chan struct{})}
+	err := ctrlManager.Add(sentinel)
+	if err != nil {
+		return nil, fmt.Errorf("add controller manager sentinel: %w", err)
 	}
+
+	// Configure loopback controller runtime,
+	// including the client and direct reading client.
 	system.ConfigureLoopbackCtrlRuntime(ctrlManager.GetClient(), ctrlManager.GetAPIReader())
 
 	return &Manager{

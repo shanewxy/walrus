@@ -187,7 +187,7 @@ func (o *Options) Complete(ctx context.Context) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	mgrConfig.DisableCache = o.DisableController
+	mgrConfig.DisableController = o.DisableController
 
 	system.ConfigureControl(
 		o.BootstrapPassword,
