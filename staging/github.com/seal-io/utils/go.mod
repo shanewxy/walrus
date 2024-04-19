@@ -5,8 +5,6 @@ go 1.21
 require (
 	github.com/akerl/go-indefinite-article v0.0.2-0.20221219154354-6280c92263d6
 	github.com/alitto/pond v1.8.3
-	github.com/allegro/bigcache/v3 v3.1.0
-	github.com/dustin/go-humanize v1.0.1
 	github.com/evanphx/json-patch v5.9.0+incompatible
 	github.com/go-openapi/inflect v0.19.0
 	github.com/google/uuid v1.6.0

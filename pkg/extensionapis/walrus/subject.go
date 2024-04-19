@@ -58,7 +58,7 @@ func (h *SubjectHandler) SetupHandler(
 			return []string{obj.GetName()}
 		})
 	if err != nil {
-		return gvr, srs, err
+		return gvr, srs, fmt.Errorf("index service account 'metadata.name': %w", err)
 	}
 
 	// Declare GVR.
@@ -368,6 +368,9 @@ func (h *SubjectHandler) OnUpdate(ctx context.Context, obj, oldObj runtime.Objec
 		if err := subj.Spec.Role.Validate(); err != nil {
 			errs = append(errs, field.Invalid(
 				field.NewPath("spec.role"), subj.Spec.Role, err.Error()))
+		} else if subj.Name == systemkuberes.AdminSubjectName && subj.Spec.Role != walrus.SubjectRoleAdmin {
+			errs = append(errs, field.Invalid(
+				field.NewPath("spec.role"), subj.Spec.Role, "admin role is immutable"))
 		}
 		if stringx.StringWidth(subj.Spec.DisplayName) > 30 {
 			errs = append(errs, field.TooLongMaxLength(

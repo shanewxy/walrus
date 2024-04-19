@@ -2,6 +2,7 @@ package walrus
 
 import (
 	"context"
+	"fmt"
 	"slices"
 	"sort"
 	"strings"
@@ -54,7 +55,7 @@ func (h *SubjectProviderHandler) SetupHandler(
 			return []string{obj.GetName()}
 		})
 	if err != nil {
-		return
+		return gvr, srs, fmt.Errorf("index secret 'metadata.name': %w", err)
 	}
 
 	// Declare GVR.

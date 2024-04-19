@@ -26,11 +26,12 @@ type (
 )
 
 type (
+	GetClient[T MetaObject] interface {
+		Get(ctx context.Context, name string, opts meta.GetOptions) (T, error)
+	}
+
 	CreateClient[T MetaObject] interface {
 		Create(ctx context.Context, obj T, opts meta.CreateOptions) (T, error)
-		Update(ctx context.Context, obj T, opts meta.UpdateOptions) (T, error)
-		Get(ctx context.Context, name string, opts meta.GetOptions) (T, error)
-		Delete(ctx context.Context, name string, opts meta.DeleteOptions) error
 	}
 
 	_CreateOptions[T MetaObject] struct {
@@ -92,17 +93,22 @@ func Create[T MetaObject](ctx context.Context, cli CreateClient[T], expected T, 
 	)
 
 	if name != "" {
-		actual, err = cli.Get(ctx, name, meta.GetOptions{
-			ResourceVersion: "0",
-		})
-		if err != nil && !kerrors.IsNotFound(err) {
-			return actual, err
+		if getter, ok := cli.(GetClient[T]); ok {
+			actual, err = getter.Get(ctx, name, meta.GetOptions{
+				ResourceVersion: "0",
+			})
+			if err != nil && !kerrors.IsNotFound(err) {
+				if isRetryError(err) {
+					return Create(ctx, cli, expected, opts...)
+				}
+				return actual, err
+			}
 		}
 	}
 
 	// Create if not found or deleting.
 	if err != nil || actual.GetDeletionTimestamp() != nil {
-		deleting := actual.GetDeletionTimestamp() != nil && len(actual.GetFinalizers()) == 0
+		deleting := err == nil && actual.GetDeletionTimestamp() != nil && len(actual.GetFinalizers()) == 0
 		if deleting {
 			// NB(thxCode): sleep a while to avoid server flipping.
 			time.Sleep(10 * time.Millisecond)
@@ -110,15 +116,20 @@ func Create[T MetaObject](ctx context.Context, cli CreateClient[T], expected T, 
 		actual, err = cli.Create(ctx, expected, meta.CreateOptions{
 			DryRun: co.DryRun,
 		})
-		if err != nil && kerrors.IsAlreadyExists(err) {
-			// Retry on already existed if:
-			// - configure align function.
-			// - configure compare function.
-			// - the resource is deleting without finalizers.
-			if co.UpdateAlignFunc != nil || co.RecreateCompareFunc != nil || deleting {
+		if err != nil {
+			switch {
+			case isRetryError(err):
 				return Create(ctx, cli, expected, opts...)
+			case kerrors.IsAlreadyExists(err):
+				// Retry on already existed if:
+				// - configure align function.
+				// - configure compare function.
+				// - the resource is deleting without finalizers.
+				if co.UpdateAlignFunc != nil || co.RecreateCompareFunc != nil || deleting {
+					return Create(ctx, cli, expected, opts...)
+				}
+				err = nil
 			}
-			err = nil
 		}
 		return actual, err
 	}
@@ -135,6 +146,11 @@ func Create[T MetaObject](ctx context.Context, cli CreateClient[T], expected T, 
 		}
 		if skip {
 			return actual, nil
+		}
+
+		updater, ok := cli.(UpdateClient[T])
+		if !ok {
+			return actual, errors.New("client does not support update")
 		}
 
 		// Copy resource version for update.
@@ -156,10 +172,10 @@ func Create[T MetaObject](ctx context.Context, cli CreateClient[T], expected T, 
 			copiedOm.SetOwnerReferences(actualOm.GetOwnerReferences())
 		}
 
-		updated, err := cli.Update(ctx, copied, meta.UpdateOptions{
+		updated, err := updater.Update(ctx, copied, meta.UpdateOptions{
 			DryRun: co.DryRun,
 		})
-		if err == nil || !kerrors.IsConflict(err) || !kerrors.IsNotAcceptable(err) {
+		if err == nil || !kerrors.IsConflict(err) || !kerrors.IsNotAcceptable(err) || !isRetryError(err) {
 			return updated, err
 		}
 
@@ -171,11 +187,16 @@ func Create[T MetaObject](ctx context.Context, cli CreateClient[T], expected T, 
 			return actual, nil
 		}
 
-		err = cli.Delete(ctx, name, meta.DeleteOptions{
+		deleter, ok := cli.(DeleteClient)
+		if !ok {
+			return actual, errors.New("client does not support delete")
+		}
+
+		err = deleter.Delete(ctx, name, meta.DeleteOptions{
 			DryRun:            co.DryRun,
 			PropagationPolicy: ptr.To(meta.DeletePropagationForeground),
 		})
-		if err != nil && !kerrors.IsNotFound(err) {
+		if err != nil && !kerrors.IsNotFound(err) && !isRetryError(err) {
 			return actual, err
 		}
 
@@ -206,13 +227,16 @@ func CreateWithCtrlClient[T MetaObject](ctx context.Context, cli ctrlcli.Client,
 	if name != "" {
 		err = cli.Get(ctx, ctrlcli.ObjectKeyFromObject(expected), actual)
 		if err != nil && !kerrors.IsNotFound(err) {
+			if isRetryError(err) {
+				return CreateWithCtrlClient(ctx, cli, expected, opts...)
+			}
 			return actual, err
 		}
 	}
 
 	// Create if not found or deleting.
 	if err != nil || actual.GetDeletionTimestamp() != nil {
-		deleting := actual.GetDeletionTimestamp() != nil && len(actual.GetFinalizers()) == 0
+		deleting := err == nil && actual.GetDeletionTimestamp() != nil && len(actual.GetFinalizers()) == 0
 		if deleting {
 			// NB(thxCode): sleep a while to avoid server flipping.
 			time.Sleep(10 * time.Millisecond)
@@ -225,7 +249,10 @@ func CreateWithCtrlClient[T MetaObject](ctx context.Context, cli ctrlcli.Client,
 		if err == nil {
 			return expected, nil
 		}
-		if kerrors.IsAlreadyExists(err) {
+		switch {
+		case isRetryError(err):
+			return CreateWithCtrlClient(ctx, cli, expected, opts...)
+		case kerrors.IsAlreadyExists(err):
 			// Retry on already existed if:
 			// - configure align function.
 			// - configure compare function.
@@ -275,7 +302,7 @@ func CreateWithCtrlClient[T MetaObject](ctx context.Context, cli ctrlcli.Client,
 			DryRun: co.DryRun,
 			Raw:    &meta.UpdateOptions{DryRun: co.DryRun},
 		})
-		if err == nil || !kerrors.IsConflict(err) || !kerrors.IsNotAcceptable(err) {
+		if err == nil || !kerrors.IsConflict(err) || !kerrors.IsNotAcceptable(err) || !isRetryError(err) {
 			return copied, err
 		}
 
@@ -291,7 +318,7 @@ func CreateWithCtrlClient[T MetaObject](ctx context.Context, cli ctrlcli.Client,
 			DryRun:            co.DryRun,
 			PropagationPolicy: ptr.To(meta.DeletePropagationForeground),
 		})
-		if err != nil && !kerrors.IsNotFound(err) {
+		if err != nil && !kerrors.IsNotFound(err) && !isRetryError(err) {
 			return actual, err
 		}
 
@@ -304,7 +331,6 @@ func CreateWithCtrlClient[T MetaObject](ctx context.Context, cli ctrlcli.Client,
 
 type (
 	UpdateClient[T MetaObject] interface {
-		Create(ctx context.Context, obj T, opts meta.CreateOptions) (T, error)
 		Update(ctx context.Context, obj T, opts meta.UpdateOptions) (T, error)
 		Get(ctx context.Context, name string, opts meta.GetOptions) (T, error)
 	}
@@ -365,13 +391,20 @@ func Update[T MetaObject](ctx context.Context, cli UpdateClient[T], expected T, 
 	})
 	if err != nil {
 		if kerrors.IsNotFound(err) && uo.CreateIfNotExisted {
-			actual, err = cli.Create(ctx, expected, meta.CreateOptions{
+			creator, ok := cli.(CreateClient[T])
+			if !ok {
+				return actual, errors.New("client does not support create")
+			}
+			actual, err = creator.Create(ctx, expected, meta.CreateOptions{
 				DryRun: uo.DryRun,
 			})
 			if err != nil && kerrors.IsAlreadyExists(err) {
 				// Retry if already existed.
 				return Update(ctx, cli, expected, opts...)
 			}
+		}
+		if isRetryError(err) {
+			return Update(ctx, cli, expected, opts...)
 		}
 		return actual, err
 	}
@@ -412,6 +445,10 @@ func Update[T MetaObject](ctx context.Context, cli UpdateClient[T], expected T, 
 		DryRun: uo.DryRun,
 	})
 	if err != nil {
+		if isRetryError(err) {
+			return Update(ctx, cli, expected, opts...)
+		}
+
 		if !kerrors.IsConflict(err) && !kerrors.IsNotAcceptable(err) {
 			return actual, err
 		}
@@ -455,6 +492,9 @@ func UpdateWithCtrlClient[T MetaObject](ctx context.Context, cli ctrlcli.Client,
 				return UpdateWithCtrlClient(ctx, cli, expected, opts...)
 			}
 		}
+		if isRetryError(err) {
+			return UpdateWithCtrlClient(ctx, cli, expected, opts...)
+		}
 		return actual, err
 	}
 
@@ -497,6 +537,10 @@ func UpdateWithCtrlClient[T MetaObject](ctx context.Context, cli ctrlcli.Client,
 		Raw:          ptr.To(uo.UpdateOptions),
 	})
 	if err != nil {
+		if isRetryError(err) {
+			return UpdateWithCtrlClient(ctx, cli, expected, opts...)
+		}
+
 		if !kerrors.IsConflict(err) && !kerrors.IsNotAcceptable(err) {
 			return actual, err
 		}
@@ -549,6 +593,9 @@ func Delete(ctx context.Context, cli DeleteClient, expected MetaObject, opts ...
 
 	err := cli.Delete(ctx, name, do.DeleteOptions)
 	if err != nil && !kerrors.IsNotFound(err) {
+		if isRetryError(err) {
+			return Delete(ctx, cli, expected, opts...)
+		}
 		return err
 	}
 
@@ -579,8 +626,23 @@ func DeleteWithCtrlClient(ctx context.Context, cli ctrlcli.Client, expected Meta
 		Raw:                ptr.To(do.DeleteOptions),
 	})
 	if err != nil && !kerrors.IsNotFound(err) {
+		if isRetryError(err) {
+			return DeleteWithCtrlClient(ctx, cli, expected, opts...)
+		}
 		return err
 	}
 
 	return nil
+}
+
+func isRetryError(err error) bool {
+	if kerrors.IsTooManyRequests(err) || kerrors.IsGone(err) || kerrors.IsTimeout(err) || kerrors.IsServerTimeout(err) {
+		time.Sleep(10 * time.Millisecond)
+		return true
+	}
+	if s, ok := kerrors.SuggestsClientDelay(err); ok {
+		time.Sleep(time.Duration(s) * time.Second)
+		return true
+	}
+	return false
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"slices"
 
 	"github.com/seal-io/utils/stringx"
 	rbac "k8s.io/api/rbac/v1"
@@ -16,7 +15,7 @@ import (
 	walrus "github.com/seal-io/walrus/pkg/apis/walrus/v1"
 	"github.com/seal-io/walrus/pkg/kubeclientset"
 	"github.com/seal-io/walrus/pkg/kubemeta"
-	"github.com/seal-io/walrus/pkg/systemkuberes"
+	"github.com/seal-io/walrus/pkg/kubereviewsubject"
 	"github.com/seal-io/walrus/pkg/systemmeta"
 )
 
@@ -54,35 +53,35 @@ func GrantProjectSubjects(ctx context.Context, cli ctrlcli.Client, projSubjs *wa
 	}
 
 	for i := range projSubjs.Items {
-		item := &projSubjs.Items[i]
+		psbj := &projSubjs.Items[i]
 
 		eRb := &rbac.RoleBinding{
 			ObjectMeta: meta.ObjectMeta{
 				Namespace: projSubjs.Name,
-				Name:      GetProjectSubjectRoleBindingName(&item.SubjectReference),
+				Name:      GetProjectSubjectRoleBindingName(&psbj.SubjectReference),
 			},
 			RoleRef: rbac.RoleRef{
 				APIGroup: rbac.GroupName,
 				Kind:     "ClusterRole",
-				Name:     ConvertClusterRoleNameFromProjectRole(item.Role),
+				Name:     ConvertClusterRoleNameFromProjectRole(psbj.Role),
 			},
 			Subjects: []rbac.Subject{
 				{
 					Kind:      rbac.ServiceAccountKind,
-					Namespace: item.Namespace,
-					Name:      ConvertServiceAccountNameFromSubjectName(item.Name),
+					Namespace: psbj.Namespace,
+					Name:      ConvertServiceAccountNameFromSubjectName(psbj.Name),
 				},
 				{
 					APIGroup: rbac.GroupName,
 					Kind:     rbac.UserKind,
-					Name:     ConvertImpersonateUserFromSubjectName(item.Namespace, item.Name),
+					Name:     ConvertImpersonateUserFromSubjectName(psbj.Namespace, psbj.Name),
 				},
 			},
 		}
 		systemmeta.NoteResource(eRb, "rolebindings", map[string]string{
 			"scope":   "project",
 			"project": kubemeta.GetNamespacedNameKey(projSubjs),
-			"subject": kubemeta.GetNamespacedNameKey(item.SubjectReference.ToNamespacedName()),
+			"subject": kubemeta.GetNamespacedNameKey(psbj.SubjectReference.ToNamespacedName()),
 		})
 
 		// Create.
@@ -103,12 +102,12 @@ func RevokeProjectSubjects(ctx context.Context, cli ctrlcli.Client, projSubjs *w
 	}
 
 	for i := range projSubjs.Items {
-		item := &projSubjs.Items[i]
+		psbj := &projSubjs.Items[i]
 
 		eRb := &rbac.RoleBinding{
 			ObjectMeta: meta.ObjectMeta{
 				Namespace: projSubjs.Name,
-				Name:      GetProjectSubjectRoleBindingName(&item.SubjectReference),
+				Name:      GetProjectSubjectRoleBindingName(&psbj.SubjectReference),
 			},
 		}
 
@@ -129,16 +128,6 @@ func GrantProjectSubjectRole(ctx context.Context, cli ctrlcli.Client, proj *walr
 		return errors.New("request user not found")
 	}
 
-	// Don't bind the walrus admin, system:admin user or system:master group.
-	{
-		if un, ug := ui.GetName(), ui.GetGroups(); un == "system:admin" || slices.Contains(ug, "system:master") {
-			return nil
-		}
-		if ns, n, ok := ConvertSubjectNamesFromAuthnUser(ui); ok && ns == systemkuberes.SystemNamespaceName && n == systemkuberes.AdminSubjectName {
-			return nil
-		}
-	}
-
 	return GrantProjectSubjectRoleFor(ctx, cli, proj, role, ui)
 }
 
@@ -150,6 +139,24 @@ func GrantProjectSubjectRoleFor(ctx context.Context, cli ctrlcli.Client, proj *w
 	}
 	if err := role.Validate(); err != nil {
 		return err
+	}
+
+	// Return directly if the user has the global management permissions.
+	revs := kubereviewsubject.Reviews{
+		{
+			ResourceAttributes: &kubereviewsubject.ResourceAttributes{
+				Group:    walrus.GroupName,
+				Resource: "projects",
+				Verb:     rbac.VerbAll,
+			},
+		},
+	}
+	err := kubereviewsubject.CanSpecificUserDoWithCtrlClient(ctx, cli, revs, user)
+	switch {
+	case err == nil:
+		return nil
+	case !kubereviewsubject.IsDeniedError(err):
+		return fmt.Errorf("check global management permissions: %w", err)
 	}
 
 	// Convert.
@@ -195,7 +202,7 @@ func GrantProjectSubjectRoleFor(ctx context.Context, cli ctrlcli.Client, proj *w
 	})
 
 	// Create.
-	_, err := kubeclientset.CreateWithCtrlClient(ctx, cli, eRb,
+	_, err = kubeclientset.CreateWithCtrlClient(ctx, cli, eRb,
 		kubeclientset.WithRecreateIfDuplicated(kubeclientset.NewRbacRoleBindingCompareFunc(eRb)))
 	if err != nil {
 		return fmt.Errorf("create role binding: %w", err)

@@ -58,7 +58,7 @@ func (h *EnvironmentHandler) SetupHandler(
 			return []string{obj.GetName()}
 		})
 	if err != nil {
-		return
+		return gvr, srs, fmt.Errorf("index namespace 'metadata.name': %w", err)
 	}
 
 	// Declare GVR.

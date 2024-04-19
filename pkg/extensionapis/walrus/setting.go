@@ -3,6 +3,7 @@ package walrus
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/seal-io/utils/pools/gopool"
 	core "k8s.io/api/core/v1"
@@ -55,7 +56,7 @@ func (h *SettingHandler) SetupHandler(
 			return []string{obj.GetName()}
 		})
 	if err != nil {
-		return
+		return gvr, srs, fmt.Errorf("index secret 'metadata.name': %w", err)
 	}
 
 	// Declare GVR.

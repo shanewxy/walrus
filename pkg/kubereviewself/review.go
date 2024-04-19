@@ -17,6 +17,10 @@ type (
 	Review = authz.SelfSubjectAccessReviewSpec
 	// Reviews is the list of Review.
 	Reviews = []Review
+	// ResourceAttributes is the alias of authz.ResourceAttributes.
+	ResourceAttributes = authz.ResourceAttributes
+	// NonResourceAttributes is the alias of authz.NonResourceAttributes.
+	NonResourceAttributes = authz.NonResourceAttributes
 
 	// DeniedError is an error indicate which Review target has been denied.
 	DeniedError struct {
@@ -44,13 +48,12 @@ func Try(err error) error {
 	return nil
 }
 
-// CanDo checks if the current subject can do the specified actions.
+// CanDo checks if the current subject can do all specified actions.
 func CanDo(ctx context.Context, cli authzcli.SelfSubjectAccessReviewInterface, reviews Reviews) error {
 	if len(reviews) == 0 {
 		return errors.New("no self review to check")
 	}
 
-	allowed := true
 	for i := range reviews {
 		sar := &authz.SelfSubjectAccessReview{
 			Spec: reviews[i],
@@ -61,8 +64,7 @@ func CanDo(ctx context.Context, cli authzcli.SelfSubjectAccessReviewInterface, r
 			return fmt.Errorf("create self subject access review %s: %w", reviews[i], err)
 		}
 
-		allowed = allowed && sar.Status.Allowed
-		if !allowed {
+		if !sar.Status.Allowed {
 			return DeniedError{Review: reviews[i]}
 		}
 	}
@@ -76,7 +78,6 @@ func CanDoWithCtrlClient(ctx context.Context, cli ctrlcli.Client, reviews Review
 		return errors.New("no self review to check")
 	}
 
-	allowed := true
 	for i := range reviews {
 		sar := &authz.SelfSubjectAccessReview{
 			Spec: reviews[i],
@@ -87,8 +88,7 @@ func CanDoWithCtrlClient(ctx context.Context, cli ctrlcli.Client, reviews Review
 			return fmt.Errorf("create self subject access review %s: %w", reviews[i], err)
 		}
 
-		allowed = allowed && sar.Status.Allowed
-		if !allowed {
+		if !sar.Status.Allowed {
 			return DeniedError{Review: reviews[i]}
 		}
 	}

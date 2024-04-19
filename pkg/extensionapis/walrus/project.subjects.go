@@ -3,6 +3,7 @@ package walrus
 import (
 	"context"
 	"fmt"
+	"slices"
 
 	"golang.org/x/exp/maps"
 	rbac "k8s.io/api/rbac/v1"
@@ -100,21 +101,26 @@ func (h *ProjectSubjectsHandler) OnGet(ctx context.Context, key types.Namespaced
 
 func (h *ProjectSubjectsHandler) OnUpdate(ctx context.Context, obj, objOld runtime.Object, _ ctrlcli.UpdateOptions) (runtime.Object, error) {
 	psbjs, psbjsOld := obj.(*walrus.ProjectSubjects), objOld.(*walrus.ProjectSubjects)
+	subjRoleMap := make(map[walrus.SubjectReference]walrus.SubjectRole)
 
-	// Validate.
+	// Validate and map.
 	{
 		var errs field.ErrorList
 		for i, psbj := range psbjs.Items {
-			err := h.Client.Get(ctx, psbj.ToNamespacedName(), new(walrus.Subject))
+			err := psbj.Role.Validate()
+			if err != nil {
+				errs = append(errs, field.Invalid(
+					field.NewPath(fmt.Sprintf("items[%d].role", i)), psbj.Role, err.Error()))
+			}
+			subj := new(walrus.Subject)
+			err = h.Client.Get(ctx, psbj.ToNamespacedName(), subj)
 			if err != nil {
 				errs = append(errs, field.Invalid(
 					field.NewPath(fmt.Sprintf("items[%d]", i)), psbj.SubjectReference, err.Error()),
 				)
+				continue
 			}
-			if err := psbj.Role.Validate(); err != nil {
-				errs = append(errs, field.Invalid(
-					field.NewPath(fmt.Sprintf("items[%d].role", i)), psbj.Role, err.Error()))
-			}
+			subjRoleMap[psbj.SubjectReference] = subj.Spec.Role
 		}
 		if len(errs) > 0 {
 			return nil, kerrors.NewInvalid(walrus.SchemeKind("projectsubjects"), psbjs.Name, errs)
@@ -150,7 +156,10 @@ func (h *ProjectSubjectsHandler) OnUpdate(ctx context.Context, obj, objOld runti
 
 	// NB(thxCode): we grant the new permission to the Project namespace first,
 	// then ProjectSubjectAuthzReconciler will take care of granting the new permission to the Environment namespace.
-	psbjs.Items = maps.Keys(psbjsReverseIndex)
+	psbjs.Items = slices.DeleteFunc(maps.Keys(psbjsReverseIndex), func(psbj walrus.ProjectSubject) bool {
+		// Only grant to subject who is not an admin.
+		return subjRoleMap[psbj.SubjectReference] == walrus.SubjectRoleAdmin
+	})
 	err = systemauthz.GrantProjectSubjects(ctx, h.Client, psbjs)
 	if err != nil {
 		return nil, kerrors.NewInternalError(fmt.Errorf("grant project subject: %w", err))

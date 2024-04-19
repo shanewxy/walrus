@@ -2,7 +2,6 @@ package review
 
 import (
 	"context"
-	"slices"
 
 	authz "k8s.io/api/authorization/v1"
 	authzcli "k8s.io/client-go/kubernetes/typed/authorization/v1"
@@ -32,32 +31,6 @@ type (
 	// Simples is the list of Simple.
 	Simples = []Simple
 )
-
-type ApplyOption func([]string, string) ([]string, string)
-
-// WithStatusOnly checks if the subject can do kubeclientset.Apply
-// with kubeclientset.WithStatusOnly for something.
-func WithStatusOnly() ApplyOption {
-	return func(verbs []string, _ string) ([]string, string) {
-		return slices.DeleteFunc(verbs, func(s string) bool {
-			return s == "create"
-		}), "status"
-	}
-}
-
-// CanDoApply checks if the current subject can do kubeclientset.Apply for something.
-func CanDoApply(ctx context.Context,
-	cli authzcli.SelfSubjectAccessReviewInterface, reviews Simples,
-	opts ...ApplyOption,
-) error {
-	verbs := []string{"get", "create", "patch"}
-	subres := ""
-	for i := range opts {
-		verbs, subres = opts[i](verbs, subres)
-	}
-
-	return canDoSimple(ctx, cli, reviews, verbs, subres)
-}
 
 type CreateOption func([]string, string) ([]string, string)
 

@@ -5,13 +5,20 @@ import (
 	"errors"
 	"fmt"
 	"slices"
+	"time"
 
+	"github.com/seal-io/utils/json"
+	"github.com/seal-io/utils/stringx"
+	"github.com/seal-io/utils/varx"
 	authz "k8s.io/api/authorization/v1"
-	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/cache"
+	authnuser "k8s.io/apiserver/pkg/authentication/user"
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
 	authzcli "k8s.io/client-go/kubernetes/typed/authorization/v1"
 	"k8s.io/klog/v2"
 	ctrlcli "sigs.k8s.io/controller-runtime/pkg/client"
+
+	"github.com/seal-io/walrus/pkg/kubeclientset"
 )
 
 type (
@@ -19,6 +26,12 @@ type (
 	Review = authz.SubjectAccessReviewSpec
 	// Reviews is the list of Review.
 	Reviews = []Review
+	// ResourceAttributes is the alias of authz.ResourceAttributes.
+	ResourceAttributes = authz.ResourceAttributes
+	// NonResourceAttributes is the alias of authz.NonResourceAttributes.
+	NonResourceAttributes = authz.NonResourceAttributes
+	// ExtraValue is the alias of authz.ExtraValue.
+	ExtraValue = authz.ExtraValue
 
 	// DeniedError is an error indicate which Review target has been denied.
 	DeniedError struct {
@@ -47,26 +60,52 @@ func Try(err error) error {
 	return nil
 }
 
-// CanDo checks if the given subject can do the specified actions.
+var (
+	responseCache           = cache.NewLRUExpireCache(8192)
+	responseAuthorizedTTL   = varx.NewOnce(10 * time.Second)
+	responseUnauthorizedTTL = varx.NewOnce(10 * time.Second)
+)
+
+// ConfigureResponseTTL configures the TTL for authorized and unauthorized responses.
+func ConfigureResponseTTL(authorized, unauthorized time.Duration) {
+	responseAuthorizedTTL.Configure(authorized)
+	responseUnauthorizedTTL.Configure(unauthorized)
+}
+
+// CanDo checks if the given subject can do all specified actions.
 func CanDo(ctx context.Context, cli authzcli.SubjectAccessReviewInterface, reviews Reviews) error {
 	if len(reviews) == 0 {
-		return errors.New("no self review to check")
+		return errors.New("no subject review to check")
 	}
 
-	allowed := true
 	for i := range reviews {
 		sar := &authz.SubjectAccessReview{
 			Spec: reviews[i],
 		}
 
-		sar, err := cli.Create(ctx, sar, meta.CreateOptions{})
-		if err != nil {
-			return fmt.Errorf("create subject access review %s: %w", reviews[i], err)
+		var key string
+		{
+			bs, err := json.Marshal(sar.Spec)
+			if err == nil {
+				key = stringx.FromBytes(&bs)
+			}
 		}
 
-		allowed = allowed && sar.Status.Allowed
-		if !allowed {
+		if entry, ok := responseCache.Get(key); ok {
+			sar.Status = entry.(authz.SubjectAccessReviewStatus)
+		} else {
+			var err error
+			sar, err = kubeclientset.Create(ctx, cli, sar)
+			if err != nil {
+				return fmt.Errorf("create subject access review %s: %w", reviews[i], err)
+			}
+		}
+
+		if !sar.Status.Allowed {
+			responseCache.Add(key, sar.Status, responseUnauthorizedTTL.Get())
 			return DeniedError{Review: reviews[i]}
+		} else {
+			responseCache.Add(key, sar.Status, responseAuthorizedTTL.Get())
 		}
 	}
 
@@ -76,10 +115,9 @@ func CanDo(ctx context.Context, cli authzcli.SubjectAccessReviewInterface, revie
 // CanDoWithCtrlClient is similar to CanDo, but uses the ctrl client.
 func CanDoWithCtrlClient(ctx context.Context, cli ctrlcli.Client, reviews Reviews) error {
 	if len(reviews) == 0 {
-		return errors.New("no self review to check")
+		return errors.New("no subject review to check")
 	}
 
-	allowed := true
 	for i := range reviews {
 		sar := &authz.SubjectAccessReview{
 			Spec: reviews[i],
@@ -90,8 +128,7 @@ func CanDoWithCtrlClient(ctx context.Context, cli ctrlcli.Client, reviews Review
 			return fmt.Errorf("create subject access review %s: %w", reviews[i], err)
 		}
 
-		allowed = allowed && sar.Status.Allowed
-		if !allowed {
+		if !sar.Status.Allowed {
 			return DeniedError{Review: reviews[i]}
 		}
 	}
@@ -99,37 +136,41 @@ func CanDoWithCtrlClient(ctx context.Context, cli ctrlcli.Client, reviews Review
 	return nil
 }
 
-// CanRequestUserDo leverages CanDo to review the requesting subject can do the specified actions or not.
+// CanRequestUserDo leverages CanDo to review the requesting subject can do all specified actions or not.
 //
 // CanRequestUserDo overrides all given reviews' user information
 // after it successfully parse from the given context.
 func CanRequestUserDo(ctx context.Context, cli authzcli.SubjectAccessReviewInterface, reviews Reviews) error {
-	reviews, err := overrideUserInfo(ctx, reviews)
-	if err != nil {
-		return err
+	ui, ok := genericapirequest.UserFrom(ctx)
+	if !ok {
+		return errors.New("cannot retrieve kubernetes request user information from context")
 	}
 
-	return CanDo(ctx, cli, reviews)
+	return CanDo(ctx, cli, overrideUserInfo(reviews, ui))
 }
 
 // CanRequestUserDoWithCtrlClient is similar to CanRequestUserDo, but uses the ctrl client.
 func CanRequestUserDoWithCtrlClient(ctx context.Context, cli ctrlcli.Client, reviews Reviews) error {
-	reviews, err := overrideUserInfo(ctx, reviews)
-	if err != nil {
-		return err
-	}
-
-	return CanDoWithCtrlClient(ctx, cli, reviews)
-}
-
-// overrideUserInfo extracts the user info from the given context,
-// and then override the user information of the given Reviews with the extracted result.
-func overrideUserInfo(ctx context.Context, reviews Reviews) (Reviews, error) {
 	ui, ok := genericapirequest.UserFrom(ctx)
 	if !ok {
-		return nil, errors.New("cannot retrieve kubernetes request user information from context")
+		return errors.New("cannot retrieve kubernetes request user information from context")
 	}
 
+	return CanDoWithCtrlClient(ctx, cli, overrideUserInfo(reviews, ui))
+}
+
+// CanSpecificUserDo leverages CanDo to review the specified subject can do all specified actions or not.
+func CanSpecificUserDo(ctx context.Context, cli authzcli.SubjectAccessReviewInterface, reviews Reviews, user authnuser.Info) error {
+	return CanDo(ctx, cli, overrideUserInfo(reviews, user))
+}
+
+// CanSpecificUserDoWithCtrlClient is similar to CanSpecificUserDo, but uses the ctrl client.
+func CanSpecificUserDoWithCtrlClient(ctx context.Context, cli ctrlcli.Client, reviews Reviews, user authnuser.Info) error {
+	return CanDoWithCtrlClient(ctx, cli, overrideUserInfo(reviews, user))
+}
+
+// overrideUserInfo overrides the given Reviews with the given user information.
+func overrideUserInfo(reviews Reviews, ui authnuser.Info) Reviews {
 	var (
 		user  = ui.GetName()
 		uid   = ui.GetUID()
@@ -158,5 +199,5 @@ func overrideUserInfo(ctx context.Context, reviews Reviews) (Reviews, error) {
 		reviews[i].Groups = groups
 	}
 
-	return reviews, nil
+	return reviews
 }

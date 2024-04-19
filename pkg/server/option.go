@@ -18,6 +18,7 @@ import (
 	cliflag "k8s.io/component-base/cli/flag"
 
 	walruscore "github.com/seal-io/walrus/pkg/apis/walruscore/v1"
+	"github.com/seal-io/walrus/pkg/kubereviewsubject"
 	"github.com/seal-io/walrus/pkg/manager"
 	"github.com/seal-io/walrus/pkg/servers/serverset/scheme"
 	"github.com/seal-io/walrus/pkg/system"
@@ -269,6 +270,7 @@ func (o *Options) Complete(ctx context.Context) (*Config, error) {
 			},
 		}
 	}
+	kubereviewsubject.ConfigureResponseTTL(o.AuthzAllowCacheTTL, o.AuthzDenyCacheTTL)
 
 	audit := genericoptions.NewAuditOptions()
 	audit.PolicyFile = o.AuditPolicyFile

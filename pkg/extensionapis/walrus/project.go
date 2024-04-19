@@ -2,6 +2,7 @@ package walrus
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"slices"
 	"sort"
@@ -9,20 +10,25 @@ import (
 	"github.com/seal-io/utils/pools/gopool"
 	"github.com/seal-io/utils/stringx"
 	core "k8s.io/api/core/v1"
+	rbac "k8s.io/api/rbac/v1"
 	kerrors "k8s.io/apimachinery/pkg/api/errors"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/apimachinery/pkg/watch"
+	authnuser "k8s.io/apiserver/pkg/authentication/user"
+	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
 	"k8s.io/apiserver/pkg/registry/rest"
 	ctrlcli "sigs.k8s.io/controller-runtime/pkg/client"
 
 	walrus "github.com/seal-io/walrus/pkg/apis/walrus/v1"
 	"github.com/seal-io/walrus/pkg/extensionapi"
 	"github.com/seal-io/walrus/pkg/kubemeta"
+	"github.com/seal-io/walrus/pkg/kubereviewsubject"
 	"github.com/seal-io/walrus/pkg/systemauthz"
 	"github.com/seal-io/walrus/pkg/systemkuberes"
 	"github.com/seal-io/walrus/pkg/systemmeta"
@@ -54,7 +60,24 @@ func (h *ProjectHandler) SetupHandler(
 			return []string{obj.GetName()}
 		})
 	if err != nil {
-		return
+		return gvr, srs, fmt.Errorf("index namespace 'metadata.name': %w", err)
+	}
+	err = fi.IndexField(ctx, &rbac.RoleBinding{}, "rolebindings[scope=project].subject",
+		func(obj ctrlcli.Object) []string {
+			if obj == nil {
+				return nil
+			}
+			resType, notes := systemmeta.DescribeResource(obj)
+			if resType != "rolebindings" {
+				return nil
+			}
+			if notes["scope"] != "project" {
+				return nil
+			}
+			return []string{notes["subject"]}
+		})
+	if err != nil {
+		return gvr, srs, fmt.Errorf("index role binding 'rolebindings[scope=project].subject': %w", err)
 	}
 
 	// Declare GVR.
@@ -72,7 +95,7 @@ func (h *ProjectHandler) SetupHandler(
 				JSONPath: ".status.phase",
 			})
 		if err != nil {
-			return
+			return gvr, srs, err
 		}
 	}
 
@@ -89,7 +112,7 @@ func (h *ProjectHandler) SetupHandler(
 		"subjects": newProjectSubjectsHandler(opts),
 	}
 
-	return
+	return gvr, srs, err
 }
 
 var (
@@ -191,6 +214,11 @@ func (h *ProjectHandler) NewList() runtime.Object {
 }
 
 func (h *ProjectHandler) OnList(ctx context.Context, opts ctrlcli.ListOptions) (runtime.Object, error) {
+	ui, ok := genericapirequest.UserFrom(ctx)
+	if !ok {
+		return nil, kerrors.NewForbidden(walrus.SchemeResource("projects"), "", errors.New("request user not found"))
+	}
+
 	// List.
 	nsList := new(core.NamespaceList)
 	err := h.APIReader.List(ctx, nsList,
@@ -199,14 +227,82 @@ func (h *ProjectHandler) OnList(ctx context.Context, opts ctrlcli.ListOptions) (
 		return nil, err
 	}
 
-	// TODO Validate RBAC
-
 	// Convert.
 	pList := convertProjectListFromNamespaceList(nsList, opts)
-	return pList, nil
+	return h.filterProjectList(ctx, ui, pList), nil
+}
+
+func (h *ProjectHandler) filterProjectList(ctx context.Context, ui authnuser.Info, pList *walrus.ProjectList) *walrus.ProjectList {
+	// Fast-path: check with well-known admin user.
+	if systemauthz.IsWellKnownAdminUser(ui) {
+		return pList
+	}
+
+	// Slow-path: check with a subject access review.
+	revs := kubereviewsubject.Reviews{
+		{
+			ResourceAttributes: &kubereviewsubject.ResourceAttributes{
+				Group:    walrus.GroupName,
+				Resource: "projects",
+				Verb:     "list",
+			},
+		},
+	}
+	err := kubereviewsubject.CanSpecificUserDoWithCtrlClient(ctx, h.Client, revs, ui)
+	if err == nil {
+		return pList
+	}
+
+	// Slower-path: check with informer cache.
+	{
+		subjNamespace, subjName, ok := systemauthz.ConvertSubjectNamesFromAuthnUser(ui)
+		if ok {
+			rbList := new(rbac.RoleBindingList)
+			err = h.Client.List(ctx, rbList, ctrlcli.MatchingFields{
+				"rolebindings[scope=project].subject": subjNamespace + "/" + subjName,
+			})
+			if err == nil {
+				allowProjects := sets.New[string]()
+				for _, rb := range rbList.Items {
+					allowProjects.Insert(rb.Namespace)
+				}
+				pList.Items = slices.DeleteFunc(pList.Items, func(proj walrus.Project) bool {
+					return !allowProjects.Has(proj.Name)
+				})
+				return pList
+			}
+		}
+	}
+
+	// Slowest-path: check with multiple subject access reviews.
+	items := pList.Items
+	pList.Items = pList.Items[:0]
+	for i := range items {
+		revs = kubereviewsubject.Reviews{
+			{
+				ResourceAttributes: &kubereviewsubject.ResourceAttributes{
+					Group:     walrus.GroupName,
+					Resource:  "projects",
+					Namespace: items[i].Name,
+					Verb:      "list",
+				},
+			},
+		}
+		err := kubereviewsubject.CanSpecificUserDoWithCtrlClient(ctx, h.Client, revs, ui)
+		if err != nil {
+			continue
+		}
+		pList.Items = append(pList.Items, items[i])
+	}
+	return pList
 }
 
 func (h *ProjectHandler) OnWatch(ctx context.Context, opts ctrlcli.ListOptions) (watch.Interface, error) {
+	ui, ok := genericapirequest.UserFrom(ctx)
+	if !ok {
+		return nil, kerrors.NewForbidden(walrus.SchemeResource("projects"), "", errors.New("request user not found"))
+	}
+
 	// Watch.
 	uw, err := h.Client.(ctrlcli.WithWatch).Watch(ctx, new(core.NamespaceList),
 		convertNamespaceListOptsFromProjectListOpts(opts))
@@ -240,8 +336,6 @@ func (h *ProjectHandler) OnWatch(ctx context.Context, opts ctrlcli.ListOptions) 
 					continue
 				}
 
-				// TODO RBAC
-
 				// Type assert.
 				ns, ok := e.Object.(*core.Namespace)
 				if !ok {
@@ -262,6 +356,12 @@ func (h *ProjectHandler) OnWatch(ctx context.Context, opts ctrlcli.ListOptions) 
 					continue
 				}
 
+				// Filter.
+				proj = h.filterProjectWatch(ctx, ui, proj)
+				if proj == nil {
+					continue
+				}
+
 				// Ignore if not be selected by `kubectl get --field-selector=metadata.namespace=...`.
 				if fs := opts.FieldSelector; fs != nil &&
 					!fs.Matches(fields.Set{"metadata.namespace": proj.Namespace, "metadata.name": proj.Name}) {
@@ -278,7 +378,36 @@ func (h *ProjectHandler) OnWatch(ctx context.Context, opts ctrlcli.ListOptions) 
 	return dw, nil
 }
 
+func (h *ProjectHandler) filterProjectWatch(ctx context.Context, ui authnuser.Info, proj *walrus.Project) *walrus.Project {
+	// Fast-path: check with well-known admin user.
+	if systemauthz.IsWellKnownAdminUser(ui) {
+		return proj
+	}
+
+	// Slow-path: check with a subject access review.
+	revs := kubereviewsubject.Reviews{
+		{
+			ResourceAttributes: &kubereviewsubject.ResourceAttributes{
+				Group:     walrus.GroupName,
+				Resource:  "projects",
+				Namespace: proj.Name,
+				Verb:      "watch",
+			},
+		},
+	}
+	err := kubereviewsubject.CanSpecificUserDoWithCtrlClient(ctx, h.Client, revs, ui)
+	if err == nil {
+		return proj
+	}
+	return nil
+}
+
 func (h *ProjectHandler) OnGet(ctx context.Context, key types.NamespacedName, opts ctrlcli.GetOptions) (runtime.Object, error) {
+	ui, ok := genericapirequest.UserFrom(ctx)
+	if !ok {
+		return nil, kerrors.NewForbidden(walrus.SchemeResource("projects"), "", errors.New("request user not found"))
+	}
+
 	// Validate.
 	if key.Namespace != systemkuberes.SystemNamespaceName {
 		return nil, kerrors.NewNotFound(walrus.SchemeResource("projects"), key.Name)
@@ -295,14 +424,43 @@ func (h *ProjectHandler) OnGet(ctx context.Context, key types.NamespacedName, op
 		return nil, err
 	}
 
-	// TODO Validate RBAC
-
 	// Convert.
 	proj := convertProjectFromNamespace(ns)
 	if proj == nil {
 		return nil, kerrors.NewNotFound(walrus.SchemeResource("projects"), key.Name)
 	}
+
+	// Filter.
+	proj = h.filterProjectGet(ctx, ui, proj)
+	if proj == nil {
+		return nil, kerrors.NewNotFound(walrus.SchemeResource("projects"), key.Name)
+	}
+
 	return proj, nil
+}
+
+func (h *ProjectHandler) filterProjectGet(ctx context.Context, ui authnuser.Info, proj *walrus.Project) *walrus.Project {
+	// Fast-path: check with well-known admin user.
+	if systemauthz.IsWellKnownAdminUser(ui) {
+		return proj
+	}
+
+	// Slow-path: check with a subject access review.
+	revs := kubereviewsubject.Reviews{
+		{
+			ResourceAttributes: &kubereviewsubject.ResourceAttributes{
+				Group:     walrus.GroupName,
+				Resource:  "projects",
+				Namespace: proj.Name,
+				Verb:      "get",
+			},
+		},
+	}
+	err := kubereviewsubject.CanSpecificUserDoWithCtrlClient(ctx, h.Client, revs, ui)
+	if err == nil {
+		return proj
+	}
+	return nil
 }
 
 func (h *ProjectHandler) OnUpdate(ctx context.Context, obj, _ runtime.Object, opts ctrlcli.UpdateOptions) (runtime.Object, error) {
