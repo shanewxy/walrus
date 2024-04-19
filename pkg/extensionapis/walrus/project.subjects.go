@@ -168,6 +168,10 @@ func convertProjectSubjectFromRoleBinding(rb *rbac.RoleBinding) *walrus.ProjectS
 		return nil
 	}
 
+	if rb.DeletionTimestamp != nil {
+		return nil
+	}
+
 	r := systemauthz.ConvertProjectRoleFromClusterRoleName(rb.RoleRef.Name)
 	if r.Validate() != nil {
 		return nil
