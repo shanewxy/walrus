@@ -360,9 +360,10 @@ func callback(w http.ResponseWriter, r *http.Request) {
 
 type (
 	requestProfile struct {
-		DisplayName *string `json:"displayName,omitempty"`
-		Email       *string `json:"email,omitempty"`
-		Password    *string `json:"password,omitempty"`
+		DisplayName      *string `json:"displayName,omitempty"`
+		Email            *string `json:"email,omitempty"`
+		OriginalPassword *string `json:"originalPassword,omitempty"`
+		Password         *string `json:"password,omitempty"`
 	}
 	responseProfile struct {
 		Name        string   `json:"name"`
@@ -416,6 +417,31 @@ func profile(w http.ResponseWriter, r *http.Request) {
 	// Parse request.
 	var req requestProfile
 	_ = httpx.BindJSON(r, &req)
+
+	// Check password if provided original password.
+	if req.OriginalPassword != nil && req.Password != nil {
+		if *req.OriginalPassword == *req.Password {
+			ui.ResponseErrorWithCode(w, http.StatusBadRequest, errors.New("original password and new password are the same"))
+			return
+		}
+		subjl := &walrus.SubjectLogin{
+			ObjectMeta: meta.ObjectMeta{
+				Namespace: subjNamespace,
+				Name:      subjName,
+			},
+			Spec: walrus.SubjectLoginSpec{
+				Credential: *req.OriginalPassword,
+			},
+		}
+		_, err = cli.WalrusV1().Subjects(subjNamespace).
+			Login(r.Context(), subjName, subjl, meta.CreateOptions{})
+		if err != nil {
+			ui.ResponseErrorWithCode(w, http.StatusForbidden, errors.New("original password is incorrect"))
+			return
+		}
+	} else {
+		req.Password = nil
+	}
 
 	// Update profile.
 	subjChanged := applywalrus.Subject(subjName, subjNamespace).

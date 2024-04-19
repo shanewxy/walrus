@@ -310,22 +310,36 @@ func getExternalConnectorFromSubjectProvider(subjProv *walrus.SubjectProvider) (
 
 // convertSubjectFromExternalIdentity converts an ExternalIdentity to Walrus subject.
 func convertSubjectFromExternalIdentity(ctx context.Context, provider string, id *ExternalIdentity) (*walrus.Subject, error) {
+	if id.PreferredUsername == "" && id.Username == "" {
+		return nil, errors.New("both name and display name are empty")
+	}
+
 	sort.Strings(id.Groups)
 
-	// Normalize.
-	name := id.PreferredUsername
-	displayName := id.Username
-	if stringx.StringWidth(name) > stringx.StringWidth(displayName) {
-		name, displayName = displayName, name
-	}
-	name = strings.TrimSpace(strings.ToLower(name))
-	name = stringx.ReplaceFunc(name, func(r rune) rune {
-		if r == '.' || r == '-' || unicode.IsOneOf(
-			[]*unicode.RangeTable{unicode.Number, unicode.Letter}, r) {
-			return r
+	// Normalize names.
+	var name, displayName string
+	{
+		name = id.PreferredUsername
+		displayName = id.Username
+		switch {
+		case name == "":
+			name = displayName
+		case displayName == "":
+			displayName = name
 		}
-		return '-'
-	})
+		// Take the shortest name for constructing the subject name.
+		if stringx.StringWidth(name) > stringx.StringWidth(displayName) {
+			name, displayName = displayName, name
+		}
+		name = strings.TrimSpace(strings.ToLower(name))
+		name = stringx.ReplaceFunc(name, func(r rune) rune {
+			if r == '.' || r == '-' || unicode.IsOneOf(
+				[]*unicode.RangeTable{unicode.Number, unicode.Letter}, r) {
+				return r
+			}
+			return '-'
+		})
+	}
 
 	// Create or update.
 	eSubj := &walrus.Subject{

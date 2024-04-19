@@ -322,6 +322,10 @@ func decorateProfilePath(spec *openspec3.Paths, prefix string) {
                                 "type": "string",
                                 "description": "Email is the email of the subject."
                             },
+                            "originalPassword": {
+                                "type": "string",
+                                "description": "Original password is the original password of the subject used to verify."
+                            },
                             "password": {
                                 "type": "string",
                                 "description": "Password is the new password of the subject."
