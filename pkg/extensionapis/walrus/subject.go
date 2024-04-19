@@ -564,7 +564,8 @@ func convertSubjectListFromServiceAccountList(saList *core.ServiceAccountList, o
 	})
 
 	sList := &walrus.SubjectList{
-		Items: make([]walrus.Subject, 0, len(saList.Items)),
+		ListMeta: saList.ListMeta,
+		Items:    make([]walrus.Subject, 0, len(saList.Items)),
 	}
 
 	for i := range saList.Items {

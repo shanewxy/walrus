@@ -445,7 +445,8 @@ func convertEnvironmentListFromNamespaceList(nsList *core.NamespaceList, opts ct
 	})
 
 	eList := &walrus.EnvironmentList{
-		Items: make([]walrus.Environment, 0, len(nsList.Items)),
+		ListMeta: nsList.ListMeta,
+		Items:    make([]walrus.Environment, 0, len(nsList.Items)),
 	}
 
 	for i := range nsList.Items {

@@ -7,7 +7,6 @@ import (
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apiserver/pkg/registry/rest"
 	ctrlcli "sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -55,7 +54,7 @@ func (h *SchemaHandler) SetupHandler(
 	h.ObjectInfo = &walrus.Schema{}
 	h.CurdOperations = extensionapi.WithCurdProxy[
 		*walrus.Schema, *walrus.SchemaList, *walruscore.Schema, *walruscore.SchemaList,
-	](tc, h, opts.Manager.GetClient().(ctrlcli.WithWatch))
+	](tc, h, opts.Manager.GetClient().(ctrlcli.WithWatch), opts.Manager.GetAPIReader())
 
 	// Set client.
 	h.client = opts.Manager.GetClient()
@@ -96,12 +95,6 @@ func (h *SchemaHandler) CastObjectTo(do *walrus.Schema) (uo *walruscore.Schema) 
 
 func (h *SchemaHandler) CastObjectFrom(uo *walruscore.Schema) (do *walrus.Schema) {
 	return (*walrus.Schema)(uo)
-}
-
-func (h *SchemaHandler) OnGet(ctx context.Context, key types.NamespacedName, opts ctrlcli.GetOptions) (runtime.Object, error) {
-	uo := h.CastObjectTo(h.New().(*walrus.Schema))
-	err := h.client.Get(ctx, key, uo, &opts)
-	return h.CastObjectFrom(uo), err
 }
 
 func (h *SchemaHandler) OnUpdate(ctx context.Context, obj, _ runtime.Object, opts ctrlcli.UpdateOptions) (runtime.Object, error) {

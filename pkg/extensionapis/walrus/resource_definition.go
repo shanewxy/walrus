@@ -36,7 +36,7 @@ func (h *ResourceDefinitionHandler) SetupHandler(
 	h.ObjectInfo = &walrus.ResourceDefinition{}
 	h.CurdOperations = extensionapi.WithCurdProxy[
 		*walrus.ResourceDefinition, *walrus.ResourceDefinitionList, *walruscore.ResourceDefinition, *walruscore.ResourceDefinitionList,
-	](nil, h, opts.Manager.GetClient().(ctrlcli.WithWatch))
+	](nil, h, opts.Manager.GetClient().(ctrlcli.WithWatch), opts.Manager.GetAPIReader())
 
 	return
 }

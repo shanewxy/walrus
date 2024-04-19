@@ -131,11 +131,14 @@ func (h *VariableHandler) OnCreate(ctx context.Context, obj runtime.Object, opts
 		}
 		ns, err := systemmeta.ReflectNamespace(ctx, h.Client, vra.Namespace)
 		if err != nil {
-			errs = field.ErrorList{
-				field.Invalid(field.NewPath("metadata.namespace"), vra.Namespace, err.Error()),
-			}
+			errs = append(errs,
+				field.Invalid(field.NewPath("metadata.namespace"), vra.Namespace, err.Error()))
 		} else {
 			vra.Status.Scope = walrus.VariableScope(ns.Kind())
+		}
+		if len(vra.Finalizers) != 0 {
+			errs = append(errs,
+				field.Invalid(field.NewPath("metadata.finalizers"), vra.Finalizers, "finalizers are not allowed"))
 		}
 		if len(errs) > 0 {
 			return nil, kerrors.NewInvalid(walrus.SchemeKind("variables"), vra.Name, errs)
@@ -522,11 +525,20 @@ func (h *VariableHandler) OnGet(ctx context.Context, name types.NamespacedName, 
 func (h *VariableHandler) OnUpdate(ctx context.Context, obj, _ runtime.Object, opts ctrlcli.UpdateOptions) (runtime.Object, error) {
 	// Validate.
 	vra := obj.(*walrus.Variable)
-	if vra.Spec.Value == nil {
-		errs := field.ErrorList{
-			field.Required(field.NewPath("spec.value"), "variable value is required"),
+	{
+		var errs field.ErrorList
+		if vra.Spec.Value == nil {
+			errs = field.ErrorList{
+				field.Required(field.NewPath("spec.value"), "variable value is required"),
+			}
 		}
-		return nil, kerrors.NewInvalid(walrus.SchemeKind("variables"), vra.Name, errs)
+		if len(vra.Finalizers) != 0 {
+			errs = append(errs,
+				field.Invalid(field.NewPath("metadata.finalizers"), vra.Finalizers, "finalizers are not allowed"))
+		}
+		if len(errs) > 0 {
+			return nil, kerrors.NewInvalid(walrus.SchemeKind("variables"), vra.Name, errs)
+		}
 	}
 
 	// Update.
@@ -679,6 +691,9 @@ func convertVariableListFromSecret(sec *core.Secret, opts ctrlcli.ListOptions) *
 	}
 
 	vList := &walrus.VariableList{
+		ListMeta: meta.ListMeta{
+			ResourceVersion: sec.ResourceVersion,
+		},
 		Items: make([]walrus.Variable, 0, len(sec.Data)),
 	}
 
@@ -744,7 +759,8 @@ func mergeVariableListFromSecretList(secList *core.SecretList, opts ctrlcli.List
 			vListCount += len(secList.Items[i].Data)
 		}
 		vList = &walrus.VariableList{
-			Items: make([]walrus.Variable, 0, vListCount),
+			ListMeta: secList.ListMeta,
+			Items:    make([]walrus.Variable, 0, vListCount),
 		}
 	}
 
@@ -790,7 +806,8 @@ func convertVariableListFromSecretList(secList *core.SecretList, opts ctrlcli.Li
 			vListCount += len(secList.Items[i].Data)
 		}
 		vList = &walrus.VariableList{
-			Items: make([]walrus.Variable, 0, vListCount),
+			ListMeta: secList.ListMeta,
+			Items:    make([]walrus.Variable, 0, vListCount),
 		}
 	}
 

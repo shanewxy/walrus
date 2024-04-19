@@ -428,7 +428,8 @@ func convertSubjectProviderListFromSecretList(secList *core.SecretList, opts ctr
 	})
 
 	spList := &walrus.SubjectProviderList{
-		Items: make([]walrus.SubjectProvider, 0, len(secList.Items)),
+		ListMeta: secList.ListMeta,
+		Items:    make([]walrus.SubjectProvider, 0, len(secList.Items)),
 	}
 
 	for i := range secList.Items {

@@ -371,6 +371,9 @@ func convertSettingListFromSecret(sec *core.Secret, opts ctrlcli.ListOptions) *w
 	}
 
 	sList := &walrus.SettingList{
+		ListMeta: meta.ListMeta{
+			ResourceVersion: sec.ResourceVersion,
+		},
 		Items: make([]walrus.Setting, 0, len(sec.Data)),
 	}
 

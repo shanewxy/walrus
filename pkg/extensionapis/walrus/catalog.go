@@ -20,8 +20,6 @@ import (
 type CatalogHandler struct {
 	extensionapi.ObjectInfo
 	extensionapi.CurdOperations
-
-	client ctrlcli.Client
 }
 
 func (h *CatalogHandler) SetupHandler(
@@ -73,10 +71,8 @@ func (h *CatalogHandler) SetupHandler(
 	h.ObjectInfo = &walrus.Catalog{}
 	h.CurdOperations = extensionapi.WithCurdProxy[
 		*walrus.Catalog, *walrus.CatalogList, *walruscore.Catalog, *walruscore.CatalogList,
-	](tc, h, opts.Manager.GetClient().(ctrlcli.WithWatch))
+	](tc, h, opts.Manager.GetClient().(ctrlcli.WithWatch), opts.Manager.GetAPIReader())
 
-	// Set client.
-	h.client = opts.Manager.GetClient()
 	return gvr, srs, nil
 }
 

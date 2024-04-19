@@ -32,7 +32,7 @@ func (h *ConnectorHandler) SetupHandler(
 	h.ObjectInfo = &walrus.Connector{}
 	h.CurdOperations = extensionapi.WithCurdProxy[
 		*walrus.Connector, *walrus.ConnectorList, *walruscore.Connector, *walruscore.ConnectorList,
-	](nil, h, opts.Manager.GetClient().(ctrlcli.WithWatch))
+	](nil, h, opts.Manager.GetClient().(ctrlcli.WithWatch), opts.Manager.GetAPIReader())
 
 	return
 }

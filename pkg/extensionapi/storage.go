@@ -148,8 +148,6 @@ func (s ListOperation) List(
 	ctx context.Context,
 	options *metainternal.ListOptions,
 ) (runtime.Object, error) {
-	_, isCurdProxy := s.Handler.(isCurdProxyHandler)
-
 	if options == nil {
 		options = &metainternal.ListOptions{ResourceVersion: "0"}
 	}
@@ -161,14 +159,25 @@ func (s ListOperation) List(
 
 	if listObj == nil {
 		listObj = s.Handler.NewList()
-	} else if !isCurdProxy {
-		// Get the highest revision from the list items.
-		items, _ := kmeta.ExtractList(listObj)
-		if len(items) != 0 {
-			om, err := kmeta.Accessor(items[len(items)-1])
-			if err == nil {
-				s.WatchBookmark.SwapResourceVersion(om.GetResourceVersion())
+	} else {
+		// Try to get the resource version from the list meta.
+		var rv string
+		lm, err := kmeta.ListAccessor(listObj)
+		if err == nil {
+			rv = lm.GetResourceVersion()
+		}
+		// Otherwise, try to get the resource version from the last list item.
+		if rv == "" {
+			li, _ := kmeta.ExtractList(listObj)
+			if len(li) != 0 {
+				om, err := kmeta.Accessor(li[len(li)-1])
+				if err == nil {
+					rv = om.GetResourceVersion()
+				}
 			}
+		}
+		if rv != "" {
+			s.WatchBookmark.SwapResourceVersion(rv)
 		}
 	}
 
@@ -212,8 +221,6 @@ func (s ListWatchOperation) Watch(
 	ctx context.Context,
 	options *metainternal.ListOptions,
 ) (watch.Interface, error) {
-	_, isCurdProxy := s.Handler.(isCurdProxyHandler)
-
 	if options == nil {
 		options = &metainternal.ListOptions{ResourceVersion: "0", Watch: true}
 	}
@@ -250,15 +257,14 @@ func (s ListWatchOperation) Watch(
 					continue
 				}
 
-				// Record the highest revision if not a proxy.
-				if !isCurdProxy {
-					om, err := kmeta.Accessor(e.Object)
-					if err == nil {
-						swapped := wm.SwapResourceVersion(om.GetResourceVersion())
-						if !swapped && om.GetDeletionTimestamp() == nil {
-							// If the revision is not updated, ignore the event.
-							continue
-						}
+				// Record the resource revision.
+				om, err := kmeta.Accessor(e.Object)
+				if err == nil {
+					// Ignore the event if the resource version is not updated,
+					// and the event's object is not deleted.
+					swp := wm.SwapResourceVersion(om.GetResourceVersion())
+					if !swp && om.GetDeletionTimestamp() == nil {
+						continue
 					}
 				}
 
@@ -833,7 +839,8 @@ type (
 	// _CurdProxyHandler is a private struct that implements CurdProxyHandler.
 	_CurdProxyHandler[DO MetaObject, DOL MetaObjectList, UO MetaObject, UOL MetaObjectList] struct {
 		CurdProxyHandler[DO, DOL, UO, UOL]
-		CtrlCli      ctrlcli.WithWatch
+		CtrlClient   ctrlcli.WithWatch
+		CtrlReader   ctrlcli.Reader
 		DOAPIVersion string
 		DOKind       string
 		UOAPIVersion string
@@ -845,15 +852,17 @@ type (
 func WithCurdProxy[DO MetaObject, DOL MetaObjectList, UO MetaObject, UOL MetaObjectList](
 	tc rest.TableConvertor,
 	h CurdProxyHandler[DO, DOL, UO, UOL],
-	ctrlCli ctrlcli.WithWatch,
+	ctrlClient ctrlcli.WithWatch,
+	ctrlReader ctrlcli.Reader,
 ) CurdOperations {
 	do := h.New().(DO)
 	uo := h.CastObjectTo(do)
-	doGvk := funcx.MustNoError(ctrlapiutil.GVKForObject(do, ctrlCli.Scheme()))
-	uoGvk := funcx.MustNoError(ctrlapiutil.GVKForObject(uo, ctrlCli.Scheme()))
+	doGvk := funcx.MustNoError(ctrlapiutil.GVKForObject(do, ctrlClient.Scheme()))
+	uoGvk := funcx.MustNoError(ctrlapiutil.GVKForObject(uo, ctrlClient.Scheme()))
 	ph := _CurdProxyHandler[DO, DOL, UO, UOL]{
 		CurdProxyHandler: h,
-		CtrlCli:          ctrlCli,
+		CtrlClient:       ctrlClient,
+		CtrlReader:       ctrlReader,
 		DOAPIVersion:     doGvk.GroupVersion().String(),
 		DOKind:           doGvk.Kind,
 		UOAPIVersion:     uoGvk.GroupVersion().String(),
@@ -906,7 +915,7 @@ func (h _CurdProxyHandler[DO, DOL, UO, UOL]) OnCreate(
 	}
 
 	uo := h.CastObjectTo(obj.(DO))
-	err := h.CtrlCli.Create(ctx, uo, &opts)
+	err := h.CtrlClient.Create(ctx, uo, &opts)
 	if err != nil {
 		return nil, err
 	}
@@ -929,7 +938,7 @@ func (h _CurdProxyHandler[DO, DOL, UO, UOL]) OnList(
 	}
 
 	uol := h.NewListForProxy().(UOL)
-	err := h.CtrlCli.List(ctx, uol, &opts)
+	err := h.CtrlReader.List(ctx, uol, &opts)
 	if err != nil {
 		return nil, err
 	}
@@ -947,6 +956,22 @@ func (h _CurdProxyHandler[DO, DOL, UO, UOL]) OnList(
 	err = kmeta.SetList(dol, dos)
 	if err != nil {
 		return nil, fmt.Errorf("set downstream list: %w", err)
+	}
+
+	// Set list metadata.
+	{
+		uolm, err := kmeta.ListAccessor(uol)
+		if err != nil {
+			return nil, fmt.Errorf("get upstream list accessor: %w", err)
+		}
+		dolm, err := kmeta.ListAccessor(dol)
+		if err != nil {
+			return nil, fmt.Errorf("get downstream list accessor: %w", err)
+		}
+		dolm.SetResourceVersion(uolm.GetResourceVersion())
+		dolm.SetContinue(uolm.GetContinue())
+		dolm.SetRemainingItemCount(uolm.GetRemainingItemCount())
+		dolm.SetSelfLink(uolm.GetSelfLink())
 	}
 
 	return dol, nil
@@ -968,7 +993,7 @@ func (h _CurdProxyHandler[DO, DOL, UO, UOL]) OnWatch(
 	}
 
 	uol := h.NewListForProxy().(UOL)
-	uw, err := h.CtrlCli.Watch(ctx, uol, &opts)
+	uw, err := h.CtrlClient.Watch(ctx, uol, &opts)
 	if err != nil {
 		return nil, err
 	}
@@ -1031,7 +1056,7 @@ func (h _CurdProxyHandler[DO, DOL, UO, UOL]) OnGet(
 		}
 	}
 	uo := h.CastObjectTo(h.New().(DO))
-	err := h.CtrlCli.Get(ctx, key, uo, &opts)
+	err := h.CtrlReader.Get(ctx, key, uo, &opts)
 	if err != nil {
 		return nil, err
 	}
@@ -1061,7 +1086,7 @@ func (h _CurdProxyHandler[DO, DOL, UO, UOL]) OnUpdate(
 		}
 	}
 	uo := h.CastObjectTo(obj.(DO))
-	err := h.CtrlCli.Update(ctx, uo, &opts)
+	err := h.CtrlClient.Update(ctx, uo, &opts)
 	if err != nil {
 		return nil, err
 	}
@@ -1084,14 +1109,8 @@ func (h _CurdProxyHandler[DO, DOL, UO, UOL]) OnDelete(
 		}
 	}
 	uo := h.CastObjectTo(obj.(DO))
-	return h.CtrlCli.Delete(ctx, uo, &opts)
+	return h.CtrlClient.Delete(ctx, uo, &opts)
 }
-
-type isCurdProxyHandler interface {
-	isCurdProxy()
-}
-
-func (h _CurdProxyHandler[DO, DOL, UO, UOL]) isCurdProxy() {}
 
 func qualifiedResourceFromContext(ctx context.Context) schema.GroupResource {
 	ri, _ := genericapirequest.RequestInfoFrom(ctx)

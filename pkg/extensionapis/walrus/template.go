@@ -20,8 +20,6 @@ import (
 type TemplateHandler struct {
 	extensionapi.ObjectInfo
 	extensionapi.CurdOperations
-
-	client ctrlcli.Client
 }
 
 func (h *TemplateHandler) SetupHandler(
@@ -73,10 +71,8 @@ func (h *TemplateHandler) SetupHandler(
 	h.ObjectInfo = &walrus.Template{}
 	h.CurdOperations = extensionapi.WithCurdProxy[
 		*walrus.Template, *walrus.TemplateList, *walruscore.Template, *walruscore.TemplateList,
-	](tc, h, opts.Manager.GetClient().(ctrlcli.WithWatch))
+	](tc, h, opts.Manager.GetClient().(ctrlcli.WithWatch), opts.Manager.GetAPIReader())
 
-	// Set client.
-	h.client = opts.Manager.GetClient()
 	return gvr, srs, nil
 }
 

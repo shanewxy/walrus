@@ -597,7 +597,8 @@ func convertProjectListFromNamespaceList(nsList *core.NamespaceList, opts ctrlcl
 	})
 
 	pList := &walrus.ProjectList{
-		Items: make([]walrus.Project, 0, len(nsList.Items)),
+		ListMeta: nsList.ListMeta,
+		Items:    make([]walrus.Project, 0, len(nsList.Items)),
 	}
 
 	for i := range nsList.Items {

@@ -32,7 +32,7 @@ func (h *ResourceRunHandler) SetupHandler(
 	h.ObjectInfo = &walrus.ResourceRun{}
 	h.CurdOperations = extensionapi.WithCurdProxy[
 		*walrus.ResourceRun, *walrus.ResourceRunList, *walruscore.ResourceRun, *walruscore.ResourceRunList,
-	](nil, h, opts.Manager.GetClient().(ctrlcli.WithWatch))
+	](nil, h, opts.Manager.GetClient().(ctrlcli.WithWatch), opts.Manager.GetAPIReader())
 
 	return
 }
